@@ -1,25 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
+import React from 'react'
+import Auth from './screens/Auth'
+import Homescreen from './screens/Homescreen'
+import Dashboard from './screens/Dashboard'
+import Patients from './screens/Patients'
+import PatientDetail from './screens/PatientDetail'
+import { Toaster } from 'react-hot-toast'
+import {BrowserRouter, Route,Routes} from 'react-router-dom'
+import Profile from './screens/Profile'
+import PrivateRoute from './components/PrivateRoute'
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    
+   <BrowserRouter>
+   <Routes>
+        <Route path='/' index element={<Homescreen/>}/>
+        <Route path='/auth' element={<Auth/>}/> 
+         <Route path='/dashboard' element={<PrivateRoute/>}>
+         <Route path='/dashboard' element={<Dashboard/>}/>
+         </Route>
+        <Route path='/dashboard/patients/:id' element={<PatientDetail/>}/>
+        <Route path='/dashboard/profile' element={<Profile/>}/>
+        <Route path='/dashboard/patients' element={<Patients/>}/>
+    </Routes>
+    <Toaster/>
+   </BrowserRouter>
+   
+  )
 }
 
-export default App;
+export default App
