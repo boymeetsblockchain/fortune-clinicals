@@ -35,11 +35,12 @@ const toggleVariant = useCallback(() => {
      formdata.timestamp=serverTimestamp()
 
      await setDoc(doc(db,'users',user.uid),formdata)
+     
+     navigate('/dasboard')
      toast.success(" Succesfully registered")
-     navigate('/dashboard')
      } catch (error) {
        console.log(error)
-       toast.error(error)
+       toast.error("something went wrong")
      }
   }
 
@@ -52,11 +53,12 @@ const toggleVariant = useCallback(() => {
 
       if(userCredentials.user){
         toast.success("Succesfully Loggedin")
+        navigate('/dashboard')
       }
-      navigate('/dashboard')
+      
     } catch (error) {
       console.log(error)
-       toast.error(error)
+       toast.error("something went wrong")
     }
   }
   return (
