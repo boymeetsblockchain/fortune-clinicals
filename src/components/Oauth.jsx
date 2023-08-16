@@ -29,7 +29,7 @@ function Oauth() {
             })
         }
         toast.success("succesfully logged in ")
-        navigate('/')
+        navigate('/dashboard')
       } catch (error) {
         console.log(error)
         toast.error("Could not authorized")

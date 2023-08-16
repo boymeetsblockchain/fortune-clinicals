@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import { Dialog } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Link } from 'react-router-dom'
+import {getAuth} from "firebase/auth"
 import {AiOutlineHome} from 'react-icons/ai'
 const navigation = [
   { name: 'Products', to: '/dasboard/products' },
@@ -12,7 +13,14 @@ const navigation = [
 
 export default function Homescreen() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-
+  const [user,setUser]= useState(null)
+   useEffect(()=>{
+    const auth = getAuth()
+    const {currentUser}= auth
+    if(currentUser){
+      setUser(currentUser)
+    }
+   },[])
   return (
     <div className="bg-white">
       <header className="absolute inset-x-0 top-0 z-50">
@@ -40,8 +48,8 @@ export default function Homescreen() {
             ))}
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <Link to="/auth" className="text-lg leading-6 text-[#FF5162]">
-              Log in <span aria-hidden="true">&rarr;</span>
+            <Link to={user?"/dashboard":"/auth"} className="text-lg leading-6 text-[#FF5162]">
+              {user?"Dashboard":"login"} <span aria-hidden="true">&rarr;</span>
             </Link>
           </div>
         </nav>

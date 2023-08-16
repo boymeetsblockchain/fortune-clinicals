@@ -8,6 +8,7 @@ import { Toaster } from 'react-hot-toast'
 import {BrowserRouter, Route,Routes} from 'react-router-dom'
 import Profile from './screens/Profile'
 import PrivateRoute from './components/PrivateRoute'
+import PatientRegister from './screens/PatientRegister'
 const App = () => {
   return (
     
@@ -20,6 +21,7 @@ const App = () => {
          </Route>
         <Route path='/dashboard/patients/:id' element={<PatientDetail/>}/>
         <Route path='/dashboard/profile' element={<Profile/>}/>
+        <Route path='/patient-add' element={<PatientRegister/>}/>
         <Route path='/dashboard/patients' element={<Patients/>}/>
     </Routes>
     <Toaster/>
