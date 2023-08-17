@@ -2,15 +2,17 @@ import React from 'react'
 import Navbar from '../components/Navbar'
 import {FaStethoscope,FaPencilAlt,FaCheck} from 'react-icons/fa'
 import {ImBin} from 'react-icons/im'
+import { toast } from 'react-hot-toast'
 import {MdOutlineTransform} from 'react-icons/md'
 const PatientDetails = {
-  patientName: "Jackson Kelly",
+  patientName: "Osayande Godwin",
   age: 39,
   gender: "male",
   phoneNumber: "08141889944",
   dateRegistered: "2023-08-25",
   clerkedBy: "Noah",
   regNumber: "2023/34/9",
+  condition:"Low back pain",
   sessionPaid:2,
   session: 10, // Number of sessions booked
   registrationFee: 3000, // Default registration fee in naira
@@ -19,6 +21,10 @@ const PatientDetails = {
 
 
 function PatientDetail() {
+  const onDelete = ()=>{
+    window.confirm("are you sure you want to delete this patient record")
+    toast.success("deleted")
+  }
   return (
      <>
      <Navbar/>
@@ -34,6 +40,8 @@ function PatientDetail() {
           <h1 className='bg-slate-100 text-[#fff5162] font-bold  px-2 py-1.5 text-3xl rounded-md'>{PatientDetails.patientName}</h1>
           <p> Age:{PatientDetails.age}</p>
           <p> Phone Number :{PatientDetails.phoneNumber}</p>
+          <p>Condition:{PatientDetails.condition}</p>
+          <p>Acessed by:{PatientDetails.clerkedBy}</p>
          </div>
           <div className="reg-number bg-green-500 text-2xl text-white  px-2 py-1.5 ">
             <h1>{PatientDetails.regNumber}</h1>
@@ -90,7 +98,7 @@ function PatientDetail() {
           <FaCheck size={32} color='green'/>
            <h1 className=''>DETAILS</h1>
           </div>
-          <div className='flex gap-3 items-center justify-between hover:opacity-50'>
+          <div className='flex gap-3 items-center justify-between cursor-pointer hover:opacity-50'>
             <div className="detials flex  gap-2">
             <FaCheck size={32} color='green'/>
            <h1 className=''>SESSIONS</h1>
@@ -99,7 +107,7 @@ function PatientDetail() {
               {PatientDetails.session}
             </div>
           </div>
-          <div className='flex gap-3 items-center justify-between hover:opacity-50'>
+          <div className='flex gap-3 items-center justify-between cursor-pointer hover:opacity-50'>
             <div className="detials flex  gap-2">
             <FaCheck size={32} color='green'/>
            <h1 className=''>PAYMENT</h1>
@@ -108,7 +116,7 @@ function PatientDetail() {
               {PatientDetails.sessionPaid}
             </div>
           </div>
-          <div className='flex gap-3'>
+          <div className='flex gap-3 cursor-pointer'  onClick={onDelete}>
           <ImBin size={32} color='red'/>
            <h1 className=''>DELETE</h1>
           </div>
