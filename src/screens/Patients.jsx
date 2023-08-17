@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Navbar from '../components/Navbar';
 import { ImCancelCircle } from 'react-icons/im';
 import { patientsArray } from '../data';
+import { useNavigate } from 'react-router-dom';
 
 function Patients() {
+  const navigate= useNavigate()
+  const onView = useCallback(()=>{
+    navigate('/dashboard/patients/1')
+  },[navigate])
   return (
     <>
       <Navbar />
@@ -33,7 +38,7 @@ function Patients() {
                       {patient.dateRegistered}
                     </span>
                   </p>
-                  <button className="px-2 py-0.5 text-sm bg-[#FF5162] text-white">
+                  <button className="px-2 py-0.5 text-sm bg-[#FF5162] text-white" onClick={onView}>
                     View
                   </button>
                 </div>
