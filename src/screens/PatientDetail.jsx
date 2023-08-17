@@ -28,9 +28,9 @@ function PatientDetail() {
   return (
      <>
      <Navbar/>
-     <div className="mx-auto max-w-screen-xl my-5 h-screen   overflow-y-hidden  w-full px-4 md:px-8 lg:px-12">
+     <div className="mx-auto max-w-screen-xl my-5 h-screen   md:overflow-y-hidden  w-full px-4 md:px-8 lg:px-12">
     <div className="flex flex-col my-4 space-y-8">
-    <div className="flex top-details items-center justify-between ">
+    <div className="flex top-details  flex-col md:flex-row space-y-4 items-center justify-between ">
          <div className="name-logo flex items-center jusify-between">
          <div className="text-center text-8xl bg-[#ff5162]  text-white rounded-full h-64 w-64 px-2 py-1 items-center justify-center flex font-bold">
                   {PatientDetails.patientName[0].toUpperCase()}
@@ -47,30 +47,30 @@ function PatientDetail() {
             <h1>{PatientDetails.regNumber}</h1>
           </div>
       </div>
-       <div className="session-payment grid  gap-x-8 grid-cols-4 h-[420px]">
+       <div className="session-payment md:grid  md:gap-x-8 md:grid-cols-4 md:h-[420px] flex flex-col gap-4 justify-center">
         <div className="bg-slate-200 rounded-md shadow-lg col-span-3 p-4">
-          <div className="header-section my-4">
+          <div className="header-section md:my-4 my-2 flex justify-center">
             <div className='flex gap-3 items-center'>
               <span><FaStethoscope size={32} color='green'/></span>
-              <span className='text-2xl text-white px-2 py-1.5  bg-[#ff5162]'> number of sessions: {PatientDetails.session}</span>
+              <span className='md:text-2xl   text-white px-2 py-1.5  text-center bg-[#ff5162]'> number of sessions: {PatientDetails.session}</span>
             </div>
           </div>
          <div className="completed section my-4 space-y-6">
-         <div className="px-8 session-details flex justify-between items-center">
+         <div className="px-8 session-details flex justify-between items-center"> 
            <div className="completed flex gap-2">
               <div className="icon">
                 <FaCheck size={32} color='green'/>
               </div>
-              <div className="completed flex flex-col gap-y-1">
-                <h1 className='text-3xl text-bold'> Completed</h1>
+              <div className="completed flex flex-col  gap-y-1">
+                <h1 className='text-3xl  font-bold'> Completed</h1>
                 <p className='text-gray-400  text-xl'>{PatientDetails.dateRegistered}</p>
                 <p  className='text-xl  text-gray-400 '>1st Treatment session of 12</p>
               </div>
            </div>
            <div className="icons flex space-x-4">
-            <FaPencilAlt size={32} color='blue' className='cursor-pointer'/>
-            <MdOutlineTransform size={32} color='blue' className='cursor-pointer'/>
-            <ImBin size={32} color='red' className='cursor-pointer'/>
+           <FaPencilAlt className="cursor-pointer  md:text-2xl"  color='blue'  />
+          <MdOutlineTransform className="cursor-pointer md:text-2xl "  color='blue'/>
+            <ImBin className="cursor-pointer md:text-2xl" color='red'/>
            </div>
           </div>
           <div className="px-8 session-details flex justify-between items-center">
@@ -79,15 +79,15 @@ function PatientDetail() {
                 <FaCheck size={32} color='green'/>
               </div>
               <div className="completed flex flex-col gap-y-1">
-                <h1 className='text-3xl text-bold'> Completed</h1>
-                <p className='text-gray-400  text-xl'>{PatientDetails.dateRegistered}</p>
-                <p  className='text-xl  text-gray-400 '>2nd session the patient paid 12k for 1 hand cervical collar with jaw extenstions and semi rigid cervical</p>
+                <h1 className='text-3xl font-bold'> Completed</h1>
+                <p className='text-gray-400  md:text-xl text-sm'>{PatientDetails.dateRegistered}</p>
+                <p  className='md:text-xl text-sm  text-gray-400 '>2nd session the patient paid 12k for 1 hand cervical collar with jaw extenstions and semi rigid cervical</p>
               </div>
            </div>
            <div className="icons flex space-x-4">
-            <FaPencilAlt size={32} color='blue' className='cursor-pointer'/>
-            <MdOutlineTransform size={32} color='blue' className='cursor-pointer'/>
-            <ImBin size={32} color='red' className='cursor-pointer'/>
+           <FaPencilAlt className="cursor-pointer  md:text-2xl"  color='blue'  />
+          <MdOutlineTransform className="cursor-pointer md:text-2xl "  color='blue'/>
+            <ImBin className="cursor-pointer md:text-2xl" color='red'/>
            </div>
           </div>
          </div>
