@@ -210,3 +210,159 @@ export const patientsArray = [
     registeredBy: "Emma"
   },
 ];
+
+
+
+export const products = [
+  {
+    id: 1,
+    name: "Parallel Bars",
+    quantity: 10
+  },
+  {
+    id: 2,
+    name: "Treadmill",
+    quantity: 5
+  },
+  {
+    id: 3,
+    name: "Exercise Bikes",
+    quantity: 8
+  },
+  {
+    id: 4,
+    name: "Therabands",
+    quantity: 100
+  },
+  {
+    id: 5,
+    name: "Pulleys and Weights",
+    quantity: 15
+  },
+  {
+    id: 6,
+    name: "Gait Belts",
+    quantity: 20
+  },
+  {
+    id: 7,
+    name: "Balance Boards",
+    quantity: 12
+  },
+  {
+    id: 8,
+    name: "Hot Packs",
+    quantity: 30
+  },
+  {
+    id: 9,
+    name: "Cold Packs",
+    quantity: 25
+  },
+  {
+    id: 10,
+    name: "Ultrasound Machines",
+    quantity: 3
+  },
+  {
+  id: 11,
+  name: "Arm Ergometer",
+  quantity: 7
+},
+{
+  id: 12,
+  name: "Leg Press Machine",
+  quantity: 4
+},
+{
+  id: 13,
+  name: "Cervical Traction Device",
+  quantity: 2
+},
+{
+  id: 14,
+  name: "Wobble Board",
+  quantity: 6
+},
+{
+  id: 15,
+  name: "Aquatic Therapy Pool",
+  quantity: 1
+},
+{
+  id: 16,
+  name: "Resistance Bands",
+  quantity: 50
+},
+{
+  id: 17,
+  name: "Stair Climber",
+  quantity: 3
+},
+{
+  id: 18,
+  name: "Hand Exercisers",
+  quantity: 40
+},
+{
+  id: 19,
+  name: "Pneumatic Compression Devices",
+  quantity: 5
+},
+{
+  id: 20,
+  name: "Pivot Discs",
+  quantity: 8
+},
+{
+  id: 21,
+  name: "Ankle Braces",
+  quantity: 20
+},
+{
+  id: 22,
+  name: "Knee Braces",
+  quantity: 30
+},
+{
+  id: 23,
+  name: "Back Braces",
+  quantity: 15
+},
+{
+  id: 24,
+  name: "Wrist Braces",
+  quantity: 25
+},
+{
+  id: 25,
+  name: "Shoulder Braces",
+  quantity: 10
+},
+{
+  id: 26,
+  name: "Arch Supports",
+  quantity: 20
+},
+{
+  id: 27,
+  name: "Insoles",
+  quantity: 40
+},
+{
+  id: 28,
+  name: "Heel Cups",
+  quantity: 30
+},
+{
+  id: 29,
+  name: "Orthopedic Shoes",
+  quantity: 8
+},
+{
+  id: 30,
+  name: "Plantar Fasciitis Night Splints",
+  quantity: 12
+},
+];
+
