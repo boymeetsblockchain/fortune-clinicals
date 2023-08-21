@@ -9,7 +9,7 @@ import {BrowserRouter, Route,Routes} from 'react-router-dom'
 import Profile from './screens/Profile'
 import PrivateRoute from './components/PrivateRoute'
 import ProductDetails from './screens/ProductDetails'
-import PatientRegister from './screens/PatientRegister'
+import AddNewPatient from './screens/AddNewPatient'
 const App = () => {
   return (
     
@@ -20,11 +20,12 @@ const App = () => {
          <Route path='/dashboard' element={<PrivateRoute/>}>
          <Route path='/dashboard' element={<Dashboard/>}/>
          </Route>
-        <Route path='/dashboard/patients/:id' element={<PatientDetail/>}/>
+        <Route path='/dashboard/patient/:id' element={<PatientDetail/>}/>
         <Route path='/dashboard/profile' element={<Profile/>}/>
-        <Route path='/dashboard/patients/patient-details' element={<PatientRegister/>}/>
         <Route path='/dashboard/patients' element={<Patients/>}/>
+        <Route path='/add-new' element={<AddNewPatient/>}/>
         <Route path='/dashboard/products' element={<ProductDetails/>}/>
+        
     </Routes>
     <Toaster/>
    </BrowserRouter>

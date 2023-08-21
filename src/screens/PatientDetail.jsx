@@ -4,6 +4,8 @@ import {FaStethoscope,FaPencilAlt,FaCheck} from 'react-icons/fa'
 import {ImBin} from 'react-icons/im'
 import { toast } from 'react-hot-toast'
 import {MdOutlineTransform} from 'react-icons/md'
+import { db } from '../firebase.config'
+import { getDocs,collection } from 'firebase/firestore'
 const PatientDetails = {
   patientName: "Osayande Godwin",
   age: 39,

@@ -7,6 +7,7 @@ const Input = ({id, onChange, value, label, type })=>{
         <div className="relative">
              <input 
               id={id}
+              required
               value={value}
               type={type}
               onChange={onChange}
