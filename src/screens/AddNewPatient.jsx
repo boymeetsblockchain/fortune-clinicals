@@ -22,6 +22,7 @@ function AddNewPatient() {
     const [numOfSessions, setNumOfSessions] = useState("");
     const [paidSessions, setPaidSessions] = useState("");
     const [amountPerSession, setAmountPerSession] = useState("");
+    const[reffer,setReffer]= useState("")
 
     const formData={
         name,
@@ -33,7 +34,8 @@ function AddNewPatient() {
         dateRegistered,
         numOfSessions,
         paidSessions,
-        amountPerSession
+        amountPerSession,
+        reffer
     }
 
     const registerPatient = async (e)=>{
@@ -73,6 +75,7 @@ function AddNewPatient() {
          <Input label={"Phone Number"} type={"number"} value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
          <Input label={"Condition"} type={"text"} value={condition} onChange={(e) => setCondition(e.target.value)} />
          <Input label={"Clinician attending to"} type={"text"} value={clinician} onChange={(e) => setClinician(e.target.value)} />
+         <Input label={"Reffering Person"} type={"text"} value={reffer} onChange={(e) => setReffer(e.target.value)} />
         <Input label={"Date Registered"} type={"date"} value={dateRegistered} onChange={(e) => setDateRegistered(e.target.value)} />
 
             <div className="flex items-center flex-col md:flex-row gap-4  justify-between ">
