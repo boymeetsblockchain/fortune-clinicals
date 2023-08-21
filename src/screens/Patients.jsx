@@ -7,33 +7,43 @@ import {AiOutlineUserAdd} from 'react-icons/ai'
 import { Link } from 'react-router-dom';
 import { db } from '../firebase.config'
 import Loader from '../components/Loader';
-import { getDocs,collection } from 'firebase/firestore'
+import { getDocs,collection,getDoc } from 'firebase/firestore'
 function Patients() {
   const navigate= useNavigate()
   const[patients,setPatients]= useState([])
-  const getPatients = async()=>{
-      try {
-           const data = await getDocs(collection(db, 'patients'))
-           const filteredData= data.docs.map((doc)=>({
-              ...doc.data()
-           }))
-           setPatients(filteredData)
-           console.log(filteredData)
-      } catch (error) {
-           console.error(error)
-      }
-  }
+  const [loading,setLoading]= useState(true)
+  const getPatients = async () => {
+    try {
+      const data = await getDocs(collection(db, 'patients'));
+      const filteredData = data.docs.map((doc) => ({
+        id: doc.id, // Add the id property here
+        ...doc.data(),
+      }));
+      setPatients(filteredData);
+      console.log(filteredData)
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
   useEffect(()=>{
          getPatients()
   },[])
-  const onView = useCallback(()=>{
-    navigate('/dashboard/patients/1')
+  const onView = useCallback((id)=>{
+    navigate(`/dashboard/patient/${id}`)
   },[navigate])
   const onDelete = ()=>{
     window.confirm("are you sure you want to delete this data? record")
     toast.success("deleted")
   }
 
+  
+    if(loading){
+      return(
+        <Loader/>
+      )
+    }
   return (
     
     <>
@@ -43,7 +53,7 @@ function Patients() {
           {patients.map(data => (
             <div
               className="h-30 py-4 w-auto shadow-md rounded-lg flex flex-col items-start"
-              key={data?.name}
+              key={data?.id}
             >
               <div className="flex flex-row  justify-evenly px-4">
                 <div className="text-center text-5xl text-[#ff5162] h-20 w-20 px-2 py-1 items-center flex bg-white font-bold">
@@ -64,7 +74,7 @@ function Patients() {
                       {data?.dateRegistered}
                     </span>
                   </p>
-                  <button className="px-2 py-0.5 text-sm bg-[#FF5162] text-white" onClick={onView}>
+                  <button className="px-2 py-0.5 text-sm bg-[#FF5162] text-white" onClick={()=>onView(data?.id)}>
                     View
                   </button>
                 </div>

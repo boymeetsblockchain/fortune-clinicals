@@ -3,13 +3,15 @@ import Auth from './screens/Auth'
 import Homescreen from './screens/Homescreen'
 import Dashboard from './screens/Dashboard'
 import Patients from './screens/Patients'
+import ProductDetail from './screens/ProductDetail'
 import PatientDetail from './screens/PatientDetail'
 import { Toaster } from 'react-hot-toast'
 import {BrowserRouter, Route,Routes} from 'react-router-dom'
 import Profile from './screens/Profile'
 import PrivateRoute from './components/PrivateRoute'
-import ProductDetails from './screens/ProductDetails'
+import Products from './screens/Products'
 import AddNewPatient from './screens/AddNewPatient'
+import AddNewProduct from './screens/AddNewProduct'
 const App = () => {
   return (
     
@@ -21,10 +23,12 @@ const App = () => {
          <Route path='/dashboard' element={<Dashboard/>}/>
          </Route>
         <Route path='/dashboard/patient/:id' element={<PatientDetail/>}/>
+        <Route path='/dashboard/product/:id' element={<ProductDetail/>}/>
         <Route path='/dashboard/profile' element={<Profile/>}/>
         <Route path='/dashboard/patients' element={<Patients/>}/>
         <Route path='/add-new' element={<AddNewPatient/>}/>
-        <Route path='/dashboard/products' element={<ProductDetails/>}/>
+        <Route path='/dashboard/products' element={<Products/>}/>
+        <Route path='/add-new-product' element={<AddNewProduct/>}/>
         
     </Routes>
     <Toaster/>

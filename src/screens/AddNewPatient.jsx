@@ -1,6 +1,7 @@
 import React from 'react'
 import {AiOutlineUser,AiOutlineArrowLeft,AiOutlineArrowRight} from 'react-icons/ai'
 import Input from '../components/Input'
+import Select from '../components/Select'
 import { useState } from 'react'
 import { toast } from 'react-hot-toast'
 import {getAuth} from 'firebase/auth'
@@ -9,8 +10,15 @@ import { db } from '../firebase.config'
 import Navbar from '../components/Navbar'
 import { Link, useNavigate } from 'react-router-dom'
 function AddNewPatient() {
+  const navigate = useNavigate()
+  const options = [
+    { value: ' Basic', label: 'Basic' },
+    { value: 'Vip', label: 'Vip' },
+    { value: 'Essh', label: 'Essh' },
+    { value: 'House Patient', label: 'House Patient' },
 
-   const navigate = useNavigate()
+  ];
+   
   const auth = getAuth()
     const [name, setName] = useState("");
     const [age, setAge] = useState("");
@@ -21,7 +29,9 @@ function AddNewPatient() {
     const [dateRegistered, setDateRegistered] = useState("");
     const [numOfSessions, setNumOfSessions] = useState("");
     const [paidSessions, setPaidSessions] = useState("");
+    const [comment, setComment] = useState([]);
     const [amountPerSession, setAmountPerSession] = useState("");
+    const[selectedValue,setSelectedValue]=useState("")
     const[reffer,setReffer]= useState("")
 
     const formData={
@@ -35,7 +45,9 @@ function AddNewPatient() {
         numOfSessions,
         paidSessions,
         amountPerSession,
-        reffer
+        reffer,
+        comment,
+        selectedValue
     }
 
     const registerPatient = async (e)=>{
@@ -71,6 +83,13 @@ function AddNewPatient() {
             </div>
             <Input label={"Name"} type={"text"} value={name} onChange={(e) => setName(e.target.value)} />
             <Input label={"Age"} type={"number"} value={age} onChange={(e) => setAge(e.target.value)} />
+            <Select
+  id="selectInput"
+  value={selectedValue}
+  onChange={(e)=>setSelectedValue(e.target.value)}
+  label="Select an option"
+  options={options}
+/>
            <Input label={"Address"} type={"text"} value={address} onChange={(e) => setAddress(e.target.value)} />
          <Input label={"Phone Number"} type={"number"} value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
          <Input label={"Condition"} type={"text"} value={condition} onChange={(e) => setCondition(e.target.value)} />
@@ -84,6 +103,7 @@ function AddNewPatient() {
   <Input label={"Amount per Session"} type={"number"} value={amountPerSession} onChange={(e) => setAmountPerSession(e.target.value)} />
 
             </div>
+            <Input label={"Comment"} type={"text"} value={comment} onChange={(e) => setComment(e.target.value)} />
             <div className="flex justify-end">
                 <button className="bg-[#FF5162] py-3 flex  items-center justify-center gap-x-2 text-white text-sm rounded-md w-1/4 mt-4 hover:bg-red-700 transition">
                  Register <AiOutlineArrowRight/>
