@@ -19,25 +19,28 @@ function AddNewProduct() {
     const auth = getAuth()
 
     const addProduct = async (e) => {
-        e.preventDefault();
-        try {
-          const formDataCopy = {
-            name,
-            price,
-            quantity,
-            comment,
-            timestamp: serverTimestamp(),
-            userId: auth?.currentUser?.uid,
-          };
-      
-          const data = await addDoc(collection(db, 'products'), formDataCopy);
-          console.log(data);
-          toast.success("Product saved");
-          navigate('/dashboard/products')
-        } catch (error) {
-          console.log(error);
-        }
-      };
+      e.preventDefault();
+      try {
+        const formDataCopy = {
+          name,
+          price,
+          quantity,
+          comments: [comment], // Initialize with an array containing the current comment
+          timestamp: serverTimestamp(),
+          userId: auth?.currentUser?.uid,
+        };
+    
+        const data = await addDoc(collection(db, 'products'), formDataCopy);
+        console.log(data);
+        toast.success("Product saved");
+        navigate('/dashboard/products');
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    // Add a new comment to the existing array of comments
+
+
       
   return (
     <>

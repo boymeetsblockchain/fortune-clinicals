@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase.config';
-import { getDoc, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { getDoc, doc, updateDoc, deleteDoc, arrayUnion } from 'firebase/firestore';
 import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Input from '../components/Input';
@@ -78,6 +78,17 @@ const [comment, setComment] = useState('');
     }
   };
   
+  const addComment = async (newComment) => {
+    try {
+      const productRef = doc(db, 'products', params.id); // Replace 'productId' with the ID of the product you're updating
+      await updateDoc(productRef, {
+        comments: arrayUnion(newComment), // Add the new comment to the 'comments' array
+      });
+      console.log("Comment added");
+    } catch (error) {
+      console.error("Error adding comment: ", error);
+    }
+  };
   
   if (loading) {
     return <Loader />;
@@ -98,8 +109,8 @@ const [comment, setComment] = useState('');
           <Input label="Product Name" type="text" value={name} onChange={(e) => setName(e.target.value)} />
           <Input label="Price" type="number" value={price} onChange={(e) => setPrice(e.target.value)} />
           <Input label="Quantity" type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
-          <Input label="Comment" type="text" value={comment} onChange={(e) => setComment(e.target.value)} />
-
+          {/* <Input label="Comment" type="text" value={comment} onChange={(e) => setComment(e.target.value)} /> */}
+         <h2 className='capitalize'>{product.comment}</h2>
           <div className="flex justify-end">
             <button
             onClick={updateProduct}

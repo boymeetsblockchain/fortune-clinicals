@@ -12,6 +12,7 @@ import PrivateRoute from './components/PrivateRoute'
 import Products from './screens/Products'
 import AddNewPatient from './screens/AddNewPatient'
 import AddNewProduct from './screens/AddNewProduct'
+import Message from './screens/Message'
 const App = () => {
   return (
     
@@ -29,6 +30,7 @@ const App = () => {
         <Route path='/add-new' element={<AddNewPatient/>}/>
         <Route path='/dashboard/products' element={<Products/>}/>
         <Route path='/add-new-product' element={<AddNewProduct/>}/>
+        <Route path='/message' element={<Message/>}/>
         
     </Routes>
     <Toaster/>

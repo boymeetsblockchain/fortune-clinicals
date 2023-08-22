@@ -42,7 +42,7 @@ function Products() {
         <table className="table-auto w-full">
           <thead>
             <tr>
-              <th className=" py-2">Name</th>
+              <th className="px py-2">Name</th>
               <th className="px-4 py-2">Quantity</th>
               <th className="px-4 py-2">Price</th>
             </tr>
