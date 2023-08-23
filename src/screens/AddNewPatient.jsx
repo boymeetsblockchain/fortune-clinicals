@@ -8,16 +8,12 @@ import {getAuth} from 'firebase/auth'
 import { addDoc,serverTimestamp,collection } from 'firebase/firestore'
 import { db } from '../firebase.config'
 import Navbar from '../components/Navbar'
+import { titleOptions } from '../data'
+import { options } from '../data'
 import { Link, useNavigate } from 'react-router-dom'
 function AddNewPatient() {
   const navigate = useNavigate()
-  const options = [
-    { value: ' Basic', label: 'Basic' },
-    { value: 'Vip', label: 'Vip' },
-    { value: 'Essh', label: 'Essh' },
-    { value: 'House Patient', label: 'House Patient' },
 
-  ];
    
   const auth = getAuth()
     const [name, setName] = useState("");
@@ -31,7 +27,8 @@ function AddNewPatient() {
     const [paidSessions, setPaidSessions] = useState("");
     const [comment, setComment] = useState([]);
     const [amountPerSession, setAmountPerSession] = useState("");
-    const[selectedValue,setSelectedValue]=useState("")
+    const[selectedValue,setSelectedValue]=useState("Basic")
+    const[selectedTitle,setSelectedTitle]=useState("Mr")
     const[reffer,setReffer]= useState("")
 
     const formData={
@@ -47,7 +44,8 @@ function AddNewPatient() {
         amountPerSession,
         reffer,
         comment,
-        selectedValue
+        selectedValue,
+        selectedTitle
     }
 
     const registerPatient = async (e)=>{
@@ -82,6 +80,13 @@ function AddNewPatient() {
                 <AiOutlineUser className='rounded-full  text-gray-400 ' size={64} />
             </div>
             <Input label={"Name"} type={"text"} value={name} onChange={(e) => setName(e.target.value)} />
+            <Select
+  id="selectInput"
+  value={selectedTitle}
+  onChange={(e)=>setSelectedTitle(e.target.value)}
+  label="Select an option"
+  options={titleOptions}
+/>
             <Input label={"Age"} type={"number"} value={age} onChange={(e) => setAge(e.target.value)} />
             <Select
   id="selectInput"

@@ -15,6 +15,9 @@ const [name, setName] = useState( '');
 const [price, setPrice] = useState('');
 const [quantity, setQuantity] = useState('');
 const [comment, setComment] = useState('');
+const [sold,setSold]= useState("")
+const [used,setUsed]= useState("")
+const [added,setAdded]= useState("")
     const params = useParams();
   const [loading, setLoading] = useState(true);
   const [product, setProduct] = useState({});
@@ -30,6 +33,9 @@ const [comment, setComment] = useState('');
         setPrice(data.price || '');
         setQuantity(data.quantity || '');
         setComment(data.comment || '');
+        setAdded(data.added || "")
+        setUsed(data.used || "")
+        setSold(data.sold || "")
         console.log(data);
       }
     };
@@ -42,22 +48,31 @@ const [comment, setComment] = useState('');
  
 
   const updateProduct = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
+  
     try {
-      // Update the product data in Firestore
+      // Calculate the new quantity based on sold, added, and used values
+      const newQuantity = parseInt(quantity) + parseInt(added) - (parseInt(sold) + parseInt(used));
+  
+      // Update the product data in Firestore, including the new quantity
       const docRef = doc(db, 'products', params.id);
       await updateDoc(docRef, {
         name: name,
         price: price,
-        quantity: quantity,
+        quantity: newQuantity, // Update the quantity with the calculated value
         comment: comment,
+        sold: sold, // You can include other fields here as well
+        used: used,
+        added: added,
       });
-       
-      navigate('/dashboard/products')
+  
+      navigate('/dashboard/products');
     } catch (error) {
       console.error('Error updating product:', error);
     }
   };
+  
+  
   
   const deleteProduct = async () => {
     try {
@@ -109,7 +124,10 @@ const [comment, setComment] = useState('');
           <Input label="Product Name" type="text" value={name} onChange={(e) => setName(e.target.value)} />
           <Input label="Price" type="number" value={price} onChange={(e) => setPrice(e.target.value)} />
           <Input label="Quantity" type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
-          {/* <Input label="Comment" type="text" value={comment} onChange={(e) => setComment(e.target.value)} /> */}
+          <Input label="Used" type={"number"} value={used} onChange={(e)=>setUsed(e.target.value)}/>
+            <Input label="Added" type={"number"} value={added} onChange={(e)=>setAdded(e.target.value)}/>
+            <Input label="Sold" type={"number"} value={sold} onChange={(e)=>setSold(e.target.value)}/>
+          
          <h2 className='capitalize'>{product.comment}</h2>
           <div className="flex justify-end">
             <button

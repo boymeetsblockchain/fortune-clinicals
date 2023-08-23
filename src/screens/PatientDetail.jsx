@@ -50,7 +50,7 @@ if(loading){
                 </div>
          </div>
          <div className="name-age-number flex  space-y-4 mx-5  flex-col">
-          <h1 className='bg-slate-100 text-[#fff5162] font-bold  px-2 py-1.5 text-3xl rounded-md'>{patient?.name}</h1>
+          <h1 className='bg-slate-100 text-[#fff5162] font-bold  px-2 py-1.5 text-3xl rounded-md'>{patient?.selectedTitle} {""}{patient?.name}</h1>
           <p> Age:{patient?.age}</p>
           <p> Phone Number :{patient?.phoneNumber}</p>
           <p>Condition:{patient?.condition}</p>

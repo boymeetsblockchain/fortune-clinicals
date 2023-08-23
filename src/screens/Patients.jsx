@@ -7,7 +7,7 @@ import {AiOutlineUserAdd} from 'react-icons/ai'
 import { Link } from 'react-router-dom';
 import { db } from '../firebase.config'
 import Loader from '../components/Loader';
-import { getDocs,collection,getDoc } from 'firebase/firestore'
+import { getDocs,collection,} from 'firebase/firestore'
 function Patients() {
   const navigate= useNavigate()
   const[patients,setPatients]= useState([])
