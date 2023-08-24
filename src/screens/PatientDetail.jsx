@@ -51,10 +51,10 @@ if(loading){
          </div>
          <div className="name-age-number flex  space-y-4 mx-5  flex-col">
           <h1 className='bg-slate-100 text-[#fff5162] font-bold  px-2 py-1.5 text-3xl rounded-md'>{patient?.selectedTitle} {""}{patient?.name}</h1>
-          <p> Age:{patient?.age}</p>
-          <p> Phone Number :{patient?.phoneNumber}</p>
-          <p>Condition:{patient?.condition}</p>
-          <p>Acessed by:{patient?.clinician}</p>
+          <p> Age:&nbsp; {patient?.age}</p>
+          <p> Phone Number: &nbsp; {patient?.phoneNumber}</p>
+          <p>Condition:&nbsp; {patient?.condition}</p>
+          <p>Acessed by:&nbsp;{patient?.clinician}</p>
          </div>
           <div className="reg-number bg-green-500 text-2xl text-white  px-2 py-1.5 ">
             <h1>{patient?.dateRegistered}/{patient?.selectedValue}</h1>
