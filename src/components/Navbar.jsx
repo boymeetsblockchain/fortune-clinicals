@@ -11,15 +11,15 @@ function Navbar() {
           <AiOutlineMail size={32} color='white' className='hover:scale-75'/>
           </Link>
           <Link to={'/dashboard/patients'}>
-          <AiOutlineUnorderedList size={32} color='white'/>
+          <AiOutlineUnorderedList size={32} color='white' className='hover:scale-75'/>
           </Link>
           <Link to={'/'}>
-          <AiOutlineHome size={60} color='white'/></Link>
+          <AiOutlineHome size={60} color='white' className='hover:scale-75'/></Link>
            <Link to={'/dashboard/profile'}>
            
-           <AiOutlineUser size={32} color='white'/></Link>
+           <AiOutlineUser size={32} color='white'className='hover:scale-75'/></Link>
           <Link to={'/dashboard/products'}>
-          <AiOutlineShoppingCart size={32} color='white'/>
+          <AiOutlineShoppingCart size={32} color='white' className='hover:scale-75'/>
           </Link>
         </div>
       </div>

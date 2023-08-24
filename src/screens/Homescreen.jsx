@@ -7,7 +7,7 @@ import {AiOutlineHome} from 'react-icons/ai'
 const navigation = [
   { name: 'Products', to: '/dasboard/products' },
   { name: 'Dashboard', to: '/dashboard' },
-  { name: 'Patient', to: '/dashboard/patient' },
+  { name: 'Patient', to: '/dashboard/patients' },
   { name: 'Profile ', to: '/dashboard/profile' },
 ]
 
@@ -21,6 +21,8 @@ export default function Homescreen() {
       setUser(currentUser)
     }
    },[])
+
+   console.log(user)
   return (
     <div className="bg-white">
       <header className="absolute inset-x-0 top-0 z-50">
