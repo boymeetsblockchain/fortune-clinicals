@@ -6,6 +6,7 @@ import { addDoc,serverTimestamp,collection,getDocs } from 'firebase/firestore'
 import { db } from '../firebase.config'
 import Navbar from '../components/Navbar'
 import { AiOutlineArrowRight } from 'react-icons/ai'
+import Loader from '../components/Loader'
 import Input from '../components/Input'
 function Profile() {
   const[note,setNote]= useState("")
@@ -59,6 +60,12 @@ function Profile() {
    console.log(notes)
   },[])
 
+
+  if(loading){
+    return(
+      <Loader/>
+    )
+  }
   return (
    <>
     <Navbar/>

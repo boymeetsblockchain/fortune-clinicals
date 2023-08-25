@@ -13,7 +13,7 @@ function PatientDetail() {
   const params = useParams()
   const [loading,setLoading]= useState(true)
   const [patient,setPatient]= useState(null)
-  
+  const [isActive,setIsActive]= useState(false)
 
 
   useEffect(()=>{
@@ -73,23 +73,6 @@ if(loading){
                 <h1 className='text-3xl  font-bold'> Completed</h1>
                 <p className='text-gray-400  text-xl'>{patient?.dateRegistered}</p>
                 <p  className='text-xl  text-gray-400 '>{patient?.comment}</p>
-              </div>
-           </div>
-           <div className="icons flex space-x-4">
-           <FaPencilAlt className="cursor-pointer  md:text-2xl"  color='blue'  />
-          <MdOutlineTransform className="cursor-pointer md:text-2xl "  color='blue'/>
-            <ImBin className="cursor-pointer md:text-2xl" color='red'/>
-           </div>
-          </div>
-          <div className="px-8 session-details flex justify-between items-center">
-           <div className="completed flex gap-2">
-              <div className="icon">
-                <FaCheck size={32} color='green'/>
-              </div>
-              <div className="completed flex flex-col gap-y-1">
-                <h1 className='text-3xl font-bold'> Completed</h1>
-                <p className='text-gray-400  md:text-xl text-sm'>{patient?.dateRegistered}</p>
-                <p  className='md:text-xl text-sm  text-gray-400 '>2nd session the patient? paid 12k for 1 hand cervical collar with jaw extenstions and semi rigid cervical</p>
               </div>
            </div>
            <div className="icons flex space-x-4">
