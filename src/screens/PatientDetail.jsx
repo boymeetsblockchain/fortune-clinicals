@@ -3,17 +3,19 @@ import Navbar from '../components/Navbar'
 import {FaPencilAlt,FaCheck} from 'react-icons/fa'
 import {ImBin} from 'react-icons/im'
 import { toast } from 'react-hot-toast'
+import{GrDocumentUpdate} from 'react-icons/gr'
 import {MdOutlineTransform} from 'react-icons/md'
 import { db } from '../firebase.config'
 import { getDoc,doc } from 'firebase/firestore'
 import { useParams } from 'react-router-dom'
 import Loader from '../components/Loader'
 
+
 function PatientDetail() {
   const params = useParams()
   const [loading,setLoading]= useState(true)
   const [patient,setPatient]= useState(null)
-  const [isActive,setIsActive]= useState(false)
+  const [isActive,setIsActive]= useState(true)
 
 
   useEffect(()=>{
@@ -61,31 +63,11 @@ if(loading){
           </div>
       </div>
        <div className="session-payment md:grid  md:gap-x-8 md:grid-cols-4 md:h-[420px] flex flex-col gap-4 justify-center">
-        <div className="bg-slate-200 rounded-md shadow-lg col-span-3 p-4">
-
-         <div className="completed section my-4 space-y-6">
-         <div className="px-8 session-details flex justify-between items-center"> 
-           <div className="completed flex gap-2">
-              <div className="icon">
-                <FaCheck size={32} color='green'/>
-              </div>
-              <div className="completed flex flex-col  gap-y-1">
-                <h1 className='text-3xl  font-bold'> Completed</h1>
-                <p className='text-gray-400  text-xl'>{patient?.dateRegistered}</p>
-                <p  className='text-xl  text-gray-400 '>{patient?.comment}</p>
-              </div>
-           </div>
-           <div className="icons flex space-x-4">
-           <FaPencilAlt className="cursor-pointer  md:text-2xl"  color='blue'  />
-          <MdOutlineTransform className="cursor-pointer md:text-2xl "  color='blue'/>
-            <ImBin className="cursor-pointer md:text-2xl" color='red'/>
-           </div>
-          </div>
-         </div>
-          
-        </div>
-        <div className="bg-slate-200 rounded-md shadow-lg flex flex-col justify-center space-y-4 p-6 col-span-1">
-          <div className='flex gap-3'>
+       <div className="bg-slate-200 rounded-md shadow-lg col-span-3 p-4">
+      
+       </div>
+       <div className="bg-slate-200 rounded-md shadow-lg col-span-1  flex flex-col justify-center space-y-4 p-6 col-span-">
+       <div className='flex gap-3   cursor-pointer hover:opacity-50'>
           <FaCheck size={32} color='green'/>
            <h1 className=''>DETAILS</h1>
           </div>
@@ -107,11 +89,13 @@ if(loading){
               {patient?.sessionPaid}
             </div>
           </div>
-          <div className='flex gap-3 cursor-pointer'  onClick={onDelete}>
+          <div className='flex gap-3 cursor-pointer hover:opacity-50'  onClick={onDelete}>
           <ImBin size={32} color='red'/>
            <h1 className=''>DELETE</h1>
           </div>
-        </div>
+
+       </div>
+          
        </div>
     </div>
      </div>
