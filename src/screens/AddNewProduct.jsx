@@ -31,11 +31,12 @@ function AddNewProduct() {
           sold,
           added,
           used,
-          comments: [comment], // Initialize with an array containing the current comment
+          comment, // Initialize with an array containing the current comment
           timestamp: serverTimestamp(),
           userId: auth?.currentUser?.uid,
+
         };
-    
+      
         const data = await addDoc(collection(db, 'products'), formDataCopy);
         console.log(data);
         toast.success("Product saved");

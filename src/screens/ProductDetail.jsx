@@ -35,9 +35,10 @@ const [added,setAdded]= useState("")
         setAdded(data.added || "")
         setUsed(data.used || "")
         setSold(data.sold || "")
-        console.log(data);
       }
+      
     };
+   
     getProduct();
   }, [params.id]);
   
@@ -50,25 +51,59 @@ const [added,setAdded]= useState("")
     e.preventDefault();
   
     try {
+      // Check if any of the input values have changed
+    
+      const priceChanged = price !== product.price;
+      const soldChanged = sold !== product.sold;
+      const usedChanged = used !== product.used;
+      const addedChanged = added !== product.added;
+      const quantityChanged =  priceChanged || soldChanged || usedChanged || addedChanged;
+  
       // Calculate the new quantity based on sold, added, and used values
-      const newQuantity = parseInt(quantity) + parseInt(added) - (parseInt(sold) + parseInt(used));
-      // Update the product data in Firestore, including the new quantity
+      const newQuantity = quantityChanged
+        ? parseInt(quantity) + parseInt(added) - (parseInt(sold) + parseInt(used))
+        : product.quantity; // Use the current quantity if it hasn't changed
+  
+      // Create an object to hold the updated fields
+      const updatedFields = {};
+  
+      // Check if the values have changed and update the corresponding field
+     
+      if (priceChanged) {
+        updatedFields.price = price;
+      }
+  
+      if (quantityChanged) {
+        updatedFields.quantity = newQuantity;
+      }
+  
+      if (comment !== product.comment) {
+        updatedFields.comment = comment;
+      }
+  
+      if (soldChanged) {
+        updatedFields.sold = sold;
+      }
+  
+      if (usedChanged) {
+        updatedFields.used = used;
+      }
+  
+      if (addedChanged) {
+        updatedFields.added = added;
+      }
+  
+      // Update the product data in Firestore with the updated fields
       const docRef = doc(db, 'products', params.id);
-      await updateDoc(docRef, {
-        name: name,
-        price: price,
-        quantity: newQuantity, // Update the quantity with the calculated value
-        comment: comment,
-        sold: sold, // You can include other fields here as well
-        used: used,
-        added: added,
-      });
-      toast.success("Product Updated")
+      await updateDoc(docRef, updatedFields);
+      toast.success("Product Updated");
       navigate('/dashboard/products');
     } catch (error) {
       console.error('Error updating product:', error);
     }
   };
+  
+  
   
   
   
@@ -82,6 +117,7 @@ const [added,setAdded]= useState("")
     <>
       <Navbar />
       <div className="mx-auto max-w-screen-xl py-4 h-full w-full px-4 relative md:px-8 lg:px-12">
+      <h2 className='capitalize text-3xl text-center '>{product.comment}</h2>
         <h1 className="text-center my-6 font-bold text-3xl capitalize">Edit {product?.name}</h1>
     
         <form className="flex flex-col space-y-4 justify-center w-full mx-auto">
@@ -91,8 +127,8 @@ const [added,setAdded]= useState("")
           <Input label="Used" type={"number"} value={used} onChange={(e)=>setUsed(e.target.value)}/>
             <Input label="Added" type={"number"} value={added} onChange={(e)=>setAdded(e.target.value)}/>
             <Input label="Sold" type={"number"} value={sold} onChange={(e)=>setSold(e.target.value)}/>
-          
-         <h2 className='capitalize'>{product.comment}</h2>
+            <Input label="Comment" type={"text"} value={comment} onChange={(e)=>setComment(e.target.value)}/>
+         
           <div className="flex justify-end">
             <button
             onClick={updateProduct}
