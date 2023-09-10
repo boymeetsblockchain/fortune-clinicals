@@ -2,6 +2,8 @@ import React from 'react'
 import Navbar from '../../components/Navbar'
 import Input from '../../components/Input'
 import Select from '../../components/Select'
+import { db } from '../../firebase.config'
+import { serverTimestamp,addDoc,collection } from 'firebase/firestore'
 import {AiOutlineUser,AiOutlineArrowLeft,AiOutlineArrowRight} from 'react-icons/ai'
 import { useState } from 'react'
 import { toast } from 'react-hot-toast'
@@ -15,6 +17,7 @@ function EshPatient() {
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [address, setAddress] = useState("");
+  const [regNumber, setRegnumber] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [condition, setCondition] = useState("");
   const [clinician, setClinician] = useState("");
@@ -27,7 +30,30 @@ function EshPatient() {
   const[selectedTitle,setSelectedTitle]=useState("Mr")
   const[reffer,setReffer]= useState("")
 
-  const registerPatient=()=>{}
+
+  const formData = {
+    name,
+    age,address,phoneNumber,clinician,dateRegistered,reffer,
+    numOfSessions,paidSessions,comment,condition,regNumber 
+  }
+  const registerPatient = async (e)=>{
+    e.preventDefault()
+     
+     try {
+       const formDataCopy ={
+           ...formData,
+           timestamp: serverTimestamp(),
+           userId:auth?.currentUser?.uid
+        }
+        const data = await addDoc(collection(db, 'eshpatients'), formDataCopy)
+        console.log(data)
+         toast.success("patient saved")
+         navigate(`/esh-patient/${data.id}`)
+         
+     } catch (error) {
+       console.log(error)
+     }
+   }
   return (
    <>
    <Navbar/>
@@ -57,7 +83,7 @@ function EshPatient() {
   label="Select an option"
   options={Eshoptions}
 />
-           <Input label={"Registration Number"} type={"text"}/>
+           <Input label={"Registration Number"} type={"text"} value={regNumber} onChange={(e)=>setRegnumber(e.target.value)}/>
            <Input label={"Address"} type={"text"} value={address} onChange={(e) => setAddress(e.target.value)} />
          <Input label={"Phone Number"} type={"number"} value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
          <Input label={"Condition"} type={"text"} value={condition} onChange={(e) => setCondition(e.target.value)} />
