@@ -79,7 +79,7 @@ function Session({ patientId }) {
             <div key={session.id} className="flex space-y-2 bg-white rounded-lg p-3 shadow-md mb-3">
               <div className="flex flex-col">
                 <p className="text-gray-700 text-lg">Comment: {session?.comment}</p>
-                <p className="text-green-600 text-sm font-semibold"> Date: ${session?.date}</p>
+                <p className="text-green-600 text-sm font-semibold"> Date: {session?.date}</p>
               </div>
             </div>
           ))}

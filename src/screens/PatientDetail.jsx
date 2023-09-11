@@ -79,7 +79,7 @@ function PatientDetail() {
               {isActive === 'session' && <Session patientId={params.id} />}
             </div>
             <div className="bg-slate-200 rounded-md shadow-lg col-span-1 flex flex-col justify-center space-y-4 p-6 col-span-">
-              <div className='flex gap-3 cursor-pointer hover:opacity-50' onClick={() => setIsActive('payment')}>
+              <div className='flex gap-3 cursor-pointer hover:opacity-50'>
                 <FaCheck size={32} color='green' />
                 <h1 className=''>DETAILS</h1>
               </div>
@@ -93,7 +93,7 @@ function PatientDetail() {
                 </div>
               </div>
               <div className='flex gap-3 items-center justify-between cursor-pointer hover:opacity-50'>
-                <div className="detials flex gap-2">
+                <div className="detials flex gap-2" onClick={()=> setIsActive("payment")}>
                   <FaCheck size={32} color='green' />
                   <h1 className=''>PAYMENT</h1>
                 </div>

@@ -83,8 +83,8 @@ function Payment({ patientId }) {
             <div key={payment.id} className="flex space-y-2 bg-white rounded-lg p-3 shadow-md mb-3">
               <div className="flex flex-col">
                 <p className="text-gray-700 text-lg">Comment: {payment?.comment}</p>
-                <p className="text-green-600 text-sm font-semibold">Amount: ${payment?.amount}</p>
-                <p className="text-green-600 text-sm font-semibold">Date: ${payment?.datePayed}</p>
+                <p className="text-green-600 text-sm font-semibold">Amount: 	&#8358;{payment?.amount}</p>
+                <p className="text-green-600 text-sm font-semibold">Date: {payment?.datePayed}</p>
               </div>
             </div>
           ))}
