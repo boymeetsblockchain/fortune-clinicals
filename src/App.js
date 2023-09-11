@@ -16,6 +16,7 @@ import AddNewProduct from './screens/AddNewProduct'
 import Message from './screens/Message'
 import EshPatients from './screens/esh/EshPatients'
 import AddEshPatient from './screens/esh/AddEshPatient'
+import EshProfile from './screens/esh/EshProfile'
 const App = () => {
   return (
     
@@ -36,7 +37,8 @@ const App = () => {
         <Route path='/message' element={<Message/>}/>
          <Route path='/esh-patient/:id' element={<EshPatient/>}/>
          <Route path='/add-esh-patients' element={<AddEshPatient/>}/>
-         <Route path='/esh-patients' element={<EshPatients/>}/>
+         <Route path='/esh/patients' element={<EshPatients/>}/>
+         <Route path='/esh/profile' element={<EshProfile/>}/>
     </Routes>
     <Toaster/>
    </BrowserRouter>

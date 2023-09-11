@@ -38,6 +38,7 @@ function PatientDetail() {
       try {
         const docRef = doc(db, 'eshpatients', params.id);
         await deleteDoc(docRef);
+        navigate('/esh-patients')
         toast.success("Deleted");
         // Redirect or perform any other action after deletion
       } catch (error) {
