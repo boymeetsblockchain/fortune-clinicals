@@ -5,6 +5,7 @@ import Dashboard from './screens/Dashboard'
 import Patients from './screens/Patients'
 import ProductDetail from './screens/ProductDetail'
 import PatientDetail from './screens/PatientDetail'
+import EshProduct from './screens/esh/EshProduct'
 import EshPatient from './screens/esh/EshPatient'
 import { Toaster } from 'react-hot-toast'
 import {BrowserRouter, Route,Routes} from 'react-router-dom'
@@ -17,6 +18,8 @@ import Message from './screens/Message'
 import EshPatients from './screens/esh/EshPatients'
 import AddEshPatient from './screens/esh/AddEshPatient'
 import EshProfile from './screens/esh/EshProfile'
+import AddNewEshProduct from './screens/esh/AddNewEshProduct'
+import EshProductDetail from './screens/esh/EshProductDetail'
 const App = () => {
   return (
     
@@ -39,6 +42,9 @@ const App = () => {
          <Route path='/add-esh-patients' element={<AddEshPatient/>}/>
          <Route path='/esh/patients' element={<EshPatients/>}/>
          <Route path='/esh/profile' element={<EshProfile/>}/>
+         <Route path='/esh/products' element={<EshProduct/>}/>
+         <Route path='/esh/add-new-product' element={<AddNewEshProduct/>}/>
+         <Route path='/esh/product/:id' element={<EshProductDetail/>}/>
     </Routes>
     <Toaster/>
    </BrowserRouter>

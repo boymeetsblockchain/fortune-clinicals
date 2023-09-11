@@ -19,6 +19,9 @@ function Patients() {
         id: doc.id, // Add the id property here
         ...doc.data(),
       }));
+
+      filteredData.sort((a, b) => b.date.localeCompare(a.date));
+
       setPatients(filteredData);
       console.log(filteredData)
       setLoading(false);

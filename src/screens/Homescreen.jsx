@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom'
 import {getAuth} from "firebase/auth"
 import {AiOutlineHome} from 'react-icons/ai'
 const navigation = [
-  { name: 'Products', to: '/dasboard/products' },
-  { name: 'Dashboard', to: '/dashboard' },
-  { name: 'Patient', to: '/dashboard/patients' },
-  { name: 'Profile ', to: '/dashboard/profile' },
+  { name: 'Products', to: '#' },
+  { name: 'Dashboard', to: '#' },
+  { name: 'Patient', to: '#' },
+  { name: 'Profile ', to: '#' },
 ]
 
 export default function Homescreen() {

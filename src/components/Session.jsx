@@ -19,10 +19,12 @@ function Session({ patientId }) {
       // Use map to directly transform querySnapshot to an array of paymentDetails
       const paymentDetails = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 
+      // Sort the paymentDetails array by date in ascending order
+      paymentDetails.sort((a, b) => b.date.localeCompare(a.date));
+
       // Update the payments state with fetched session details
       setSessions(paymentDetails);
       setLoading(false);
-      console.log(paymentDetails);
     } catch (error) {
       console.error('Error fetching session details:', error);
     }
@@ -66,11 +68,11 @@ function Session({ patientId }) {
 
   return (
     <div className='flex justify-center my-2 gap-y-3 flex-col px-3'>
-       <h1 className='text-center font-bold'>Sessions Info </h1>
+      <h1 className='text-center font-bold'>Sessions Info</h1>
       <form className='space-y-2 flex flex-col' onSubmit={addNewPayment}>
         <Input type={"text"} label={"Comment"} value={comment} onChange={(e) => setComment(e.target.value)} />
         <Input label={"Date Registered"} type={"date"} value={date} onChange={(e) => setDate(e.target.value)} />
-        <button type="submit " className='bg-[#FF5162] text-white py-1.5'>Submit</button>
+        <button type="submit" className='bg-[#FF5162] text-white py-1.5'>Submit</button>
       </form>
       <div className="session-details-container">
         <h1 className="text-xl font-semibold flex flex-col gap-3 mb-4">Completed Sessions :{sessions.length ===0 ?("") :sessions.length}</h1>

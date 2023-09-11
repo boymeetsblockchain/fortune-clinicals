@@ -10,6 +10,7 @@ import Loader from '../components/Loader'
 import Input from '../components/Input'
 function Profile() {
   const[note,setNote]= useState("")
+  const[date,setDate]= useState("")
   const[notes,setNotes]= useState([])
   const [loading, setLoading] = useState(true);
   const navigate =useNavigate()
@@ -25,6 +26,7 @@ function Profile() {
   const saveNote = async(e)=>{
     e.preventDefault();
     const noteCopy= {note,
+      date,
     timestamp:serverTimestamp(),
   userId:auth.currentUser.uid}
     
@@ -48,6 +50,8 @@ function Profile() {
         id: doc.id,
         ...doc.data(),
       }));
+      filteredData.sort((a, b) => b.date.localeCompare(a.date));
+
       setNotes(filteredData);
       setLoading(false);
     } catch (error) {
@@ -78,6 +82,7 @@ function Profile() {
      <div className="note my-8">
       <form  onSubmit={saveNote}> 
         <Input label={"Add a note "} type={"text"} value={note} onChange={e=>setNote(e.target.value)}/>
+        <Input label={"pick a date"} type={"date"} value={date} onChange={e=>setDate(e.target.value)}/>
        <div className="flex justify-end">
        <button className="bg-[#FF5162] py-3 flex  items-center justify-center gap-x-2 text-white text-sm rounded-md w-1/4 mt-4 hover:bg-red-700 transition">
                  Add new Note <AiOutlineArrowRight/>
@@ -87,8 +92,9 @@ function Profile() {
      </div>
      <div className="notes-display mt-4">
   {notes.map((data) => (
-    <div key={data.id} className="bg-[#FF5162] text-white p-4 mb-2 rounded-lg">
-      <p className="text-lg">{data.note}</p>
+    <div key={data.id} className="bg-[#FF5162] text-white p-4 mb-2 flex justify-between items-center rounded-lg">
+      <p className="text-sm">{data.note}</p>
+      <p className='text-sm'>{data.date}</p>
     </div>
   ))}
 </div>

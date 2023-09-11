@@ -19,6 +19,10 @@ function Payment({ patientId }) {
 
       // Use map to directly transform querySnapshot to an array of paymentDetails
       const paymentDetails = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      
+       // Sort the paymentDetails array by date in ascending order
+       paymentDetails.sort((a, b) => b.date.localeCompare(a.date));
+
 
       // Update the payments state with fetched payment details
       setPayments(paymentDetails);
