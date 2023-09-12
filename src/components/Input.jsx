@@ -2,12 +2,12 @@ import React from "react";
 
 
 
-const Input = ({id, onChange, value, label, type })=>{
+const Input = ({id, onChange, value, label, name, type })=>{
     return(
         <div className="relative">
              <input 
               id={id}
-              required
+              name={name}
               value={value}
               type={type}
               onChange={onChange}
