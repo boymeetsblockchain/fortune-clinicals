@@ -34,7 +34,7 @@ function Navbar() {
       <div className="flex items-center justify-center">
         <div className="flex justify-between items-center gap-x-8">
           {
-            userRole ==="isEsh" ? eshLinks.map((link, index) => (
+            userRole ==="isESH" ? eshLinks.map((link, index) => (
               <Link key={index} to={link.to} title={link.title}>
                 {React.createElement(link.icon, { size: link.size, color: 'white', className: 'hover:scale-75' })}
               </Link>

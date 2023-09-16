@@ -16,14 +16,18 @@ function Session({ patientId }) {
       const paymentsQuery = query(collection(db, 'patientssessions'), where('patientId', '==', patientId));
       const querySnapshot = await getDocs(paymentsQuery);
 
-      // Use map to directly transform querySnapshot to an array of paymentDetails
-      const paymentDetails = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      // Use map to directly transform querySnapshot to an array of sessionDetails
+      const sessionDetails = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 
-      // Sort the paymentDetails array by date in ascending order
-      // paymentDetails.sort((a, b) => b.date.localeCompare(a.date));
+      sessionDetails.sort((a, b) => {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+        return dateB - dateA;
+      });
+
 
       // Update the payments state with fetched session details
-      setSessions(paymentDetails);
+      setSessions(sessionDetails);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching session details:', error);
@@ -80,7 +84,7 @@ function Session({ patientId }) {
           {sessions.map((session) => (
             <div key={session.id} className="flex space-y-2 bg-white rounded-lg p-3 shadow-md mb-3">
               <div className="flex flex-col">
-                <p className="text-gray-700 text-lg">Comment: {session?.comment}</p>
+                <p className="text-gray-700 text-lg">{session?.comment}</p>
                 <p className="text-green-600 text-sm font-semibold"> Date: {session?.date}</p>
               </div>
             </div>

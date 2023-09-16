@@ -20,6 +20,8 @@ function AddNewPatient() {
     const [age, setAge] = useState("");
     const [address, setAddress] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
+    const [phoneNumber2, setPhoneNumber2] = useState("");
+    const [caregiver, setCareGiver] = useState("");
     const [condition, setCondition] = useState("");
     const [clinician, setClinician] = useState("");
     const [dateRegistered, setDateRegistered] = useState("");
@@ -45,7 +47,9 @@ function AddNewPatient() {
         reffer,
         comment,
         selectedValue,
-        selectedTitle
+        selectedTitle,
+        phoneNumber2,
+        caregiver
     }
 
     const registerPatient = async (e)=>{
@@ -97,6 +101,8 @@ function AddNewPatient() {
 />
            <Input label={"Address"} type={"text"} value={address} onChange={(e) => setAddress(e.target.value)} />
          <Input label={"Phone Number"} type={"number"} value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
+         <Input label={"Phone Number 2"} type={"number"} value={phoneNumber2} onChange={(e) => setPhoneNumber2(e.target.value)} />
+         <Input label={"Add Care giver details"} type={"text"} value={caregiver} onChange={(e) => setCareGiver(e.target.value)} />
          <Input label={"Condition"} type={"text"} value={condition} onChange={(e) => setCondition(e.target.value)} />
          <Input label={"Clinician attending to"} type={"text"} value={clinician} onChange={(e) => setClinician(e.target.value)} />
          <Input label={"Reffering Person"} type={"text"} value={reffer} onChange={(e) => setReffer(e.target.value)} />
