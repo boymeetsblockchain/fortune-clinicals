@@ -20,7 +20,7 @@ function Patients() {
         ...doc.data(),
       }));
 
-      filteredData.sort((a, b) => b.date.localeCompare(a.date));
+      // filteredData.sort((a, b) => b.date.localeCompare(a.date));
 
       setPatients(filteredData);
       console.log(filteredData)

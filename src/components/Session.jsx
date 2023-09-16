@@ -20,7 +20,7 @@ function Session({ patientId }) {
       const paymentDetails = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 
       // Sort the paymentDetails array by date in ascending order
-      paymentDetails.sort((a, b) => b.date.localeCompare(a.date));
+      // paymentDetails.sort((a, b) => b.date.localeCompare(a.date));
 
       // Update the payments state with fetched session details
       setSessions(paymentDetails);
