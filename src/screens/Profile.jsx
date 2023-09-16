@@ -50,7 +50,7 @@ function Profile() {
         id: doc.id,
         ...doc.data(),
       }));
-      filteredData.sort((a, b) => b.date.localeCompare(a.date));
+      // filteredData.sort((a, b) => b.date.localeCompare(a.date));
 
       setNotes(filteredData);
       setLoading(false);

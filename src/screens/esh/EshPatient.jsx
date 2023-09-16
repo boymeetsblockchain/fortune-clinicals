@@ -100,7 +100,7 @@ function PatientDetail() {
                 </div>
               </div>
               <div className='flex gap-3 items-center justify-between cursor-pointer hover:opacity-50'>
-                <div className="detials flex gap-2">
+                <div className="detials flex gap-2" onClick={()=>setIsActive("payment")}>
                   <FaCheck size={32} color='green' />
                   <h1 className=''>PAYMENT</h1>
                 </div>

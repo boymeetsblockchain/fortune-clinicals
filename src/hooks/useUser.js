@@ -18,7 +18,7 @@ function useUser() {
       }
     };
     getUser();
-  }, [auth.currentUser]);
+  }, []);
 
   return user;
 }
@@ -28,8 +28,8 @@ function useUserRole(user) {
     return 'loading';
   }
 
-  if (user.isEsh) {
-    return 'isEsh';
+  if (user.isESH) {
+    return 'isESH';
   }
 
   if(user.admin){

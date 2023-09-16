@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
-import { FaPencilAlt, FaCheck } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import {  FaCheck } from 'react-icons/fa';
 import { ImBin } from 'react-icons/im';
 import { toast } from 'react-hot-toast';
-import { GrDocumentUpdate } from 'react-icons/gr';
-import { MdOutlineTransform } from 'react-icons/md';
 import { db } from '../firebase.config';
 import { getDoc, doc, deleteDoc } from 'firebase/firestore'; // Import deleteDoc
 import { useParams } from 'react-router-dom';
@@ -14,6 +13,7 @@ import Session from '../components/Session';
 
 function PatientDetail() {
   const params = useParams();
+  const navigate = useNavigate()
   const [loading, setLoading] = useState(true);
   const [patient, setPatient] = useState(null);
   const [isActive, setIsActive] = useState('payment'); // Initialize with 'payment'
@@ -37,6 +37,7 @@ function PatientDetail() {
         const docRef = doc(db, 'patients', params.id);
         await deleteDoc(docRef);
         toast.success("Deleted");
+         navigate('/dashboard/patients')
         // Redirect or perform any other action after deletion
       } catch (error) {
         console.error('Error deleting patient record:', error);

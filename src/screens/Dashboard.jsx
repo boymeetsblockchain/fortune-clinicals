@@ -1,5 +1,5 @@
 import React from 'react';
-import {getAuth} from 'firebase/auth'
+import GetUser from '../hooks/useGetUser';
 import { Link } from 'react-router-dom';
 import { AiOutlineShoppingCart, AiOutlineUser, AiOutlineSetting, AiOutlineUnorderedList } from 'react-icons/ai';
 import  {useUserRole,useUser} from '../hooks/useUser'
@@ -18,17 +18,16 @@ const eshMenuItems= [
 ]
 
 function Dashboard() {
-  const auth= getAuth()
-  const {currentUser}= auth
+
+  const currentUser=GetUser()
   const user = useUser();
   const userRole = useUserRole(user);
-  console.log(userRole)
   return (
     <div className='flex items-center flex-col  justify-center h-screen px-4 md:px-8 lg:px-12'>
       <h1 className="text-center md:text-4xl text-2xl  mb-4 font-bold">Welcome, {currentUser?currentUser.displayName :""}</h1>
       <div className="grid  grid-cols-1 md:grid-cols-2  md:gap-6 gap-2">
         {
-          userRole === "isEsh" ? eshMenuItems.map((item, index) => (
+          userRole === "isESH" ? eshMenuItems.map((item, index) => (
             <Link key={index} to={item.to} className='bg-red-500 h-32 w-64 px-2 py-3 text-white text-center flex flex-row-reverse items-center justify-center rounded-md'>
               {item.text} <item.icon size={64} />
             </Link>
