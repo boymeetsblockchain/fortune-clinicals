@@ -12,6 +12,7 @@ const Input = ({id, onChange, value, label, name, type })=>{
               type={type}
               onChange={onChange}
               autoComplete="none"
+      
              className="
              block
              rounded-md

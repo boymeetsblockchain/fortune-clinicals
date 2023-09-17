@@ -114,7 +114,7 @@ function AddNewPatient() {
   options={options}
 />
           <Input label={"Address"} type={"text"} value={address} onChange={(e) => setAddress(e.target.value)} />
-          <Input label={"Registration Number"} type={"number"} value={regNum} onChange={(e) => setRegNum(e.target.value)} />
+          <Input label={"Registration Number"} type={"text"} value={regNum} onChange={(e) => setRegNum(e.target.value)} />
          <Input label={"Phone Number"} type={"number"} value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
          <Input label={"Phone Number 2"} type={"number"} value={phoneNumber2} onChange={(e) => setPhoneNumber2(e.target.value)} />
          <Input label={"Add Care giver details"} type={"text"} value={caregiver} onChange={(e) => setCareGiver(e.target.value)} />
