@@ -15,7 +15,8 @@ function AddNewPatient() {
 
    
   const auth = getAuth()
-    const [name, setName] = useState("");
+    const [surname, setSurname] = useState("");
+    const [othername, setOthername] = useState("");
     const [age, setAge] = useState("");
     const [address, setAddress] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -34,7 +35,8 @@ function AddNewPatient() {
     const[ageRange,setAgeRange]= useState("Year")
     const[regNum,setRegNum]= useState("")
     const formData={
-        name,
+        surname,
+        othername,
         address,
         age,
         phoneNumber,
@@ -85,7 +87,8 @@ function AddNewPatient() {
             <div className='flex  justify-center'> 
                 <AiOutlineUser className='rounded-full  text-gray-400 ' size={64} />
             </div>
-            <Input label={"Name"} type={"text"} value={name} onChange={(e) => setName(e.target.value)} />
+            <Input label={"Surname"} type={"text"} value={surname} onChange={(e) => setSurname(e.target.value)} />
+            <Input label={"Other Name"} type={"text"} value={othername} onChange={(e) => setOthername(e.target.value)} />
             <Select
   id="selectInput"
   value={selectedTitle}
@@ -110,8 +113,8 @@ function AddNewPatient() {
   label="Select an option"
   options={options}
 />
-           <Input label={"Address"} type={"text"} value={address} onChange={(e) => setAddress(e.target.value)} />
-           <Input label={"Registration Number"} type={"number"} value={regNum} onChange={(e) => setRegNum(e.target.value)} />
+          <Input label={"Address"} type={"text"} value={address} onChange={(e) => setAddress(e.target.value)} />
+          <Input label={"Registration Number"} type={"number"} value={regNum} onChange={(e) => setRegNum(e.target.value)} />
          <Input label={"Phone Number"} type={"number"} value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
          <Input label={"Phone Number 2"} type={"number"} value={phoneNumber2} onChange={(e) => setPhoneNumber2(e.target.value)} />
          <Input label={"Add Care giver details"} type={"text"} value={caregiver} onChange={(e) => setCareGiver(e.target.value)} />

@@ -91,7 +91,7 @@ function PatientDetail() {
               </div>
             </div> */}
             <div className="name-age-number flex space-y-1 mx-5 flex-col">
-              <h1 className='bg-slate-100 text-[#fff5162] font-bold px-2 py-1.5 text-3xl rounded-md'>{patient?.selectedTitle} {""}{patient?.name}</h1>
+              <h1 className='bg-slate-100 text-[#fff5162] font-bold px-2 py-1.5 text-3xl rounded-md'>{patient?.selectedTitle} {""}{patient?.surname} &nbsp; {patient?.othername}</h1>
               <p> Age:&nbsp; {patient?.age} {patient?.ageRange}</p>
               <p> Phone Number: &nbsp; {patient?.phoneNumber}</p>
               <p> Phone Number 2: &nbsp; {patient?.phoneNumber2}</p>
