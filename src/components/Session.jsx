@@ -4,7 +4,7 @@ import { collection, where, query, getDocs, addDoc } from 'firebase/firestore';
 import { db } from '../firebase.config';
 import ComponentLoader from './ComponentLoader';
 
-function Session({ patientId }) {
+function Session({ patientId}) {
   const [comment, setComment] = useState('');
   const [sessions, setSessions] = useState(null);
   const [loading, setLoading] = useState(true);

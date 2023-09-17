@@ -34,9 +34,10 @@ function Patients() {
   const onView = useCallback((id)=>{
     navigate(`/dashboard/patient/${id}`)
   },[navigate])
+
   const onDelete = ()=>{
     window.confirm("are you sure you want to delete this data? record")
-    toast.success("deleted")
+    toast.success("click on the user data to delete")
   }
 
   

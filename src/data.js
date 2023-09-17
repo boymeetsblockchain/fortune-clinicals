@@ -26,3 +26,15 @@ export   const Eshoptions = [
   
 
 ];
+
+export const ageData=[
+  {
+    value:"Years",label:"Years",
+  },
+  {
+    value:"Months", label:"Months"
+  },
+  {
+    value:"Days", label:"Days"
+  }
+]

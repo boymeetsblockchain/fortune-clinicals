@@ -8,8 +8,7 @@ import {getAuth} from 'firebase/auth'
 import { addDoc,serverTimestamp,collection } from 'firebase/firestore'
 import { db } from '../firebase.config'
 import Navbar from '../components/Navbar'
-import { titleOptions } from '../data'
-import { options } from '../data'
+import { options,titleOptions, ageData } from '../data'
 import { Link, useNavigate } from 'react-router-dom'
 function AddNewPatient() {
   const navigate = useNavigate()
@@ -32,7 +31,8 @@ function AddNewPatient() {
     const[selectedValue,setSelectedValue]=useState("Basic")
     const[selectedTitle,setSelectedTitle]=useState("Mr")
     const[reffer,setReffer]= useState("")
-
+    const[ageRange,setAgeRange]= useState("Year")
+    const[regNum,setRegNum]= useState("")
     const formData={
         name,
         address,
@@ -49,7 +49,9 @@ function AddNewPatient() {
         selectedValue,
         selectedTitle,
         phoneNumber2,
-        caregiver
+        caregiver,
+        ageRange,
+        regNum
     }
 
     const registerPatient = async (e)=>{
@@ -91,7 +93,16 @@ function AddNewPatient() {
   label="Select an option"
   options={titleOptions}
 />
-            <Input label={"Age"} type={"number"} value={age} onChange={(e) => setAge(e.target.value)} />
+            <div className="age flex justify-evenly ">
+              <Input label={"Age"} type={"number"} value={age} onChange={(e) => setAge(e.target.value)} />
+              <Select
+  id="selectInput"
+  value={ageRange}
+  onChange={(e)=>setAgeRange(e.target.value)}
+  label="in"
+  options={ageData}
+/>
+            </div>
             <Select
   id="selectInput"
   value={selectedValue}
@@ -100,6 +111,7 @@ function AddNewPatient() {
   options={options}
 />
            <Input label={"Address"} type={"text"} value={address} onChange={(e) => setAddress(e.target.value)} />
+           <Input label={"Registration Number"} type={"number"} value={regNum} onChange={(e) => setRegNum(e.target.value)} />
          <Input label={"Phone Number"} type={"number"} value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
          <Input label={"Phone Number 2"} type={"number"} value={phoneNumber2} onChange={(e) => setPhoneNumber2(e.target.value)} />
          <Input label={"Add Care giver details"} type={"text"} value={caregiver} onChange={(e) => setCareGiver(e.target.value)} />

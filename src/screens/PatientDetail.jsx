@@ -65,7 +65,7 @@ function PatientDetail() {
             </div>
             <div className="name-age-number flex space-y-4 mx-5 flex-col">
               <h1 className='bg-slate-100 text-[#fff5162] font-bold px-2 py-1.5 text-3xl rounded-md'>{patient?.selectedTitle} {""}{patient?.name}</h1>
-              <p> Age:&nbsp; {patient?.age}</p>
+              <p> Age:&nbsp; {patient?.age} {patient?.ageRange}</p>
               <p> Phone Number: &nbsp; {patient?.phoneNumber}</p>
               <p> Phone Number 2: &nbsp; {patient?.phoneNumber2}</p>
               <p> Care giver Details: &nbsp; {patient?.caregiver}</p>
@@ -73,7 +73,7 @@ function PatientDetail() {
               <p>Acessed by:&nbsp;{patient?.clinician}</p>
             </div>
             <div className="reg-number bg-green-500 text-2xl text-white px-2 py-1.5 ">
-              <h1>{patient?.dateRegistered}/{patient?.selectedValue}</h1>
+              <h1>{patient?.dateRegistered}/{patient?.regNum}/{patient?.selectedValue}</h1>
             </div>
           </div>
           <div className="session-payment md:grid md:gap-x-8 md:grid-cols-4 md:h-[420px] flex flex-col gap-4 justify-center">
@@ -81,7 +81,7 @@ function PatientDetail() {
               {isActive === 'payment' && <Payment patientId={params.id} />}
               {isActive === 'session' && <Session patientId={params.id} />}
             </div>
-            <div className="bg-slate-200 rounded-md shadow-lg col-span-1 flex flex-col justify-center space-y-4 p-6 col-span-">
+            <div className="bg-slate-200 rounded-md shadow-lg col-span-1 flex flex-col space-y-4 p-6 col-span-">
               <div className='flex gap-3 cursor-pointer hover:opacity-50'>
                 <FaCheck size={32} color='green' />
                 <h1 className=''>DETAILS</h1>
