@@ -4,7 +4,7 @@ import React from 'react';
 function ComponentLoader() {
   return (
     
-    <div className="h-auto w-auto flex items-center justify-center mx-auto">
+    <div className="h-auto w-auto flex items-center my-auto justify-center mx-auto">
       
       <FadeLoader color="#FF5162" />
     </div>
