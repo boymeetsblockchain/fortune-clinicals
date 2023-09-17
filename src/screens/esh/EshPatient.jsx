@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../../components/Navbar';
-import { FaPencilAlt, FaCheck } from 'react-icons/fa';
+
+import {  FaCheck } from 'react-icons/fa';
 import { ImBin } from 'react-icons/im';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-import { GrDocumentUpdate } from 'react-icons/gr';
-import { MdOutlineTransform } from 'react-icons/md';
 import { db } from '../../firebase.config';
 import { getDoc, doc, deleteDoc } from 'firebase/firestore'; // Import deleteDoc
 import { useParams } from 'react-router-dom';
 import Loader from '../../components/Loader';
 import Payment from '../../components/Payment';
 import Session from '../../components/Session';
-
+import InitialReview from '../../components/InitialReview';
 function PatientDetail() {
   const params = useParams();
   const navigate= useNavigate()
@@ -43,7 +42,7 @@ function PatientDetail() {
         // Redirect or perform any other action after deletion
       } catch (error) {
         console.error('Error deleting patient record:', error);
-        navigate('/esh-patients')
+        navigate('/esh/patients')
         toast.error("Error deleting patient record");
       }
     }
@@ -84,11 +83,16 @@ function PatientDetail() {
             <div className="bg-slate-200 rounded-md shadow-lg col-span-3 p-4 overflow-y-auto">
               {isActive === 'payment' && <Payment patientId={params.id} />}
               {isActive === 'session' && <Session patientId={params.id} />}
+              {isActive === 'review' && <InitialReview patientId={params.id} />}
             </div>
             <div className="bg-slate-200 rounded-md shadow-lg col-span-1 flex flex-col justify-center space-y-4 p-6 col-span-">
               <div className='flex gap-3 cursor-pointer hover:opacity-50' onClick={() => setIsActive('payment')}>
                 <FaCheck size={32} color='green' />
                 <h1 className=''>DETAILS</h1>
+              </div>
+              <div className='flex gap-3 cursor-pointer hover:opacity-50' onClick={() => setIsActive('review')}>
+                <FaCheck size={32} color='green' />
+                <h1 className=''>INTIAL REVIEW</h1>
               </div>
               <div className='flex gap-3 items-center justify-between cursor-pointer hover:opacity-50'>
                 <div className="detials flex gap-2" onClick={() => setIsActive('session')}>

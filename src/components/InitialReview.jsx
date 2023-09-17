@@ -4,22 +4,22 @@ import { collection, where, query, getDocs, addDoc } from 'firebase/firestore';
 import { db } from '../firebase.config';
 import ComponentLoader from './ComponentLoader';
 
-function Session({ patientId }) {
+function InitialReview({ patientId }) {
   const [comment, setComment] = useState('');
-  const [sessions, setSessions] = useState(null);
+  const [reviews, setReview] = useState(null);
   const [loading, setLoading] = useState(true);
   const [date, setDate] = useState('');
 
   // Function to fetch session details based on patientId
-  const fetchPaymentDetails = async () => {
+  const reviewDetails = async () => {
     try {
-      const paymentsQuery = query(collection(db, 'patientssessions'), where('patientId', '==', patientId));
-      const querySnapshot = await getDocs(paymentsQuery);
+      const reviewsQuery = query(collection(db, 'reviews'), where('patientId', '==', patientId));
+      const querySnapshot = await getDocs(reviewsQuery);
 
-      // Use map to directly transform querySnapshot to an array of sessionDetails
-      const sessionDetails = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      // Use map to directly transform querySnapshot to an array of reviewDetails
+      const reviewDetails = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 
-      sessionDetails.sort((a, b) => {
+      reviewDetails.sort((a, b) => {
         const dateA = new Date(a.date);
         const dateB = new Date(b.date);
         return dateB - dateA;
@@ -27,7 +27,7 @@ function Session({ patientId }) {
 
 
       // Update the payments state with fetched session details
-      setSessions(sessionDetails);
+      setReview(reviewDetails);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching session details:', error);
@@ -35,8 +35,8 @@ function Session({ patientId }) {
   };
 
   useEffect(() => {
-    // Call the fetchPaymentDetails function when the component mounts or when patientId changes
-    fetchPaymentDetails();
+    // Call the reviewDetails function when the component mounts or when patientId changes
+    reviewDetails();
   }, [patientId]);
 
   const addNewPayment = async (e) => {
@@ -49,11 +49,11 @@ function Session({ patientId }) {
     };
 
     try {
-      const data = await addDoc(collection(db, 'patientssessions'), paymentData);
+      const data = await addDoc(collection(db, 'reviews'), paymentData);
       console.log('Session added with ID:', data.id);
 
       // After adding a new session, refetch the session details to include the new one
-      fetchPaymentDetails();
+      reviewDetails();
 
       // Clear the input fields
       setComment('');
@@ -69,20 +69,18 @@ function Session({ patientId }) {
       </div>
     );
   }
- 
-  const sessionLength= sessions.length ===0 ?("0") :sessions.length
+
   return (
     <div className='flex justify-center my-2 gap-y-3 flex-col px-3'>
-      <h1 className='text-center font-bold'>Sessions Info</h1>
+      <h1 className='text-center font-bold'>Review Info</h1>
       <form className='space-y-2 flex flex-col' onSubmit={addNewPayment}>
         <Input type={"text"} label={"Comment"} value={comment} onChange={(e) => setComment(e.target.value)} />
         <Input label={"Date Registered"} type={"date"} value={date} onChange={(e) => setDate(e.target.value)} />
         <button type="submit" className='bg-[#FF5162] text-white py-1.5'>Submit</button>
       </form>
       <div className="session-details-container">
-        <h1 className="text-xl font-semibold flex flex-col gap-3 mb-4">Completed Sessions :{sessionLength}</h1>
         <div className="session-details">
-          {sessions.map((session) => (
+          {reviews.map((session) => (
             <div key={session.id} className="flex space-y-2 bg-white rounded-lg p-3 shadow-md mb-3">
               <div className="flex flex-col">
                 <p className="text-gray-700 text-lg">{session?.comment}</p>
@@ -96,4 +94,4 @@ function Session({ patientId }) {
   );
 }
 
-export default Session;
+export default InitialReview
