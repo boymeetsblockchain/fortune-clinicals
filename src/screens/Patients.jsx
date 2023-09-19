@@ -64,12 +64,12 @@ function Patients() {
             >
               <div className="flex flex-row  justify-evenly px-4">
                 <div className="text-center text-5xl text-[#ff5162] h-20 w-20 px-2 py-1 items-center flex bg-white font-bold">
-                  {data?.name[0].toUpperCase()}
+                  {data?.surname[0].toUpperCase()}
                 </div>
                 <div className="flex ml-4 space-y-2 flex-col">
                   <p className="text-sm">
                     Name:{' '}
-                    <span className="text-gray-400">{data?.name}</span>
+                    <span className="text-gray-400">{data?.surname} &nbsp; {data?.othername}</span>
                   </p>
                   <p className="text-sm">
                     Clinicians:{' '}
