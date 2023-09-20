@@ -8,13 +8,15 @@ import {AiOutlineUser,AiOutlineArrowLeft,AiOutlineArrowRight} from 'react-icons/
 import { useState } from 'react'
 import { toast } from 'react-hot-toast'
 import {getAuth} from 'firebase/auth'
-import { titleOptions } from '../../data'
+import { ageData, titleOptions } from '../../data'
 import { Eshoptions } from '../../data'
 import { Link, useNavigate } from 'react-router-dom'
 function EshPatient() {
   const navigate = useNavigate()
   const auth = getAuth()
-  const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [othername, setOthername] = useState("");
+  const[ageRange,setAgeRange]= useState("")
   const [age, setAge] = useState("");
   const [address, setAddress] = useState("");
   const [regNumber, setRegnumber] = useState("");
@@ -34,7 +36,7 @@ function EshPatient() {
 
 
   const formData = {
-    name,
+    surname,othername,
     age,address,phoneNumber,clinician,dateRegistered,reffer,
     numOfSessions,paidSessions,comment,condition,regNumber,phoneNumber2,caregiver
   }
@@ -69,7 +71,8 @@ function EshPatient() {
             <div className='flex  justify-center'> 
                 <AiOutlineUser className='rounded-full  text-gray-400 ' size={64} />
             </div>
-            <Input label={"Name"} type={"text"} value={name} onChange={(e) => setName(e.target.value)} />
+            <Input label={"Surname"} type={"text"} value={surname} onChange={(e) => setSurname(e.target.value)} />
+            <Input label={"Other Name"} type={"text"} value={othername} onChange={(e) => setOthername(e.target.value)} />
             <Select
   id="selectInput"
   value={selectedTitle}
@@ -77,7 +80,14 @@ function EshPatient() {
   label="Select an option"
   options={titleOptions}
 />
-            <Input label={"Age"} type={"number"} value={age} onChange={(e) => setAge(e.target.value)} />
+<Input label={"Age"} type={"number"} value={age} onChange={(e) => setAge(e.target.value)} />
+              <Select
+  id="selectInput"
+  value={ageRange}
+  onChange={(e)=>setAgeRange(e.target.value)}
+  label="in"
+  options={ageData}
+/>
             <Select
   id="selectInput"
   value={selectedValue}
