@@ -32,7 +32,7 @@ function Patients() {
          getPatients()
   },[])
   const onView = useCallback((id)=>{
-    navigate(`/esh/patients/${id}`)
+    navigate(`/esh/patient/${id}`)
   },[navigate])
 
   const onDelete = ()=>{
