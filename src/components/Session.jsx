@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Input from './Input';
-import { collection, where, query, getDocs, addDoc } from 'firebase/firestore';
+import { collection, where, query, getDocs, addDoc,deleteDoc,doc} from 'firebase/firestore';
 import { db } from '../firebase.config';
 import ComponentLoader from './ComponentLoader';
+import toast from 'react-hot-toast';
+import {ImBin} from 'react-icons/im'
 
 function Session({ patientId}) {
   const [comment, setComment] = useState('');
@@ -11,7 +13,7 @@ function Session({ patientId}) {
   const [date, setDate] = useState('');
 
   // Function to fetch session details based on patientId
-  const fetchPaymentDetails = async () => {
+  const fectchSessionDetails = async () => {
     try {
       const paymentsQuery = query(collection(db, 'patientssessions'), where('patientId', '==', patientId));
       const querySnapshot = await getDocs(paymentsQuery);
@@ -35,8 +37,8 @@ function Session({ patientId}) {
   };
 
   useEffect(() => {
-    // Call the fetchPaymentDetails function when the component mounts or when patientId changes
-    fetchPaymentDetails();
+    // Call the fectchSessionDetails function when the component mounts or when patientId changes
+    fectchSessionDetails();
   }, [patientId]);
 
   const addNewPayment = async (e) => {
@@ -49,18 +51,37 @@ function Session({ patientId}) {
     };
 
     try {
-      const data = await addDoc(collection(db, 'patientssessions'), paymentData);
-      console.log('Session added with ID:', data.id);
-
-      // After adding a new session, refetch the session details to include the new one
-      fetchPaymentDetails();
-
-      // Clear the input fields
-      setComment('');
+       if(!comment || !date){
+        toast.error("please fill in all details ")
+       }else{
+        const data = await addDoc(collection(db, 'patientssessions'), paymentData);
+        console.log('Session added with ID:', data.id);
+  
+        // After adding a new session, refetch the session details to include the new one
+        fectchSessionDetails();
+  
+        // Clear the input fields
+        setComment('');
+        setDate("")
+       }
     } catch (error) {
       console.error('Error adding session:', error);
     }
   };
+
+  const deleteSession = async (sessionId) => {
+    try {
+      // Delete the payment document from Firebase using its ID
+      await deleteDoc(doc(db, 'patientssessions',sessionId));
+      toast.success('Payment deleted successfully');
+  
+      // After deleting the payment, refetch the payment details to update the list
+      fectchSessionDetails();
+    } catch (error) {
+      console.error('Error deleting payment:', error);
+    }
+  };
+  
 
   if (loading) {
     return (
@@ -83,10 +104,13 @@ function Session({ patientId}) {
         <h1 className="text-xl font-semibold flex flex-col gap-3 mb-4">Completed Sessions :{sessionLength}</h1>
         <div className="session-details">
           {sessions.map((session) => (
-            <div key={session.id} className="flex space-y-2 bg-white rounded-lg p-3 shadow-md mb-3">
+            <div key={session.id} className="flex space-y-2 justify-between bg-white rounded-lg p-3 shadow-md mb-3">
               <div className="flex flex-col">
                 <p className="text-gray-700 text-lg">{session?.comment}</p>
                 <p className="text-green-600 text-sm font-semibold"> Date: {session?.date}</p>
+              </div>
+              <div className="delete">
+                <ImBin size={24} color='red' onClick={()=>deleteSession(session.id)}/>
               </div>
             </div>
           ))}

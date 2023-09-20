@@ -17,7 +17,7 @@ function PatientDetail() {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(true);
   const [patient, setPatient] = useState(null);
-  const [isActive, setIsActive] = useState('payment'); 
+  const [isActive, setIsActive] = useState('session'); 
   const [payment,setPayment]= useState("")
   const [session,setSession]= useState("")
 

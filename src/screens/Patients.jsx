@@ -69,15 +69,15 @@ function Patients() {
                 <div className="flex ml-4 space-y-2 flex-col">
                   <p className="text-sm">
                     Name:{' '}
-                    <span className="text-gray-400">{data?.surname} &nbsp; {data?.othername}</span>
+                    <span className="text-gray-800">{data?.surname} &nbsp; {data?.othername}</span>
                   </p>
                   <p className="text-sm">
                     Clinicians:{' '}
-                    <span className="text-gray-400">{data?.clinician}</span>
+                    <span className="text-gray-800">{data?.clinician}</span>
                   </p>
                   <p className="text-sm">
                     Date:{' '}
-                    <span className="text-gray-400 text-xs">
+                    <span className="text-gray-800 text-xs">
                       {data?.dateRegistered}
                     </span>
                   </p>
