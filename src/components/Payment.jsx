@@ -5,14 +5,16 @@ import {ImBin} from 'react-icons/im'
 import { db } from '../firebase.config';
 import ComponentLoader from './ComponentLoader';
 import toast from 'react-hot-toast';
-
+import { useNavigate } from 'react-router-dom';
 function Payment({ patientId }) {
   const [comment, setComment] = useState('');
   const [amount, setAmount] = useState('');
   const [payments, setPayments] = useState(null);
   const [loading, setLoading] = useState(true);
   const [datePayed, setDatePayed] = useState('');
+  
 
+  const navigate = useNavigate()
   // Function to fetch payment details based on patientId
   const fetchPaymentDetails = async () => {
     try {
@@ -73,6 +75,7 @@ function Payment({ patientId }) {
         setComment('');
         setAmount('');
         setDatePayed("")
+        navigate(0)
       }
     
     } catch (error) {
@@ -99,7 +102,7 @@ function Payment({ patientId }) {
       // Delete the payment document from Firebase using its ID
       await deleteDoc(doc(db, 'patientspayments',paymentId));
       toast.success('Payment deleted successfully');
-  
+       
       // After deleting the payment, refetch the payment details to update the list
       fetchPaymentDetails();
     } catch (error) {
@@ -139,7 +142,7 @@ function Payment({ patientId }) {
                 <p className="text-green-600 text-sm font-semibold">Date: {payment?.datePayed}</p>
               </div>
               <div className="delete">
-                <ImBin size={24} color='red' onClick={()=>deletePayment(payment.id)}/>
+                <ImBin size={24} color='red' className='cursor-pointer' onClick={()=>deletePayment(payment.id)}/>
               </div>
             </div>
           ))}

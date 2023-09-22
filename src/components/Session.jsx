@@ -5,13 +5,13 @@ import { db } from '../firebase.config';
 import ComponentLoader from './ComponentLoader';
 import toast from 'react-hot-toast';
 import {ImBin} from 'react-icons/im'
-
+import { useNavigate } from 'react-router-dom';
 function Session({ patientId}) {
   const [comment, setComment] = useState('');
   const [sessions, setSessions] = useState(null);
   const [loading, setLoading] = useState(true);
   const [date, setDate] = useState('');
-
+const navigate= useNavigate()
   // Function to fetch session details based on patientId
   const fectchSessionDetails = async () => {
     try {
@@ -63,6 +63,7 @@ function Session({ patientId}) {
         // Clear the input fields
         setComment('');
         setDate("")
+        navigate(0)
        }
     } catch (error) {
       console.error('Error adding session:', error);
@@ -110,7 +111,8 @@ function Session({ patientId}) {
                 <p className="text-green-600 text-sm font-semibold"> Date: {session?.date}</p>
               </div>
               <div className="delete">
-                <ImBin size={24} color='red' onClick={()=>deleteSession(session.id)}/>
+                <ImBin size={24} color='red' className='cursor-pointer'
+                 onClick={()=>deleteSession(session.id)}/>
               </div>
             </div>
           ))}

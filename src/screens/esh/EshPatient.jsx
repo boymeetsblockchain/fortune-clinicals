@@ -6,7 +6,7 @@ import { ImBin } from 'react-icons/im';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../../firebase.config';
-import { getDoc, doc, deleteDoc } from 'firebase/firestore'; // Import deleteDoc
+import { getDoc, doc, deleteDoc,collection,query,getDocs,where} from 'firebase/firestore'; // Import deleteDoc
 import { useParams } from 'react-router-dom';
 import Loader from '../../components/Loader';
 import Payment from '../../components/Payment';
@@ -17,7 +17,9 @@ function PatientDetail() {
   const navigate= useNavigate()
   const [loading, setLoading] = useState(true);
   const [patient, setPatient] = useState(null);
-  const [isActive, setIsActive] = useState('payment'); // Initialize with 'payment'
+  const [payment,setPayment]= useState("")
+  const [session,setSession]= useState("")
+  const [isActive, setIsActive] = useState('session'); // Initialize with 'payment'
 
   useEffect(() => {
     const getPatient = async () => {
@@ -29,6 +31,25 @@ function PatientDetail() {
         setLoading(false);
       }
     };
+
+    const getPayment = async()=>{
+      const paymentsQuery = query(collection(db, 'patientspayments'), where('patientId', '==', params.id));
+      const querySnapshot = await getDocs(paymentsQuery);
+  
+      // Use map to directly transform querySnapshot to an array of paymentDetails
+      const paymentDetails =  querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      setPayment(paymentDetails)
+    }
+    const getSession = async()=>{
+      const paymentsQuery = query(collection(db, 'patientssessions'), where('patientId', '==', params.id));
+      const querySnapshot = await getDocs(paymentsQuery);
+  
+      // Use map to directly transform querySnapshot to an array of paymentDetails
+      const sessionDetails =  querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      setSession(sessionDetails)
+    }
+    getPayment()
+    getSession()
     getPatient();
   }, []);
 
@@ -92,7 +113,7 @@ function PatientDetail() {
               <div className='flex gap-3 items-center justify-between cursor-pointer hover:opacity-50'>
                 <div className="detials flex gap-2" onClick={() => setIsActive('session')}>
                   <FaCheck size={32} color='green' />
-                  <h1 className=''>SESSIONS</h1>
+                  <h1 className=''>SESSIONS <span className='ml-4 bg-green-500 px-3 py-1 rounded-md text-white'>{session.length}</span> </h1>
                 </div>
                 <div>
                   {patient?.session}
@@ -101,7 +122,7 @@ function PatientDetail() {
               <div className='flex gap-3 items-center justify-between cursor-pointer hover:opacity-50'>
                 <div className="detials flex gap-2" onClick={()=>setIsActive("payment")}>
                   <FaCheck size={32} color='green' />
-                  <h1 className=''>PAYMENT</h1>
+                  <h1 className=''>PAYMENT <span className='ml-4 bg-green-500 px-3 py-1 rounded-md text-white'>{payment.length}</span></h1>
                 </div>
                 <div>
                   {patient?.sessionPaid}
