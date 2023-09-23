@@ -1,20 +1,21 @@
 import React from 'react';
 import GetUser from '../hooks/useGetUser';
 import { Link } from 'react-router-dom';
-import { AiOutlineShoppingCart, AiOutlineUser, AiOutlineSetting, AiOutlineUnorderedList } from 'react-icons/ai';
+import { AiOutlineShoppingCart, AiOutlineUser, AiOutlineSetting, AiOutlineUnorderedList,AiTwotoneCalendar } from 'react-icons/ai';
 import  {useUserRole,useUser} from '../hooks/useUser'
 const menuItems = [
   { to: '/dashboard/patients', text: 'Click to view and edit Patient Data', icon: AiOutlineUnorderedList },
   { to: '/dashboard/products', text: 'Click to have access to available Products', icon: AiOutlineShoppingCart },
   { to: '/dashboard/profile', text: 'Click to access your details', icon: AiOutlineUser },
-  { to: '/dashboard/about', text: 'Click to know how to use', icon: AiOutlineSetting },
+  { to: '/dashboard/calender', text: 'Click to have access to monthly report', icon: AiTwotoneCalendar },
+ 
 ];
 
 const eshMenuItems= [
   { to: '/esh/patients', text: 'Click to view and edit Patient Data', icon: AiOutlineUnorderedList },
   { to: '/esh/products', text: 'Click to have access to available Products', icon: AiOutlineShoppingCart },
   { to: '/esh/profile', text: 'Click to access your details', icon: AiOutlineUser },
-  { to: '/esh/about', text: 'Click to know how to use', icon: AiOutlineSetting },
+  { to: '/esh/about', text: 'Click to have access to monthly report', icon: AiOutlineSetting },
 ]
 
 function Dashboard() {
