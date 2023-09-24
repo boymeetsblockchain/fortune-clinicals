@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Input from '../components/Input'
-import Textarea from '../components/Textarea'
+
 import { useRef } from 'react'
 import Navbar from '../components/Navbar'
 import emailjs from '@emailjs/browser'
@@ -16,6 +16,7 @@ function Message() {
      form.current, 
      'B2CcDlj6aqwUKKeGG')
     e.target.reset()
+    console.log(form)
     toast.success("Message Sent")
   } catch (error) {
      toast.error("something went wrong")
@@ -33,7 +34,7 @@ function Message() {
         <Input label={"name"} type={"text"} name={'name'}/>
         <Input label={"email"} type={"email"} name={"email"}/>
         <Input label={"number"}  type={"number"} name={"number"} />
-        <Textarea label={"Write your message here"}  name={"message"}/>
+        <Input label={"Write your message here"}  name={"message"}/>
         <button className='bg-red-500 p-2  text-white  text-sm'>
           Send Message 
         </button>
