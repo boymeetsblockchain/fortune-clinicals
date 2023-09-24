@@ -50,7 +50,12 @@ function Profile() {
         id: doc.id,
         ...doc.data(),
       }));
-      // filteredData.sort((a, b) => b.date.localeCompare(a.date));
+      filteredData.sort((a, b) => {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+        return dateB - dateA;
+      });;
+  
 
       setNotes(filteredData);
       setLoading(false);
@@ -78,6 +83,7 @@ function Profile() {
       <p className='text-2xl capitalize'>Signed in  as <span className='ml-4 bg-[#ff5162] text-white p-2 rounded-md'> {auth?.currentUser?.displayName}</span></p>
        <button className='text-xl capitalize bg-[#FF5162] p-2 text-white rounded-md' 
        onClick={onLogOut}>signOut</button>
+       <button onClick={()=> navigate('/daily')} className='text-xl capitalize bg-[#FF5162] p-2 text-white rounded-md'>Daily Expenditures</button>
     </div>
      <div className="note my-8">
       <form  onSubmit={saveNote}> 

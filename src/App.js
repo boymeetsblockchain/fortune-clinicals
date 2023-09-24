@@ -21,6 +21,8 @@ import EshProfile from './screens/esh/EshProfile'
 import AddNewEshProduct from './screens/esh/AddNewEshProduct'
 import EshProductDetail from './screens/esh/EshProductDetail'
 import Calender from './screens/Calender'
+import Daily from './screens/Daily'
+import EshDaily from './screens/esh/EshDaily'
 const App = () => {
   return (
     
@@ -36,6 +38,8 @@ const App = () => {
         <Route path='/dashboard/profile' element={<Profile/>}/>
         <Route path='/dashboard/patients' element={<Patients/>}/>
         <Route path='/add-new' element={<AddNewPatient/>}/>
+        <Route path='/daily' element={<Daily/>}/>
+        <Route path='/esh-daily' element={<EshDaily/>}/>
         <Route path='/dashboard/products' element={<Products/>}/>
         <Route path='/dashboard/calender' element={<Calender/>}/>
         <Route path='/add-new-product' element={<AddNewProduct/>}/>
