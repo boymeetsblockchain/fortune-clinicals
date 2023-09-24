@@ -58,7 +58,7 @@ function PatientDetail() {
       try {
         const docRef = doc(db, 'eshpatients', params.id);
         await deleteDoc(docRef);
-        navigate('/esh-patients')
+        navigate('/esh/patients')
         toast.success("Deleted");
         // Redirect or perform any other action after deletion
       } catch (error) {
@@ -92,7 +92,7 @@ function PatientDetail() {
            
             </div>
             <div className="reg-number bg-green-500 text-2xl text-white px-2 py-1.5 ">
-              <h1>{patient.regNumber}</h1>
+              <h1>{patient.selectedValue}{patient.regNumber}</h1>
             </div>
           </div>
           <div className="session-payment md:grid md:gap-x-8 md:grid-cols-4 md:h-[420px] flex flex-col gap-4 justify-center">

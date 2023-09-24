@@ -30,14 +30,14 @@ function EshPatient() {
   const [paidSessions, setPaidSessions] = useState("");
   const [comment, setComment] = useState([]);
   const [amountPerSession, setAmountPerSession] = useState("");
-  const[selectedValue,setSelectedValue]=useState("Basic")
+  const[selectedValue,setSelectedValue]=useState("In-patient")
   const[selectedTitle,setSelectedTitle]=useState("Mr")
   const[reffer,setReffer]= useState("")
 
 
   const formData = {
     surname,othername,
-    age,address,phoneNumber,clinician,dateRegistered,reffer,
+    age,address,phoneNumber,clinician,dateRegistered,reffer,selectedValue,
     numOfSessions,paidSessions,comment,condition,regNumber,phoneNumber2,caregiver
   }
   const registerPatient = async (e)=>{

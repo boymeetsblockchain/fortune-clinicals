@@ -6,8 +6,47 @@ import { useState,useEffect } from 'react';
 
 function Calendar() {
   // Array of month names
-  const [payment,setPayment]= useState("")
+  const [payments,setPayments]= useState("")
   const [session,setSession]= useState("")
+ 
+ 
+  const getPayment = async()=>{
+    const paymentsQuery = query(collection(db, 'patientspayments'));
+    const querySnapshot = await getDocs(paymentsQuery);
+
+    // Use map to directly transform querySnapshot to an array of paymentDetails
+    const paymentDetails =  querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    setPayments(paymentDetails)
+    console.log(paymentDetails)
+  }
+  const getSession = async()=>{
+    const paymentsQuery = query(collection(db, 'patientssessions'),);
+    const querySnapshot = await getDocs(paymentsQuery);
+
+    // Use map to directly transform querySnapshot to an array of paymentDetails
+    const sessionDetails =  querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    setSession(sessionDetails)
+    console.log(sessionDetails)
+  }
+  
+
+  const calculateTotalPayment = () => {
+    if (!payments) return 0; // Handle case when payments is null
+  
+    // Calculate the total payment by summing up the amounts
+    const totalPayment = payments.reduce((total, payment) => {
+      const amount = parseFloat(payment.amount);
+      return isNaN(amount) ? total : total + amount;
+    }, 0);
+  
+    // Check if the result is NaN and return 0 if it is
+    return isNaN(totalPayment) ? 0 : totalPayment;
+  };
+  
+  useEffect(()=>{
+     getPayment()
+     getSession()
+  },[])
   const months = [
     {
       name: 'January',
@@ -51,8 +90,9 @@ function Calendar() {
     },
     {
       name: 'September',
-      pay: payment.length,
+      pay: payments.length,
       ses: session.length,
+      total:calculateTotalPayment()
     },
     {
       name: 'October',
@@ -70,28 +110,6 @@ function Calendar() {
       ses: ' ',
     },
   ];
- 
-  const getPayment = async()=>{
-    const paymentsQuery = query(collection(db, 'patientspayments'));
-    const querySnapshot = await getDocs(paymentsQuery);
-
-    // Use map to directly transform querySnapshot to an array of paymentDetails
-    const paymentDetails =  querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-    setPayment(paymentDetails)
-  }
-  const getSession = async()=>{
-    const paymentsQuery = query(collection(db, 'patientssessions'),);
-    const querySnapshot = await getDocs(paymentsQuery);
-
-    // Use map to directly transform querySnapshot to an array of paymentDetails
-    const sessionDetails =  querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-    setSession(sessionDetails)
-  }
-
-  useEffect(()=>{
-     getPayment()
-     getSession()
-  },[])
   return (
     <>
       <Navbar />
@@ -104,7 +122,8 @@ function Calendar() {
                   <h1 className='text-3xl font-bold'>{month.name}</h1>
                    <div className='flex gap-2'>
                    <span className='text-green-800 font-semibold'> session :{month.ses}</span>
-                     <span className="text-red-800 font-semibold"> payment : {month.pay}</span>
+                     <span className="text-red-800 font-semibold"> payments : {month.pay}</span>
+                     <span className="text-red-800 font-semibold"> payments  {month.total}</span>
                    </div>
                 </div>
               </div>
