@@ -108,9 +108,9 @@ function Patients() {
                    View
                  </button>
                </div>
-               <div className="deletebutton ml-5" onClick={onDelete}>
+               {/* <div className="deletebutton ml-5" onClick={onDelete}>
                  <ImBin size={20} className="text-[#ff5162] cursor-pointer" />
-               </div>
+               </div> */}
              </div>
            </div>
           ))}
