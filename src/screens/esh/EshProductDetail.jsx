@@ -51,58 +51,55 @@ const [added,setAdded]= useState("")
     e.preventDefault();
   
     try {
-      // Check if any of the input values have changed
-    
-      const priceChanged = price !== product.price;
-      const soldChanged = sold !== product.sold;
-      const usedChanged = used !== product.used;
-      const addedChanged = added !== product.added;
-      const quantityChanged =  priceChanged || soldChanged || usedChanged || addedChanged;
+      const docRef = doc(db, 'eshproducts', params.id);
+      const docSnap = await getDoc(docRef);
   
-      // Calculate the new quantity based on sold, added, and used values
-      const newQuantity = quantityChanged
-        ? parseInt(quantity) + parseInt(added) - (parseInt(sold) + parseInt(used))
-        : product.quantity; // Use the current quantity if it hasn't changed
+      if (!docSnap.exists()) {
+        toast.error('Product does not exist.');
+        return;
+      }
+  
+      const existingData = docSnap.data();
   
       // Create an object to hold the updated fields
       const updatedFields = {};
   
-      // Check if the values have changed and update the corresponding field
-     
-      if (priceChanged) {
-        updatedFields.price = price;
+      if (parseInt(sold) !== existingData.sold) {
+        updatedFields.sold = parseInt(sold);
       }
   
-      if (quantityChanged) {
+      if (parseInt(used) !== existingData.used) {
+        updatedFields.used = parseInt(used);
+      }
+  
+      if (parseInt(added) !== existingData.added) {
+        updatedFields.added = parseInt(added);
+      }
+  
+      // Calculate the new quantity
+      const newQuantity =
+        existingData.quantity + (updatedFields.added || 0) -((updatedFields.sold || 0) + (updatedFields.used || 0)) ;
+  
+      if (newQuantity !== existingData.quantity) {
         updatedFields.quantity = newQuantity;
       }
   
-      if (comment !== product.comment) {
+      if (comment !== existingData.comment) {
         updatedFields.comment = comment;
       }
   
-      if (soldChanged) {
-        updatedFields.sold = sold;
+      // Update Firestore document with the updated fields
+      if (Object.keys(updatedFields).length > 0) {
+        await updateDoc(docRef, updatedFields);
+        toast.success('Product Updated');
+        navigate('/dashboard/products');
+      } else {
+        toast.info('No changes to update.');
       }
-  
-      if (usedChanged) {
-        updatedFields.used = used;
-      }
-  
-      if (addedChanged) {
-        updatedFields.added = added;
-      }
-  
-      // Update the product data in Firestore with the updated fields
-      const docRef = doc(db, 'eshproducts', params.id);
-      await updateDoc(docRef, updatedFields);
-      toast.success("Product Updated");
-      navigate('/dashboard/products');
     } catch (error) {
       console.error('Error updating product:', error);
     }
   };
-  
   
   
   

@@ -20,6 +20,7 @@ function Products() {
           ...doc.data(),
         }));
         setProducts(filteredData);
+        console.log(filteredData)
         setLoading(false);
       } catch (error) {
         console.error(error);

@@ -29,7 +29,13 @@ function AddNewProduct() {
         return !isNaN(parseFloat(value)) && isFinite(value);
       };
     
-      if (!isNumeric(price) || !isNumeric(quantity) || !isNumeric(used) || !isNumeric(added) || !isNumeric(sold)) {
+      if (
+        !isNumeric(price) ||
+        !isNumeric(quantity) ||
+        !isNumeric(used) ||
+        !isNumeric(added) ||
+        !isNumeric(sold)
+      ) {
         toast.error("Please enter valid numbers for Price, Quantity, Used, Added, and Sold.");
         return;
       }
@@ -37,11 +43,11 @@ function AddNewProduct() {
       try {
         const formDataCopy = {
           name,
-          price,
-          quantity,
-          sold,
-          added,
-          used,
+          price: parseFloat(price), // Convert to a number
+          quantity: parseInt(quantity), // Convert to an integer
+          sold: parseInt(sold), // Convert to an integer
+          added: parseInt(added), // Convert to an integer
+          used: parseInt(used), // Convert to an integer
           comment,
           timestamp: serverTimestamp(),
           userId: auth?.currentUser?.uid,
@@ -55,6 +61,7 @@ function AddNewProduct() {
         console.log(error);
       }
     };
+    
     
     // Add a new comment to the existing array of comments
 
