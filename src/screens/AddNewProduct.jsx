@@ -23,6 +23,17 @@ function AddNewProduct() {
 
     const addProduct = async (e) => {
       e.preventDefault();
+    
+      // Validate input fields as numbers
+      const isNumeric = (value) => {
+        return !isNaN(parseFloat(value)) && isFinite(value);
+      };
+    
+      if (!isNumeric(price) || !isNumeric(quantity) || !isNumeric(used) || !isNumeric(added) || !isNumeric(sold)) {
+        toast.error("Please enter valid numbers for Price, Quantity, Used, Added, and Sold.");
+        return;
+      }
+    
       try {
         const formDataCopy = {
           name,
@@ -31,12 +42,11 @@ function AddNewProduct() {
           sold,
           added,
           used,
-          comment, // Initialize with an array containing the current comment
+          comment,
           timestamp: serverTimestamp(),
           userId: auth?.currentUser?.uid,
-
         };
-      
+    
         const data = await addDoc(collection(db, 'products'), formDataCopy);
         console.log(data);
         toast.success("Product saved");
@@ -45,6 +55,7 @@ function AddNewProduct() {
         console.log(error);
       }
     };
+    
     // Add a new comment to the existing array of comments
 
 

@@ -117,18 +117,35 @@ const [added,setAdded]= useState("")
     <>
       <Navbar />
       <div className="mx-auto max-w-screen-xl py-4 h-full w-full px-4 relative md:px-8 lg:px-12">
-      <h2 className='capitalize text-3xl text-center '>{product.comment}</h2>
+      
         <h1 className="text-center my-6 font-bold text-3xl capitalize">Edit {product?.name}</h1>
     
         <form className="flex flex-col space-y-4 justify-center w-full mx-auto">
+        <h2 className='capitalize text-sm text-center '>{product.comment}</h2>
           <Input label="Product Name" type="text" value={name} onChange={(e) => setName(e.target.value)} />
-          <Input label="Price" type="number" value={price} onChange={(e) => setPrice(e.target.value)} />
+          <Input
+  label="Price"
+  type="number"
+  value={price}
+  onChange={(e) => {
+    // Ensure only numeric input is accepted
+    if (/^[0-9]*$/.test(e.target.value)) {
+      setPrice(e.target.value);
+    } else {
+      // Display an error message or handle the invalid input as needed
+      console.error('Invalid input for Price');
+    }
+  }}
+/>
+
+{/* Repeat the above pattern for other numeric fields */}
+
           <Input label="Quantity" type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
           <Input label="Used" type={"number"} value={used} onChange={(e)=>setUsed(e.target.value)}/>
             <Input label="Added" type={"number"} value={added} onChange={(e)=>setAdded(e.target.value)}/>
             <Input label="Sold" type={"number"} value={sold} onChange={(e)=>setSold(e.target.value)}/>
             <Input label="Comment" type={"text"} value={comment} onChange={(e)=>setComment(e.target.value)}/>
-         
+            
           <div className="flex justify-end">
             <button
             onClick={updateProduct}

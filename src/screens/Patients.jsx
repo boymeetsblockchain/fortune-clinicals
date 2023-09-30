@@ -65,6 +65,10 @@ function Patients() {
       <Navbar />
       <div className="px-4 md:px-8 lg:px-8 h-full mx-auto my-5 relative">
         {/* Add the search input field */}
+     <div className="flex justify-between items-center">
+     <div >
+         <p className='text-lg font-bold'>List of Patients: <span className='text-green-500'>{patients.length}</span></p>
+        </div>
       <div className="flex justify-end">
       <input
           type="text"
@@ -74,6 +78,7 @@ function Patients() {
           className="px-3 py-2 mb-4 rounded-md border border-gray-300 focus:outline-none mb"
         />
       </div>
+     </div>
         <div className="data-box grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-8">
           {filteredPatients.map((data) => (
              <div

@@ -8,10 +8,12 @@ import { Link } from 'react-router-dom';
 import { db } from '../../firebase.config';
 import Loader from '../../components/Loader';
 import { getDocs,collection,} from 'firebase/firestore'
+
 function Patients() {
   const navigate= useNavigate()
   const[patients,setPatients]= useState([])
   const [loading,setLoading]= useState(true)
+  const [searchQuery, setSearchQuery] = useState(''); // State for the search query
   const getPatients = async () => {
     try {
       const data = await getDocs(collection(db, 'eshpatients'));
@@ -40,7 +42,11 @@ function Patients() {
     toast.success("click on the user data to delete")
   }
 
-  
+   // Filter patients based on search query
+   const filteredPatients = patients.filter((patient) => {
+    const fullName = `${patient.surname} ${patient.othername}`.toLowerCase();
+    return fullName.includes(searchQuery.toLowerCase());
+  });
     if(loading){
       return(
         <Loader/>
@@ -51,8 +57,22 @@ function Patients() {
     <>
       <Navbar />
       <div className="px-4 md:px-8 lg:px-8 h-full mx-auto my-5 relative">
+      <div className="flex justify-between items-center">
+     <div >
+         <p className='text-lg font-bold'>List of Patients: <span className='text-green-500'>{patients.length}</span></p>
+        </div>
+      <div className="flex justify-end">
+      <input
+          type="text"
+          placeholder="Search patients..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="px-3 py-2 mb-4 rounded-md border border-gray-300 focus:outline-none mb"
+        />
+      </div>
+     </div>
         <div className="data-box grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-8">
-          {patients.map(data => (
+          {filteredPatients.map(data => (
             <div
               className="h-30 py-4 w-auto shadow-md rounded-lg flex flex-col items-start"
               key={data?.id}
