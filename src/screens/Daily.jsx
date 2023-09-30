@@ -93,15 +93,16 @@ function Daily() {
         {/* Display the fetched expenses data */}
         <div>
           <h2 className='text-center font-bold text-3xl mb-2'>Expenses List</h2>
-          <ul>
-            {expensesData.map((expense) => (
-              <li key={expense.id} className='flex  justify-between bg-[#FF5162] text-white p-4 mb-2  items-center rounded-lg'>
-               <p> {expense.daily}</p>
-               <p>&#8358; {expense.price}</p> 
-               <p>{expense.date}</p>
-              </li>
-            ))}
-          </ul>
+          <div>
+  {expensesData.map((expense) => (
+    <div key={expense.id} className='bg-red-500 text-white p-4 rounded-lg mb-4'>
+      <p className='text-lg capitalize'>{expense.daily}</p>
+      <p className='text-xl'>amount : &#8358;{expense.price}</p>
+      <p className='text-sm'>date: {expense.date}</p>
+    </div>
+  ))}
+</div>
+
         </div>
       </div>
     </>

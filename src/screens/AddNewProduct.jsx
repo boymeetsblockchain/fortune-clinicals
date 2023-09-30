@@ -11,11 +11,11 @@ function AddNewProduct() {
 
   const navigate =useNavigate()
     const [name,setName]= useState("")
-    const [price,setPrice]= useState("")
-    const [quantity,setQuantity]= useState("")
-    const [sold,setSold]= useState("")
-    const [used,setUsed]= useState("")
-    const [added,setAdded]= useState("")
+    const [price,setPrice]= useState(0)
+    const [quantity,setQuantity]= useState(0)
+    const [sold,setSold]= useState(0)
+    const [used,setUsed]= useState(0)
+    const [added,setAdded]= useState(0)
     const [comment,setComment]= useState("")
   
 
