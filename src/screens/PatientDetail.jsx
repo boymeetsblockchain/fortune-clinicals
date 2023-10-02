@@ -5,6 +5,7 @@ import { collection, where, query, getDocs, } from 'firebase/firestore';
 import { db } from '../firebase.config';
 import {  FaCheck } from 'react-icons/fa';
 import { ImBin } from 'react-icons/im';
+import {AiTwotoneEdit} from 'react-icons/ai'
 import { toast } from 'react-hot-toast';
 import { getDoc, doc, deleteDoc } from 'firebase/firestore'; 
 import { useParams } from 'react-router-dom';
@@ -77,6 +78,9 @@ function PatientDetail() {
   }
 
 
+  const UpdatePatient=(params)=>{
+   navigate(`/update/${params}`)
+  }
   
 
   return (
@@ -131,10 +135,17 @@ function PatientDetail() {
                   {patient?.sessionPaid}
                 </div>
               </div>
+              <div className="flex gap-3 cursor-pointer hover:opacity-50" onClick={()=>UpdatePatient(params.id)}>
+            
+               <AiTwotoneEdit size={32} color='blue'/>
+              
+                UPDATE PATIENT
+              </div>
               <div className='flex gap-3 cursor-pointer hover:opacity-50' onClick={onDelete}>
                 <ImBin size={32} color='red' />
                 <h1 className=''>DELETE</h1>
               </div>
+             
             </div>
           </div>
         </div>

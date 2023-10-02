@@ -90,15 +90,15 @@ function Calendar() {
     },
     {
       name: 'September',
-      pay: 155,
-      ses: 260,
-      total:2395499
+      pay: payments.length,
+      ses: session.length,
+      total:calculateTotalPayment()
     },
     {
       name: 'October',
-      pay: 0,
-      ses: 0,
-      total:0
+      pay: payments.length - 173,
+      ses: session.length-279,
+      total:calculateTotalPayment()-2671499
     },
     {
       name: 'November',
