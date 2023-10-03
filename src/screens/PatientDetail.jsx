@@ -7,17 +7,19 @@ import {  FaCheck } from 'react-icons/fa';
 import { ImBin } from 'react-icons/im';
 import {AiTwotoneEdit} from 'react-icons/ai'
 import { toast } from 'react-hot-toast';
-import { getDoc, doc, deleteDoc } from 'firebase/firestore'; 
+import { getDoc, doc, deleteDoc,updateDoc } from 'firebase/firestore'; 
 import { useParams } from 'react-router-dom';
 import Loader from '../components/Loader';
 import Payment from '../components/Payment';
 import Session from '../components/Session';
+import Input from '../components/Input';
 
 function PatientDetail() {
   const params = useParams();
   const navigate = useNavigate()
   const [loading, setLoading] = useState(true);
   const [patient, setPatient] = useState(null);
+  const[updatedDate,setUpdatedDate]= useState("")
   const [isActive, setIsActive] = useState('session'); 
   const [payment,setPayment]= useState("")
   const [session,setSession]= useState("")
@@ -71,6 +73,32 @@ function PatientDetail() {
     }
   };
 
+  const UpdatePatient = async () => {
+    try {
+      // Ensure updatedDate is not empty before proceeding
+      if (!updatedDate) {
+        toast.error('Please select or enter an updated date.');
+        return;
+      }
+
+      // Update the patient data with the new updatedDate
+      const docRef = doc(db, 'patients', params.id);
+      const updatedPatientData = { ...patient, updatedDate };
+      await updateDoc(docRef, updatedPatientData);
+
+      // Show success message and navigate
+      toast.success('Patient record updated successfully.');
+      navigate(0)
+    } catch (error) {
+      console.error('Error updating patient record:', error);
+      toast.error('Error updating patient record');
+    }
+  };
+
+
+  const UpdatePatientDetails=(params)=>{
+    navigate(`/update/${params}`)
+   }
   if (loading) {
     return (
       <Loader />
@@ -78,9 +106,7 @@ function PatientDetail() {
   }
 
 
-  const UpdatePatient=(params)=>{
-   navigate(`/update/${params}`)
-  }
+ 
   
 
   return (
@@ -103,6 +129,11 @@ function PatientDetail() {
               <p> Care giver Details: &nbsp; {patient?.caregiver}</p>
               <p>Condition:&nbsp; {patient?.condition}</p>
               <p>Acessed by:&nbsp;{patient?.clinician}</p>
+              <div className="date-updated mt-4 flex   gap-3 items-center justify-between" >
+              <Input label={"Update"} type={"date"}    value={updatedDate}
+          onChange={(e) => setUpdatedDate(e.target.value)} />
+              <button className='bg-blue-700  text-white px-4 py-3 rounded-md' onClick={UpdatePatient}>Update</button>
+              </div>
             </div>
             <div className="reg-number bg-green-500 text-2xl text-white px-2 py-1.5 ">
               <h1>{patient?.dateRegistered}/{patient?.regNum}/{patient?.selectedValue}</h1>
@@ -136,7 +167,7 @@ function PatientDetail() {
                   {patient?.sessionPaid}
                 </div>
               </div>
-              <div className="flex gap-3 cursor-pointer hover:opacity-50" onClick={()=>UpdatePatient(params.id)}>
+              <div className="flex gap-3 cursor-pointer hover:opacity-50" onClick={()=>UpdatePatientDetails(params.id)}>
             
                <AiTwotoneEdit size={32} color='blue'/>
               

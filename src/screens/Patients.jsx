@@ -5,7 +5,7 @@ import { AiOutlineUserAdd } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 import { db } from '../firebase.config';
 import Loader from '../components/Loader';
-import {BsFillCalendarDateFill,BsSortAlphaDown} from 'react-icons/bs'
+import {BsFillCalendarDateFill,BsSortAlphaDown,BsArrowDownUp} from 'react-icons/bs'
 import { getDocs, collection } from 'firebase/firestore';
 
 function Patients() {
@@ -42,7 +42,25 @@ function Patients() {
     return sortedData;
   };
 
-
+  const sortPatientsByUpdatedDate = (data, order) => {
+    const sortedData = [...data];
+  
+    sortedData.sort((a, b) => {
+      const dateA = a.updatedDate ? new Date(a.updatedDate) : null;
+      const dateB = b.updatedDate ? new Date(b.updatedDate) : null;
+  
+      // Handle cases where updatedDate is undefined or missing
+      if (!dateA && !dateB) return 0;
+      if (!dateA) return order === 'ascending' ? 1 : -1;
+      if (!dateB) return order === 'ascending' ? -1 : 1;
+  
+      // Sort in descending order to show the most recently updated patients first
+      return order === 'descending' ? dateA - dateB : dateB - dateA;
+    });
+  
+    return sortedData;
+  };
+  
   const getPatients = async () => {
     try {
       const data = await getDocs(collection(db, 'patients'));
@@ -50,16 +68,27 @@ function Patients() {
         id: doc.id,
         ...doc.data(),
       }));
-
+  
       // Sort the filtered data based on the selected sorting option
-      const sortedData = sortBy === 'name' ? sortPatientsByName(filteredData, sortOrder) : sortPatientsByDate(filteredData, sortOrder);
-
+      let sortedData;
+      if (sortBy === 'name') {
+        sortedData = sortPatientsByName(filteredData, sortOrder);
+      } else if (sortBy === 'date') {
+        sortedData = sortPatientsByDate(filteredData, sortOrder);
+      } else if (sortBy === 'update') { // Corrected sortBy value to 'update'
+        sortedData = sortPatientsByUpdatedDate(filteredData, sortOrder);
+      }
+  
       setPatients(sortedData);
       setLoading(false);
     } catch (error) {
       console.error(error);
     }
   };
+  
+  
+
+   
 
   useEffect(() => {
     getPatients();
@@ -70,19 +99,17 @@ function Patients() {
   }, [navigate]);
 
 
-  const toggleSortOrder = () => {
-    setSortOrder(sortOrder === 'ascending' ? 'descending' : 'ascending');
-  };
+ 
 
   const toggleSortBy = (selectedSortBy) => {
     setSortBy(selectedSortBy);
   };
   
-  // Filter patients based on search query
-  const filteredPatients = patients.filter((patient) => {
-    const fullName = `${patient.surname} ${patient.othername}`.toLowerCase();
-    return fullName.includes(searchQuery.toLowerCase());
-  });
+ // Filter patients based on search query
+const filteredPatients = patients ? patients.filter((patient) => {
+  const fullName = `${patient.surname} ${patient.othername}`.toLowerCase();
+  return fullName.includes(searchQuery.toLowerCase());
+}) : [];
 
   if (loading) {
     return <Loader />;
@@ -98,12 +125,9 @@ function Patients() {
          <p className='text-lg font-bold'>List of Patients: <span className='text-green-500'>{patients.length}</span></p>
         </div>
         <div className="sort flex gap-6 justify-between items-center">
-      {/* <button onClick={toggleSortOrder}>
-        Sort {sortBy === 'name' ? 'Alphabetically' : 'By Date'}{' '}
-        <BsArrowDownUp className={sortOrder === 'ascending' ? 'text-green-500' : 'text-red-500'} />
-      </button> */}
-      <button onClick={() => toggleSortBy('name')}><BsSortAlphaDown size={24} color='blue'/></button>
-      <button onClick={() => toggleSortBy('date')}><BsFillCalendarDateFill size={24} color={'green'}/></button>
+      <button  className='flex text-xs gap-x-3 items-center' onClick={() => toggleSortBy('name')}><BsSortAlphaDown size={24} color='blue'/>Alphabetical Order</button>
+      <button className='flex text-xs gap-x-3 items-center'   onClick={() => toggleSortBy('date')}><BsFillCalendarDateFill size={24} color={'green'}/>Date Added</button>
+      <button className='flex text-xs gap-x-3 items-center'   onClick={() => toggleSortBy('update')}><BsArrowDownUp size={24} color={'purple'}/>Updated patient</button>
     </div>
 
       <div className="flex justify-end">
@@ -139,7 +163,7 @@ function Patients() {
                  </p>
                  <p className="text-sm">
                    Date:{' '}
-                   <span className="text-gray-800 text-xs">
+                   <span className="text-gray-800 text-xs gap-x-3 items-center">
                      {data?.dateRegistered}
                    </span>
                  </p>

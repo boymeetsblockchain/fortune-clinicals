@@ -34,6 +34,7 @@ function AddNewPatient() {
     const[reffer,setReffer]= useState("")
     const[ageRange,setAgeRange]= useState("Year")
     const[regNum,setRegNum]= useState("")
+    const[updatedDate, setUpdatedDate]= useState("")
     const formData={
         surname,
         othername,
@@ -53,7 +54,8 @@ function AddNewPatient() {
         phoneNumber2,
         caregiver,
         ageRange,
-        regNum
+        regNum,
+        updatedDate
     }
 
     const registerPatient = async (e)=>{
