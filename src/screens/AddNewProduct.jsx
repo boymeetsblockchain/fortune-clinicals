@@ -16,7 +16,7 @@ function AddNewProduct() {
     const [sold,setSold]= useState(0)
     const [used,setUsed]= useState(0)
     const [added,setAdded]= useState(0)
-    const [comment,setComment]= useState("")
+
   
 
     const auth = getAuth()
@@ -48,7 +48,6 @@ function AddNewProduct() {
           sold: parseInt(sold), // Convert to an integer
           added: parseInt(added), // Convert to an integer
           used: parseInt(used), // Convert to an integer
-          comment,
           timestamp: serverTimestamp(),
           userId: auth?.currentUser?.uid,
         };
@@ -79,7 +78,7 @@ function AddNewProduct() {
             <Input label="Used" type={"number"} value={used} onChange={(e)=>setUsed(e.target.value)}/>
             <Input label="Added" type={"number"} value={added} onChange={(e)=>setAdded(e.target.value)}/>
             <Input label="Sold" type={"number"} value={sold} onChange={(e)=>setSold(e.target.value)}/>
-            <Input label="Comment" type={"text"} value={comment} onChange={(e)=>setComment(e.target.value)}/>
+  
               
             <div className="flex justify-end">
                 <button className="bg-[#FF5162] py-3 flex  items-center justify-center gap-x-2 text-white text-sm rounded-md w-1/4 mt-4 hover:bg-red-700 transition">

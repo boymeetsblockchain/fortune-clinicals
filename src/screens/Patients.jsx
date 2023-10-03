@@ -1,20 +1,47 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
-import { ImBin } from 'react-icons/im';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-hot-toast';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 import { db } from '../firebase.config';
 import Loader from '../components/Loader';
+import {BsFillCalendarDateFill,BsSortAlphaDown} from 'react-icons/bs'
 import { getDocs, collection } from 'firebase/firestore';
-import Input from '../components/Input'
 
 function Patients() {
   const navigate = useNavigate();
   const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState(''); // State for the search query
+  const [sortOrder, setSortOrder] = useState('ascending'); // State for sorting order
+  const [sortBy, setSortBy] = useState('name'); 
+
+  const sortPatientsByDate = (data, order) => {
+    const sortedData = [...data];
+
+    sortedData.sort((a, b) => {
+      const dateA = new Date(a.dateRegistered);
+      const dateB = new Date(b.dateRegistered);
+
+      return order === 'ascending' ? dateA - dateB : dateB - dateA;
+    });
+
+    return sortedData;
+  };
+
+  const sortPatientsByName = (data, order) => {
+    const sortedData = [...data];
+
+    sortedData.sort((a, b) => {
+      const fullNameA = `${a.surname} ${a.othername}`.toLowerCase();
+      const fullNameB = `${b.surname} ${b.othername}`.toLowerCase();
+
+      return order === 'ascending' ? fullNameA.localeCompare(fullNameB) : fullNameB.localeCompare(fullNameA);
+    });
+
+    return sortedData;
+  };
+
 
   const getPatients = async () => {
     try {
@@ -24,13 +51,10 @@ function Patients() {
         ...doc.data(),
       }));
 
-      filteredData.sort((a, b) => {
-        const dateA = new Date(a.dateRegistered);
-        const dateB = new Date(b.dateRegistered);
-        return dateB - dateA;
-      });
+      // Sort the filtered data based on the selected sorting option
+      const sortedData = sortBy === 'name' ? sortPatientsByName(filteredData, sortOrder) : sortPatientsByDate(filteredData, sortOrder);
 
-      setPatients(filteredData);
+      setPatients(sortedData);
       setLoading(false);
     } catch (error) {
       console.error(error);
@@ -39,17 +63,21 @@ function Patients() {
 
   useEffect(() => {
     getPatients();
-  }, []);
+  }, [sortOrder, sortBy]); 
 
   const onView = useCallback((id) => {
     navigate(`/dashboard/patient/${id}`);
   }, [navigate]);
 
-  const onDelete = () => {
-    window.confirm('Are you sure you want to delete this record?');
-    toast.success('Deleted');
+
+  const toggleSortOrder = () => {
+    setSortOrder(sortOrder === 'ascending' ? 'descending' : 'ascending');
   };
 
+  const toggleSortBy = (selectedSortBy) => {
+    setSortBy(selectedSortBy);
+  };
+  
   // Filter patients based on search query
   const filteredPatients = patients.filter((patient) => {
     const fullName = `${patient.surname} ${patient.othername}`.toLowerCase();
@@ -69,6 +97,15 @@ function Patients() {
      <div >
          <p className='text-lg font-bold'>List of Patients: <span className='text-green-500'>{patients.length}</span></p>
         </div>
+        <div className="sort flex gap-6 justify-between items-center">
+      {/* <button onClick={toggleSortOrder}>
+        Sort {sortBy === 'name' ? 'Alphabetically' : 'By Date'}{' '}
+        <BsArrowDownUp className={sortOrder === 'ascending' ? 'text-green-500' : 'text-red-500'} />
+      </button> */}
+      <button onClick={() => toggleSortBy('name')}><BsSortAlphaDown size={24} color='blue'/></button>
+      <button onClick={() => toggleSortBy('date')}><BsFillCalendarDateFill size={24} color={'green'}/></button>
+    </div>
+
       <div className="flex justify-end">
       <input
           type="text"
