@@ -27,8 +27,10 @@ function ProductDetail() {
     const getProduct = async () => {
       const docRef = doc(db, 'products', params.id);
       const docSnap = await getDoc(docRef);
+    
       if (docSnap.exists()) {
         const data = docSnap.data();
+        console.log(data)
         setProduct(data);
         setLoading(false);
         setName(data.name || '');
@@ -39,9 +41,34 @@ function ProductDetail() {
         setSold(data.sold ||0 );
       }
     };
-
+    
+    const getComments = async () => {
+      try {
+        const commentsQuery = query(collection(db, 'comments'), where('productID', '==', params.id));
+        const querySnapshot = await getDocs(commentsQuery);
+        const commentsData = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        
+        commentsData.sort((a, b) => {
+          const dateA = new Date(a.newCommentDate);
+          const dateB = new Date(b.newCommentDate);
+          return dateB - dateA;
+        });
+         console.log(commentsData)
+        setComments(commentsData);
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    
+    
+    getComments()
     getProduct();
   }, [params.id]);
+ 
 
   const navigate = useNavigate();
 
@@ -107,9 +134,10 @@ function ProductDetail() {
         };
 
         // Add the comment to the Firestore collection
-        const docRef = await addDoc(collection(db, 'productcomments'), commentData);
+        const docRef = await addDoc(collection(db, 'comments'), commentData);
         console.log('Payment added with ID:', docRef.id);
         toast.success("Added successfully")
+        navigate(0)
         // Clear the input fields
         setNewComment('');
         setNewCommentDate('');
@@ -185,8 +213,16 @@ function ProductDetail() {
             </button>
             </div>
 
-            <div className="comment-show">
-                  
+            <div className="comment-show my-5">
+            {
+  comments.map((comment) => (
+    <div key={comment.id} className="border rounded flex  justify-between items-center p-2 mb-2">
+      <p className="text-gray-700">{comment.comment}</p>
+      <p className="text-red-600 text-sm">{comment.date}</p>
+    </div>
+  ))
+}
+
             </div>
 
       </div>

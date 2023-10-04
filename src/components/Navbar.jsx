@@ -28,22 +28,29 @@ function Navbar() {
   const user = useUser();
   const userRole = useUserRole(user);
 
-
   return (
     <div className="mx-auto hidden md:block px-4 md:px-8 lg:px-12 sticky z-10 top-0 left-0 h-auto shadow-md bg-[#FF5162]">
       <div className="flex items-center justify-center">
         <div className="flex justify-between items-center gap-x-8">
-          {
-            userRole ==="isESH" ? eshLinks.map((link, index) => (
-              <Link key={index} to={link.to} title={link.title}>
-                {React.createElement(link.icon, { size: link.size, color: 'white', className: 'hover:scale-75' })}
-              </Link>
-            )) :navLinks.map((link, index) => (
-              <Link key={index} to={link.to} title={link.title}>
-                {React.createElement(link.icon, { size: link.size, color: 'white', className: 'hover:scale-75' })}
-              </Link>
-            ))
-          }
+          {userRole === "isESH"
+            ? eshLinks.map((link) => (
+                <Link key={link.to} to={link.to} title={link.title}>
+                  {React.createElement(link.icon, {
+                    size: link.size,
+                    color: 'white',
+                    className: 'hover:scale-75',
+                  })}
+                </Link>
+              ))
+            : navLinks.map((link) => (
+                <Link key={link.to} to={link.to} title={link.title}>
+                  {React.createElement(link.icon, {
+                    size: link.size,
+                    color: 'white',
+                    className: 'hover:scale-75',
+                  })}
+                </Link>
+              ))}
         </div>
       </div>
     </div>
@@ -51,3 +58,5 @@ function Navbar() {
 }
 
 export default Navbar;
+
+;
