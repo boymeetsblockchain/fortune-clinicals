@@ -6,17 +6,20 @@ import { ImBin } from 'react-icons/im';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../../firebase.config';
-import { getDoc, doc, deleteDoc,collection,query,getDocs,where} from 'firebase/firestore'; // Import deleteDoc
+import { getDoc, doc, deleteDoc,collection,query,getDocs,where,updateDoc} from 'firebase/firestore'; // Import deleteDoc
 import { useParams } from 'react-router-dom';
 import Loader from '../../components/Loader';
 import Payment from '../../components/Payment';
 import Session from '../../components/Session';
 import InitialReview from '../../components/InitialReview';
+import Input from '../../components/Input';
+import { AiTwotoneEdit } from 'react-icons/ai';
 function PatientDetail() {
   const params = useParams();
   const navigate= useNavigate()
   const [loading, setLoading] = useState(true);
   const [patient, setPatient] = useState(null);
+  const[updatedDate,setUpdatedDate]= useState("")
   const [payment,setPayment]= useState("")
   const [session,setSession]= useState("")
   const [isActive, setIsActive] = useState('session'); // Initialize with 'payment'
@@ -69,6 +72,30 @@ function PatientDetail() {
     }
   };
 
+  const UpdatePatient = async () => {
+    try {
+      // Ensure updatedDate is not empty before proceeding
+      if (!updatedDate) {
+        toast.error('Please select or enter an updated date.');
+        return;
+      }
+
+      // Update the patient data with the new updatedDate
+      const docRef = doc(db, 'eshpatients', params.id);
+      const updatedPatientData = { ...patient, updatedDate };
+      await updateDoc(docRef, updatedPatientData);
+
+      // Show success message and navigate
+      toast.success('Patient record updated successfully.');
+      navigate(0)
+    } catch (error) {
+      console.error('Error updating patient record:', error);
+      toast.error('Error updating patient record');
+    }
+  };
+  const UpdatePatientDetails=(params)=>{
+    navigate(`/update/esh/${params}`)
+   }
   if (loading) {
     return (
       <Loader />
@@ -89,7 +116,11 @@ function PatientDetail() {
               <p>Condition:&nbsp; {patient?.condition}</p>
               <p>Acessed by:&nbsp;{patient?.clinician}</p>
               <p>Reffered by:&nbsp;{patient?.reffer}</p>
-           
+              <div className="date-updated mt-4 flex   gap-3 items-center justify-between" >
+              <Input label={"Update"} type={"date"}    value={updatedDate}
+          onChange={(e) => setUpdatedDate(e.target.value)} />
+              <button className='bg-blue-700  text-white px-4 py-3 rounded-md' onClick={UpdatePatient}>Update</button>
+              </div>
             </div>
             <div className="reg-number bg-green-500 text-2xl text-white px-2 py-1.5 ">
               <h1>{patient.selectedValue}{patient.regNumber}</h1>
@@ -128,6 +159,12 @@ function PatientDetail() {
                   {patient?.sessionPaid}
                 </div>
               </div>
+              <div className="flex gap-3 cursor-pointer hover:opacity-50" onClick={()=>UpdatePatientDetails(params.id)}>
+            
+            <AiTwotoneEdit size={32} color='blue'/>
+           
+             UPDATE PATIENT
+           </div>
               <div className='flex gap-3 cursor-pointer hover:opacity-50' onClick={onDelete}>
                 <ImBin size={32} color='red' />
                 <h1 className=''>DELETE</h1>

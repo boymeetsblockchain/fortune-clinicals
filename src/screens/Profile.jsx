@@ -31,12 +31,18 @@ function Profile() {
   userId:auth.currentUser.uid}
     
   try {
-    const data = await addDoc(collection(db, 'notes'), noteCopy);
 
-    console.log(data);
-    toast.success("Note saved");
-    setNote("")
-    navigate(0)
+    if(!note || !date){
+      toast.error("Please fill in Fields")
+    }else {
+      const data = await addDoc(collection(db, 'notes'), noteCopy);
+    
+      console.log(data);
+      toast.success("Note saved");
+      setNote("")
+      navigate(0)
+    }
+  
   } catch (error) {
     console.log(error)
   }

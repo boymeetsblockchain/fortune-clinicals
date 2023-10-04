@@ -1,29 +1,88 @@
 import React, { useCallback,useEffect,useState } from 'react';
 import Navbar from '../../components/Navbar';
-import { ImBin } from 'react-icons/im';
 import { useNavigate } from 'react-router-dom';
-import { toast  } from 'react-hot-toast';
 import {AiOutlineUserAdd} from 'react-icons/ai'
 import { Link } from 'react-router-dom';
 import { db } from '../../firebase.config';
 import Loader from '../../components/Loader';
 import { getDocs,collection,} from 'firebase/firestore'
+import {BsFillCalendarDateFill,BsSortAlphaDown,BsArrowDownUp} from 'react-icons/bs'
 
 function Patients() {
   const navigate= useNavigate()
   const[patients,setPatients]= useState([])
   const [loading,setLoading]= useState(true)
   const [searchQuery, setSearchQuery] = useState(''); // State for the search query
+  const [sortOrder, setSortOrder] = useState('ascending'); // State for sorting order
+  const [sortBy, setSortBy] = useState('name'); 
+
+
+
+  const sortPatientsByDate = (data, order) => {
+    const sortedData = [...data];
+
+    sortedData.sort((a, b) => {
+      const dateA = new Date(a.dateRegistered);
+      const dateB = new Date(b.dateRegistered);
+
+      return order === 'ascending' ? dateA - dateB : dateB - dateA;
+    });
+
+    return sortedData;
+  };
+
+  const sortPatientsByName = (data, order) => {
+    const sortedData = [...data];
+
+    sortedData.sort((a, b) => {
+      const fullNameA = `${a.surname} ${a.othername}`.toLowerCase();
+      const fullNameB = `${b.surname} ${b.othername}`.toLowerCase();
+
+      return order === 'ascending' ? fullNameA.localeCompare(fullNameB) : fullNameB.localeCompare(fullNameA);
+    });
+
+    return sortedData;
+  };
+
+  const sortPatientsByUpdatedDate = (data, order) => {
+    const sortedData = [...data];
+  
+    sortedData.sort((a, b) => {
+      const dateA = a.updatedDate ? new Date(a.updatedDate) : null;
+      const dateB = b.updatedDate ? new Date(b.updatedDate) : null;
+  
+      // Handle cases where updatedDate is undefined or missing
+      if (!dateA && !dateB) return 0;
+      if (!dateA) return order === 'ascending' ? 1 : -1;
+      if (!dateB) return order === 'ascending' ? -1 : 1;
+  
+      // Sort in descending order to show the most recently updated patients first
+      return order === 'descending' ? dateA - dateB : dateB - dateA;
+    });
+  
+    return sortedData;
+  };
+  
+
   const getPatients = async () => {
     try {
       const data = await getDocs(collection(db, 'eshpatients'));
       const filteredData = data.docs.map((doc) => ({
-        id: doc.id, // Add the id property here
+        id: doc.id,
         ...doc.data(),
       }));
-      // filteredData.sort((a, b) => b.date.localeCompare(a.date)); 
-      setPatients(filteredData);
-      console.log(filteredData)
+  
+      // Sort the filtered data based on the selected sorting option
+      let sortedData;
+      if (sortBy === 'name') {
+        sortedData = sortPatientsByName(filteredData, sortOrder);
+      } else if (sortBy === 'date') {
+        sortedData = sortPatientsByDate(filteredData, sortOrder);
+      } else if (sortBy === 'update') { // Corrected sortBy value to 'update'
+        sortedData = sortPatientsByUpdatedDate(filteredData, sortOrder);
+      }
+  
+      setPatients(sortedData);
       setLoading(false);
     } catch (error) {
       console.error(error);
@@ -32,21 +91,24 @@ function Patients() {
   
   useEffect(()=>{
          getPatients()
-  },[])
+  },[sortOrder,sortBy])
+
+  const toggleSortBy = (selectedSortBy) => {
+    setSortBy(selectedSortBy);
+  };
+  
+ // Filter patients based on search query
+const filteredPatients = patients ? patients.filter((patient) => {
+  const fullName = `${patient.surname} ${patient.othername}`.toLowerCase();
+  return fullName.includes(searchQuery.toLowerCase());
+}) : [];
   const onView = useCallback((id)=>{
     navigate(`/esh-patient/${id}`)
   },[navigate])
 
-  const onDelete = ()=>{
-    window.confirm("are you sure you want to delete this data? record")
-    toast.success("click on the user data to delete")
-  }
 
-   // Filter patients based on search query
-   const filteredPatients = patients.filter((patient) => {
-    const fullName = `${patient.surname} ${patient.othername}`.toLowerCase();
-    return fullName.includes(searchQuery.toLowerCase());
-  });
+
+
     if(loading){
       return(
         <Loader/>
@@ -61,6 +123,11 @@ function Patients() {
      <div >
          <p className='text-lg font-bold'>List of Patients: <span className='text-green-500'>{patients.length}</span></p>
         </div>
+        <div className="sort flex gap-6 justify-between items-center">
+      <button  className='flex text-xs gap-x-3 items-center' onClick={() => toggleSortBy('name')}><BsSortAlphaDown size={24} color='blue'/>Alphabetical Order</button>
+      <button className='flex text-xs gap-x-3 items-center'   onClick={() => toggleSortBy('date')}><BsFillCalendarDateFill size={24} color={'green'}/>Date Added</button>
+      <button className='flex text-xs gap-x-3 items-center'   onClick={() => toggleSortBy('update')}><BsArrowDownUp size={24} color={'purple'}/>Updated patient</button>
+    </div>
       <div className="flex justify-end">
       <input
           type="text"
@@ -109,9 +176,7 @@ function Patients() {
 </button>
 
                 </div>
-                <div className="deletebutton ml-5" onClick={onDelete}>
-                  <ImBin size={20} className="text-[#ff5162] cursor-pointer" />
-                </div>
+              
               </div>
             </div>
           ))}
