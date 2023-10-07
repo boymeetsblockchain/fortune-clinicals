@@ -25,6 +25,7 @@ import Daily from './screens/Daily'
 import EshDaily from './screens/esh/EshDaily'
 import UpdatePatient from './screens/UpdatePatient'
 import EshUpdatePatient from './screens/esh/EshUpdatePatient'
+import Admin from './screens/admin/Admin'
 const App = () => {
   return (
     
@@ -55,6 +56,7 @@ const App = () => {
          <Route path='/esh/products' element={<EshProduct/>}/>
          <Route path='/esh/add-new-product' element={<AddNewEshProduct/>}/>
          <Route path='/esh/product/:id' element={<EshProductDetail/>}/>
+         <Route path='/admin' element={<Admin/>}/>
     </Routes>
     <Toaster/>
    </BrowserRouter>
