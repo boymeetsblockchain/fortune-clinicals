@@ -18,16 +18,29 @@ function Patients() {
 
   const sortPatientsByDate = (data, order) => {
     const sortedData = [...data];
-
+  
     sortedData.sort((a, b) => {
       const dateA = new Date(a.dateRegistered);
       const dateB = new Date(b.dateRegistered);
-
-      return order === 'ascending' ? dateA - dateB : dateB - dateA;
+  
+      // Check for undefined or invalid dates
+      if (isNaN(dateA) && isNaN(dateB)) {
+        // Both dates are invalid or undefined, no specific order
+        return 0;
+      } else if (isNaN(dateA)) {
+        // Handle cases where dateA is invalid or undefined
+        return 1; // Move dateA to the end
+      } else if (isNaN(dateB)) {
+        // Handle cases where dateB is invalid or undefined
+        return -1; // Move dateB to the end
+      }
+  
+      return order === 'descending' ? dateA - dateB : dateB - dateA;
     });
-
+  
     return sortedData;
   };
+  
 
   const sortPatientsByName = (data, order) => {
     const sortedData = [...data];
@@ -80,6 +93,7 @@ function Patients() {
       }
   
       setPatients(sortedData);
+      // console.log(sortedData)
       setLoading(false);
     } catch (error) {
       console.error(error);

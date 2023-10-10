@@ -32,8 +32,8 @@ function useUserRole(user) {
     return 'isESH';
   }
 
-  if(user.admin){
-    return "admin"
+  if(user.isAdmin){
+    return "isAdmin"
   }
 
   return 'user';
