@@ -4,6 +4,7 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Link } from 'react-router-dom'
 import {getAuth} from "firebase/auth"
 import {AiOutlineHome} from 'react-icons/ai'
+import { useUser,useUserRole } from '../hooks/useUser'
 const navigation = [
   { name: 'Products', to: '#' },
   { name: 'Dashboard', to: '#' },
@@ -12,6 +13,9 @@ const navigation = [
 ]
 
 export default function Homescreen() {
+  const admin = useUser();
+  const userRole = useUserRole(admin);
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [user,setUser]= useState(null)
    useEffect(()=>{
@@ -59,7 +63,7 @@ export default function Homescreen() {
           <div className="fixed inset-0 z-50" />
           <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
             <div className="flex items-center justify-between">
-              <Link to="/" className="-m-1.5 p-1.5">
+              <Link  to='/' className="-m-1.5 p-1.5">
                 <span className="sr-only">Fortune Clinic</span>
              <AiOutlineHome size={32} className='text-[#FF5162]'/>
               </Link>
@@ -123,7 +127,7 @@ export default function Homescreen() {
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <Link
-                to="/dashboard"
+                to={userRole=== "isAdmin" ? "/admin" :'/dashboard'}
                 className="rounded-md bg-[#FF5162] px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Explore

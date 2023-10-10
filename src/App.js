@@ -27,6 +27,7 @@ import UpdatePatient from './screens/UpdatePatient'
 import EshUpdatePatient from './screens/esh/EshUpdatePatient'
 import Admin from './screens/admin/Admin'
 import AdminPatients from './screens/admin/AdminPatients'
+import AdminNotes from './screens/admin/AdminNotes'
 const App = () => {
   return (
     
@@ -62,6 +63,8 @@ const App = () => {
          <Route path='/admin/patient/:id' element={<PatientDetail/>}/>
          <Route path='/admin/patient/esh/:id' element={<EshPatient/>}/>
          <Route path='/admin/profile' element={<Profile/>}/>
+         <Route path='/admin/calender' element={<Calender/>}/>
+         <Route path='/admin/message' element={<AdminNotes/>}/>
     </Routes>
     <Toaster/>
    </BrowserRouter>
