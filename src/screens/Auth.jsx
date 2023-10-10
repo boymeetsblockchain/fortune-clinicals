@@ -5,7 +5,7 @@ import HomeImage from '../assets/home.jpg';
 import { toast } from 'react-hot-toast';
 import Input from '../components/Input';
 import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from 'firebase/auth';
-import { setDoc, serverTimestamp, doc } from 'firebase/firestore';
+import { setDoc, serverTimestamp, doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase.config';
 import Oauth from '../components/Oauth';
 
@@ -49,16 +49,33 @@ export default function Home() {
     try {
       const auth = getAuth();
       const userCredentials = await signInWithEmailAndPassword(auth, email, password);
-
+  
       if (userCredentials.user) {
-        toast.success('Succesfully Loggedin');
+        // Fetch the user's data from Firestore based on their UID
+        const userDocRef = doc(db, 'users', userCredentials.user.uid);
+        const userDocSnapshot = await getDoc(userDocRef);
+  
+        if (userDocSnapshot.exists()) {
+          const userData = userDocSnapshot.data();
+  
+          // Check if the user is an admin based on the 'isAdmin' field
+          const isAdmin = userData.isAdmin === true;
+  
+          if (isAdmin) {
+            navigate('/admin'); // Navigate to the admin page
+          } else {
+            navigate('/dashboard'); // Navigate to the user dashboard
+          }
+  
+          toast.success('Successfully Logged In');
+        }
       }
-      navigate('/dashboard');
     } catch (error) {
       console.log(error);
       toast.error('Something went wrong');
     }
   };
+  
 
   return (
     <div className="mx-auto max-w-screen-xl h-full w-full px-4 md:px-8 lg:px-12">
