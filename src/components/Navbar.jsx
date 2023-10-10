@@ -16,7 +16,7 @@ const navLinks = [
   { to: '/dashboard/patients', title: 'Patient Dashboard', icon: AiOutlineUnorderedList, size: 32 },
   { to: '/', title: 'Home', icon: AiOutlineHome, size: 60 },
   { to: '/dashboard/profile', title: 'User Profile', icon: AiOutlineUser, size: 32 },
-  { to: 'dasboard/products', title: 'Products', icon: AiOutlineShoppingCart, size: 32 },
+  { to: '/dashboard/products', title: 'Products', icon: AiOutlineShoppingCart, size: 32 },
 ];
 
 const eshLinks = [
