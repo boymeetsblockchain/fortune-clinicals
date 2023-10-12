@@ -28,6 +28,7 @@ import EshUpdatePatient from './screens/esh/EshUpdatePatient'
 import Admin from './screens/admin/Admin'
 import AdminPatients from './screens/admin/AdminPatients'
 import AdminNotes from './screens/admin/AdminNotes'
+import BreakDown from './components/BreakDown'
 const App = () => {
   return (
     
@@ -46,7 +47,7 @@ const App = () => {
         <Route path='/daily' element={<Daily/>}/>
         <Route path='/esh-daily' element={<EshDaily/>}/>
         <Route path='/dashboard/products' element={<Products/>}/>
-        <Route path='/dashboard/calender' element={<Calender/>}/>
+        {/* <Route path='/dashboard/calender' element={<Calender/>}/> */}
         <Route path='/add-new-product' element={<AddNewProduct/>}/>
         <Route path='/update/:id' element={<UpdatePatient/>}/>
         <Route path='/update/esh/:id' element={<EshUpdatePatient/>}/>
@@ -65,6 +66,7 @@ const App = () => {
          <Route path='/admin/profile' element={<Profile/>}/>
          <Route path='/admin/calender' element={<Calender/>}/>
          <Route path='/admin/message' element={<AdminNotes/>}/>
+         <Route path='/payments/:monthName' element={<BreakDown/>}/>
     </Routes>
     <Toaster/>
    </BrowserRouter>
