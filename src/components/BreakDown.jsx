@@ -28,6 +28,7 @@ function BreakDown({ match }) {
       <Navbar />
       <div className="px-4 md:px-8 lg:px-8 h-full mx-auto my-5">
         <h1 className="text-2xl font-semibold mb-4 text-center ">{selectedMonth?.name} Daily Transactions</h1>
+        <h1 className='text-2xl font-bold mb-4 text-center'> Total Payment for {selectedMonth?.name}: {""} &#8358;{selectedMonth.totalPaymentsForMonth}</h1>
         {selectedMonth.dailyPayments.map((dayData) => (
           <div key={dayData.day} className="mb-4 p-4 rounded-lg">
             <h2 className="text-xl font-semibold mb-2">{`Day ${dayData.day}`}</h2>

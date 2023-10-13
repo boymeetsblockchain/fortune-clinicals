@@ -87,6 +87,20 @@ const useMonthsData = () => {
       return sessionDate.getMonth() === index;
     });
 
+    const calculateTotalPaymentsForMonth = (monthIndex) => {
+      if (!payments) return 0;
+  
+      const filteredPayments = payments.filter((payment) => {
+        const paymentDate = new Date(payment.datePayed);
+        return paymentDate.getMonth() === monthIndex;
+      });
+  
+      return filteredPayments.reduce((total, payment) => {
+        const amount = parseFloat(payment.amount);
+        return isNaN(amount) ? total : total + amount;
+      }, 0);
+    };
+
     // Calculate daily payments for this month
     const dailyPayments = [];
     for (let day = 1; day <= 31; day++) {
@@ -102,6 +116,7 @@ const useMonthsData = () => {
 
     const totalPayment = calculateTotalPayment();
     const totalSessions = calculateTotalSessions();
+    const totalPaymentsForMonth = calculateTotalPaymentsForMonth(index);
 
     return {
       ...month,
@@ -110,6 +125,7 @@ const useMonthsData = () => {
       totalPayment,
       totalSessions,
       dailyPayments,
+      totalPaymentsForMonth
     };
   });
 
