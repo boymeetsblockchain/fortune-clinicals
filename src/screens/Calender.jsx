@@ -1,14 +1,20 @@
-import Navbar from "../components/Navbar";
+import AdminNav from '../components/AdminNav'
 import { useNavigate } from "react-router-dom";
 import useMonthsData from "../hooks/useMonthData";
-
+import { useState } from "react";
+import Loader from '../components/Loader'
 function Calendar() {
+  const [loading,setLoading]= useState(true)
   const navigate = useNavigate();
   const { filteredMonthsData } = useMonthsData(); 
-
+if(!filteredMonthsData){
+  return(
+  <Loader/>
+  ) 
+}
   return (
     <>
-      <Navbar />
+      <AdminNav />
       <div className="px-4 md:px-8 lg:px-12 h-full mx-auto my-5">
 
         <div className="flex items-center justify-center h-full">

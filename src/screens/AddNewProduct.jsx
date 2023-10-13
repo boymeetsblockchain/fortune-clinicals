@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Navbar from '../components/Navbar'
+import AdminNav from "../components/AdminNav"
 import Input from '../components/Input'
 import { AiOutlineArrowRight } from 'react-icons/ai'
 import { toast } from 'react-hot-toast'
@@ -68,7 +68,7 @@ function AddNewProduct() {
       
   return (
     <>
-    <Navbar/>
+    <AdminNav/>
       <div className="mx-auto max-w-screen-xl py-4 h-full w-full px-4 relative md:px-8 lg:px-12">
       <h1 className='text-center my-6 font-bold  text-3xl  capitalize'>Add new Product</h1>
          <form className='flex flex-col space-y-4 justify-center w-full mx-auto' onSubmit={addProduct}>

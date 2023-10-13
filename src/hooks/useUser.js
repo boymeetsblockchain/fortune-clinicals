@@ -8,16 +8,25 @@ function useUser() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const getUser = async () => {
-      if (auth.currentUser) {
-        const docRef = doc(db, 'users', auth.currentUser.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          setUser(docSnap.data());
+    const storedUserRole = localStorage.getItem('userRole');
+    if (storedUserRole) {
+      // User role is already in local storage, use it directly
+      setUser({ role: storedUserRole });
+    } else {
+      // User role is not in local storage, fetch it from Firebase
+      const getUser = async () => {
+        if (auth.currentUser) {
+          const docRef = doc(db, 'users', auth.currentUser.uid);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            const userRole = docSnap.data().isESH ? 'isESH' : 'user';
+            localStorage.setItem('userRole', userRole); // Store user role in local storage
+            setUser({ role: userRole });
+          }
         }
-      }
-    };
-    getUser();
+      };
+      getUser();
+    }
   }, []);
 
   return user;
@@ -28,15 +37,7 @@ function useUserRole(user) {
     return 'loading';
   }
 
-  if (user.isESH) {
-    return 'isESH';
-  }
-
-  if(user.isAdmin){
-    return "isAdmin"
-  }
-
-  return 'user';
+  return user.role; // Retrieve the user role from the user object
 }
 
 export { useUser, useUserRole };

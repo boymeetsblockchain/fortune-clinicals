@@ -1,12 +1,15 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import { AiOutlineShoppingCart, AiOutlineUser, AiOutlineSetting, AiOutlineUnorderedList,AiTwotoneCalendar } from 'react-icons/ai';
+import { AiOutlineShoppingCart, AiOutlineUser,AiOutlineMessage, AiOutlineUnorderedList,AiTwotoneCalendar } from 'react-icons/ai';
+import {BiMessageSquareCheck} from 'react-icons/bi'
 const menuItems = [
   { to: '/admin/patients', text: 'Click to view and edit Patient Data', icon: AiOutlineUnorderedList },
   { to: '/admin/products', text: 'Click to have access to available Products', icon: AiOutlineShoppingCart },
   { to: '/admin/profile', text: 'Click to access your details', icon: AiOutlineUser },
   { to: '/admin/calender', text: 'Click to have access to monthly report', icon: AiTwotoneCalendar },
- 
+  { to: '/admin/messages', text: 'Click to have access to message ', icon: AiOutlineMessage },
+  { to: '/admin/notes', text: 'Click to have  access to note ', icon:BiMessageSquareCheck },
+  
 ];
 function Admin() {
   return (

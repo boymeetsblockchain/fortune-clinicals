@@ -1,23 +1,38 @@
 import React from 'react'
 import Input from '../components/Input'
-
-import { useRef } from 'react'
+import TextArea from '../components/Textarea'
 import Navbar from '../components/Navbar'
-import emailjs from '@emailjs/browser'
 import toast from 'react-hot-toast'
+import { useState } from 'react'
+import { addDoc,collection } from 'firebase/firestore'
+import { db } from '../firebase.config'
 function Message() {
-   const form = useRef()
-   const sendEmail = (e) => {
+   const [name,setName]= useState("")
+   const [number,setNumber]= useState("")
+   const[message,setMessage]=useState("")
+   const[date,setDate]= useState("")
+   const sendEmail = async(e) => {
     e.preventDefault();
+    const formData= {
+      name,
+      number,
+      message,
+      date
+    }
+
   try {
-      
-    emailjs.sendForm('service_l8a3zla',
-    'template_k4y2sxb',
-     form.current, 
-     'B2CcDlj6aqwUKKeGG')
-    e.target.reset()
-    console.log(form)
-    toast.success("Message Sent")
+     if(!name || !message){
+      toast.error("Please fill all Info")
+     }else{
+      const data = await addDoc(collection(db, 'messages'), formData);
+      console.log(data)
+      toast.success("Message Sent");
+      setName("")
+      setMessage("")
+      setNumber("")
+      setDate("")
+     }
+    
   } catch (error) {
      toast.error("something went wrong")
   }
@@ -30,11 +45,14 @@ function Message() {
     <Navbar/>
     <div className="mx-auto max-w-screen-xl py-4 h-full w-full px-4 relative md:px-8 lg:px-12">
       <h1 className='text-center my-6 font-bold  text-3xl  capitalize'>Send a Message </h1>
-      <form className='flex flex-col space-y-4 justify-center w-full mx-auto' ref={form} onSubmit={sendEmail}>
-        <Input label={"name"} type={"text"} name={'name'}/>
-        <Input label={"email"} type={"email"} name={"email"}/>
-        <Input label={"number"}  type={"number"} name={"number"} />
-        <Input label={"Write your message here"}  name={"message"}/>
+      <form className='flex flex-col space-y-4 justify-center w-full mx-auto' onSubmit={sendEmail}>
+        <Input label={"name"} type={"text"} name={'name'} value={name} onChange={(e)=>setName(e.target.value)}/>
+        
+        <Input label={"number"}  type={"number"} name={"number"} value={number} onChange={(e)=>setNumber(e.target.value)} />
+        <TextArea value={message} onChange={(e)=>setMessage(e.target.value)}>
+
+        </TextArea>
+        <Input label={"Date"} type={"date"} value={date} onChange={(e)=>setDate(e.target.value)}/>
         <button className='bg-red-500 p-2  text-white  text-sm'>
           Send Message 
         </button>

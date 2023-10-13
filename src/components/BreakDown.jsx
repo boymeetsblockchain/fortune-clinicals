@@ -1,7 +1,7 @@
 import React from 'react';
 import useMonthsData from '../hooks/useMonthData';
 import { useParams } from 'react-router-dom';
-import Navbar from './Navbar';
+import AdminNav from './AdminNav'
 import Loader from './Loader';
 import { useNavigate } from 'react-router-dom';
 
@@ -25,7 +25,7 @@ function BreakDown({ match }) {
 
   return (
     <>
-      <Navbar />
+      <AdminNav />
       <div className="px-4 md:px-8 lg:px-8 h-full mx-auto my-5">
         <h1 className="text-2xl font-semibold mb-4 text-center ">{selectedMonth?.name} Daily Transactions</h1>
         <h1 className='text-2xl font-bold mb-4 text-center'> Total Payment for {selectedMonth?.name}: {""} &#8358;{selectedMonth.totalPaymentsForMonth}</h1>
