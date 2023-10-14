@@ -16,18 +16,17 @@ import Input from '../../components/Input';
 import InitialReview from '../../components/InitialReview';
 function AdminPatientDetail() {
   const params = useParams();
-  const navigate = useNavigate()
+  const navigate= useNavigate()
   const [loading, setLoading] = useState(true);
   const [patient, setPatient] = useState(null);
   const[updatedDate,setUpdatedDate]= useState("")
-  const [isActive, setIsActive] = useState('session'); 
   const [payment,setPayment]= useState("")
   const [session,setSession]= useState("")
-
+  const [isActive, setIsActive] = useState('session'); // Initialize with 'payment'
 
   useEffect(() => {
     const getPatient = async () => {
-      const docRef = doc(db, 'patients', params.id);
+      const docRef = doc(db, 'eshpatients', params.id);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         setPatient(docSnap.data());
@@ -52,22 +51,22 @@ function AdminPatientDetail() {
       const sessionDetails =  querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       setSession(sessionDetails)
     }
-
     getPayment()
-    getPatient();
     getSession()
+    getPatient();
   }, []);
 
   const onDelete = async () => {
     if (window.confirm("Are you sure you want to delete this patient record?")) {
       try {
-        const docRef = doc(db, 'patients', params.id);
+        const docRef = doc(db, 'eshpatients', params.id);
         await deleteDoc(docRef);
+        navigate('/esh/patients')
         toast.success("Deleted");
-         navigate('/dashboard/patients')
         // Redirect or perform any other action after deletion
       } catch (error) {
         console.error('Error deleting patient record:', error);
+        navigate('/esh/patients')
         toast.error("Error deleting patient record");
       }
     }
@@ -82,7 +81,7 @@ function AdminPatientDetail() {
       }
 
       // Update the patient data with the new updatedDate
-      const docRef = doc(db, 'patients', params.id);
+      const docRef = doc(db, 'eshpatients', params.id);
       const updatedPatientData = { ...patient, updatedDate };
       await updateDoc(docRef, updatedPatientData);
 
@@ -94,20 +93,14 @@ function AdminPatientDetail() {
       toast.error('Error updating patient record');
     }
   };
-
-
   const UpdatePatientDetails=(params)=>{
-    navigate(`/update/${params}`)
+    navigate(`/update/esh/${params}`)
    }
   if (loading) {
     return (
       <Loader />
     );
   }
-
-
- 
-  
 
   return (
     <>

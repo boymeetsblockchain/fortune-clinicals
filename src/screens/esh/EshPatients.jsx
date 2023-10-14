@@ -1,5 +1,5 @@
 import React, { useCallback,useEffect,useState } from 'react';
-import Navbar from '../../components/Navbar';
+import EshNav from '../../components/EshNav';
 import { useNavigate } from 'react-router-dom';
 import {AiOutlineUserAdd} from 'react-icons/ai'
 import { Link } from 'react-router-dom';
@@ -130,7 +130,7 @@ const filteredPatients = patients ? patients.filter((patient) => {
   return (
     
     <>
-      <Navbar />
+      <EshNav />
       <div className="px-4 md:px-8 lg:px-8 h-full mx-auto my-5 relative">
       <div className="flex justify-between items-center">
      <div >

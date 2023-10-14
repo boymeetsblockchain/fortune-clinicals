@@ -104,7 +104,7 @@ function Esh() {
       }, [sortOrder, sortBy]); 
     
       const onView = useCallback((id) => {
-        navigate(`/admin/esh/${id}`);
+        navigate(`/admin/patient/esh/${id}`);
       }, [navigate]);
     
       const toggleSortBy = (selectedSortBy) => {

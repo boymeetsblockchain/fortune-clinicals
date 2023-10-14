@@ -44,7 +44,7 @@ export default function Home() {
     }
   };
 
-  const loginuser = async e => {
+  const loginuser = async (e) => {
     e.preventDefault();
     try {
       const auth = getAuth();
@@ -61,8 +61,13 @@ export default function Home() {
           // Check if the user is an admin based on the 'isAdmin' field
           const isAdmin = userData.isAdmin === true;
   
+          // Check if the user is an ESH based on the 'isESH' field
+          const isESH = userData.isESH === true;
+  
           if (isAdmin) {
             navigate('/admin'); // Navigate to the admin page
+          } else if (isESH) {
+            navigate('/esh'); // Navigate to the ESH dashboard
           } else {
             navigate('/dashboard'); // Navigate to the user dashboard
           }

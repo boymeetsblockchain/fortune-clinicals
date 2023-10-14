@@ -6,7 +6,7 @@ import { useState,useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 import { getDoc, doc, updateDoc } from 'firebase/firestore'
 import { db } from '../../firebase.config'
-import Navbar from '../../components/Navbar'
+import EshNav from '../../components/EshNav'
 import { ageData, titleOptions } from '../../data'
 import { Eshoptions } from '../../data'
 import { Link, useNavigate,useParams} from 'react-router-dom'
@@ -120,7 +120,7 @@ function UpdatePatient() {
 
   return (
     <>
-    <Navbar/>
+    <EshNav/>
       <div className="mx-auto max-w-screen-xl py-4 h-full w-full px-4 md:px-8 lg:px-12">
       <Link to={'/dashboard/patients'}>
           <AiOutlineArrowLeft size={32} className='my-2  text-[#FF5162]  cursor-pointer'/>

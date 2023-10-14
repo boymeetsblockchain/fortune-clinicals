@@ -20,7 +20,7 @@ function Profile() {
   const onLogOut = async()=>{
       await auth.signOut()
       toast.success("successfully loggedout")
-      navigate('/auth')
+      navigate('/')
   }
 
   const saveNote = async(e)=>{

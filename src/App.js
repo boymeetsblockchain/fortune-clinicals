@@ -33,13 +33,15 @@ import AdminMessage from './screens/admin/AdminMessage'
 import AdminProfile from './screens/admin/AdminProfile'
 import AdminPatientDetails from './screens/admin/AdminPatientDetails'
 import AdminEshPatient from './screens/admin/AdminEshPatient'
+import ESH from './screens/esh/Esh'
+import EshMessage from './screens/esh/EshMessage'
 const App = () => {
   return (
     
    <BrowserRouter>
    <Routes>
-        <Route path='/' index element={<Homescreen/>}/>
-        <Route path='/auth' element={<Auth/>}/> 
+        {/* <Route path='/' index element={<Homescreen/>}/> */}
+        <Route path='/' index element={<Auth/>}/> 
          <Route path='/dashboard' element={<PrivateRoute/>}>
          <Route path='/dashboard' element={<Dashboard/>}/>
          </Route>
@@ -61,12 +63,14 @@ const App = () => {
          <Route path='/esh/patients' element={<EshPatients/>}/>
          <Route path='/esh/profile' element={<EshProfile/>}/>
          <Route path='/esh/products' element={<EshProduct/>}/>
+         <Route path='/esh/message' element={<EshMessage/>}/>
+         <Route path='/esh' element={<ESH/>}/>
          <Route path='/esh/add-new-product' element={<AddNewEshProduct/>}/>
          <Route path='/esh/product/:id' element={<EshProductDetail/>}/>
          <Route path='/admin' element={<Admin/>}/>
          <Route path='/admin/patients' element={<AdminPatients/>}/>
          <Route path='/admin/patient/:id' element={<AdminPatientDetails/>}/>
-         <Route path='/admin/esh/:id' element={<AdminEshPatient/>}/>
+         <Route path='/admin/patient/esh/:id' element={<AdminEshPatient/>}/>
          <Route path='/admin/profile' element={<AdminProfile/>}/>
          <Route path='/admin/calender' element={<Calender/>}/>
          <Route path='/admin/notes' element={<AdminNotes/>}/>

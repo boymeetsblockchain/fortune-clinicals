@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Navbar from '../../components/Navbar';
+import EshNav from '../../components/EshNav';
 
 import {  FaCheck } from 'react-icons/fa';
 import { ImBin } from 'react-icons/im';
@@ -104,7 +104,7 @@ function PatientDetail() {
 
   return (
     <>
-      <Navbar />
+      <EshNav />
       <div className="mx-auto max-w-screen-xl my-5 h-screen md:overflow-y-hidden w-full px-4 md:px-8 lg:px-12">
         <div className="flex flex-col my-4 space-y-8">
           <div className="flex top-details flex-col md:flex-row space-y-4 items-center justify-between">

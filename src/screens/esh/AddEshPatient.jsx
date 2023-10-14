@@ -1,5 +1,5 @@
 import React from 'react'
-import Navbar from '../../components/Navbar'
+import EshNav from '../../components/EshNav'
 import Input from '../../components/Input'
 import Select from '../../components/Select'
 import { db } from '../../firebase.config'
@@ -60,7 +60,7 @@ function EshPatient() {
    }
   return (
    <>
-   <Navbar/>
+   <EshNav/>
       <div className="mx-auto max-w-screen-xl py-4 h-full w-full px-4 md:px-8 lg:px-12">
       <Link to={'/dashboard/patients'}>
           <AiOutlineArrowLeft size={32} className='my-2  text-[#FF5162]  cursor-pointer'/>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from '../../components/Navbar'
+import EshNav from '../../components/EshNav'
 import Input from '../../components/Input';
 import { db } from '../../firebase.config';
 import { getAuth } from 'firebase/auth';
@@ -75,7 +75,7 @@ function EshDaily() {
 
   return (
     <>
-      <Navbar />
+      <EshNav />
       <div className="h-auto w-full flex md:flex-col max-w-screen-xl mx-auto px-4 md:px-8 lg:px-12">
         <form onSubmit={saveDaily} className="my-3 flex flex-col gap-y-3">
             <h1 className='text-center font-bold text-3xl'>Add EshDaily Expenses</h1>
