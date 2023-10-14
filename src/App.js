@@ -31,6 +31,8 @@ import AdminNotes from './screens/admin/AdminNotes'
 import BreakDown from './components/BreakDown'
 import AdminMessage from './screens/admin/AdminMessage'
 import AdminProfile from './screens/admin/AdminProfile'
+import AdminPatientDetails from './screens/admin/AdminPatientDetails'
+import AdminEshPatient from './screens/admin/AdminEshPatient'
 const App = () => {
   return (
     
@@ -63,8 +65,8 @@ const App = () => {
          <Route path='/esh/product/:id' element={<EshProductDetail/>}/>
          <Route path='/admin' element={<Admin/>}/>
          <Route path='/admin/patients' element={<AdminPatients/>}/>
-         <Route path='/admin/patient/:id' element={<PatientDetail/>}/>
-         <Route path='/admin/patient/esh/:id' element={<EshPatient/>}/>
+         <Route path='/admin/patient/:id' element={<AdminPatientDetails/>}/>
+         <Route path='/admin/esh/:id' element={<AdminEshPatient/>}/>
          <Route path='/admin/profile' element={<AdminProfile/>}/>
          <Route path='/admin/calender' element={<Calender/>}/>
          <Route path='/admin/notes' element={<AdminNotes/>}/>
