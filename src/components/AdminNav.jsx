@@ -10,7 +10,7 @@ import { BsFillGridFill } from 'react-icons/bs';
 
 
 const adminLinks = [
-  { to: '/admin/message', title: 'Messages', icon: BsFillGridFill, size: 32 },
+  { to: '/admin/messages', title: 'Messages', icon: BsFillGridFill, size: 32 },
   { to: '/admin/patients', title: 'Patient Dashboard', icon: AiOutlineUnorderedList, size: 32 },
   { to: '/', title: 'Home', icon: AiOutlineHome, size: 60 },
   { to: '/admin/profile', title: 'User Profile', icon: AiOutlineUser, size: 32 },

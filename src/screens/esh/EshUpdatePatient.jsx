@@ -110,7 +110,7 @@ function UpdatePatient() {
         await updateDoc(docRef, updatedData);
     
         toast.success('Patient updated successfully.');
-        navigate(`/esh-patient/${params.id}`); // Redirect to the patient list after update
+        navigate(-1); // Redirect to the patient list after update
       } catch (error) {
         console.error('Error updating patient:', error);
         toast.error('Error updating patient data.');

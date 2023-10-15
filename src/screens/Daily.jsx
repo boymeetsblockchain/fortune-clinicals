@@ -75,8 +75,13 @@ function Daily() {
 
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="h-auto w-full flex md:flex-col max-w-screen-xl mx-auto px-4 md:px-8 lg:px-12">
+         <div className='flex items-start my-3'>
+         <button className='bg-[#ff5162]  text-white py-3 inline-block px-6 rounded-lg' onClick={()=>navigate(-1)}>
+          back
+        </button>
+         </div>
         <form onSubmit={saveDaily} className="my-3 flex flex-col gap-y-3">
             <h1 className='text-center font-bold text-3xl'>Add Daily Expenses</h1>
           <Input label="Add  Daily Expense" type="text" value={daily} onChange={(e) => setDaily(e.target.value)} />
