@@ -64,7 +64,7 @@ function AdminPatientDetail() {
         const docRef = doc(db, 'patients', params.id);
         await deleteDoc(docRef);
         toast.success("Deleted");
-         navigate('/dashboard/patients')
+         navigate(-1)
         // Redirect or perform any other action after deletion
       } catch (error) {
         console.error('Error deleting patient record:', error);

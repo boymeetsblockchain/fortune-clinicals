@@ -35,6 +35,8 @@ import AdminPatientDetails from './screens/admin/AdminPatientDetails'
 import AdminEshPatient from './screens/admin/AdminEshPatient'
 import ESH from './screens/esh/Esh'
 import EshMessage from './screens/esh/EshMessage'
+import AddNew from './screens/admin/admincomponents/AddNew'
+import AddNewEsh from './screens/admin/admincomponents/AddNewEsh'
 const App = () => {
   return (
     
@@ -76,6 +78,8 @@ const App = () => {
          <Route path='/admin/notes' element={<AdminNotes/>}/>
          <Route path='/admin/messages' element={<AdminMessage/>}/>
          <Route path='/payments/:monthName' element={<BreakDown/>}/>
+         <Route path='/admin/add-new' element={<AddNew/>}/>
+         <Route path='/admin/add-new-esh' element={<AddNewEsh/>}/>
     </Routes>
     <Toaster/>
    </BrowserRouter>
