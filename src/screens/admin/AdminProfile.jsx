@@ -13,6 +13,7 @@ function Profile() {
   const[date,setDate]= useState("")
   const[notes,setNotes]= useState([])
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState(''); // State for the search query
   const navigate =useNavigate()
   const auth= getAuth()
   
@@ -77,11 +78,21 @@ function Profile() {
   },[])
 
 
+  const filteredNotes = notes.filter((noteItem) => {
+    // Convert both the note and the search query to lowercase for a case-insensitive search
+    const noteText = noteItem.note.toLowerCase();
+    const query = searchQuery.toLowerCase();
+    
+    // Check if the note contains the search query
+    return noteText.includes(query);
+  });
+
   if(loading){
     return(
       <Loader/>
     )
   }
+
   return (
    <>
     <AdminNav/>
@@ -104,7 +115,14 @@ function Profile() {
       </form>
      </div>
      <div className="notes-display mt-4">
-  {notes.map((data) => (
+     <input
+          type="text"
+          placeholder="Search notes..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="px-3 py-2 mb-4 rounded-md border border-gray-300 focus:outline-none mb"
+        />
+  {filteredNotes.map((data) => (
     <div key={data.id} className="bg-[#FF5162] text-white p-4 mb-2 flex justify-between items-center rounded-lg">
       <p className="text-sm">{data.note}</p>
       <p className='text-sm'>{data.date}</p>

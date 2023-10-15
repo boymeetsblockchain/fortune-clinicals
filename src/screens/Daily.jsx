@@ -15,6 +15,7 @@ function Daily() {
   const [price, setPrice] = useState('');
   const [loading, setLoading] = useState(true);
   const [expensesData, setExpensesData] = useState([]); // State to store fetched data
+  const [searchQuery, setSearchQuery] = useState(''); // State for the search query
   const navigate = useNavigate();
   const auth = getAuth();
 
@@ -71,12 +72,29 @@ function Daily() {
     getDaily();
   }, []);
 
+  const filteredNotes = expensesData.filter((noteItem) => {
+    // Convert both the note and the search query to lowercase for a case-insensitive search
+    const noteText = noteItem.daily.toLowerCase();
+    const query = searchQuery.toLowerCase();
+    
+    // Check if the note contains the search query
+    return noteText.includes(query);
+  });
   if (loading) return <Loader />;
 
   return (
     <>
       {/* <Navbar /> */}
       <div className="h-auto w-full flex md:flex-col max-w-screen-xl mx-auto px-4 md:px-8 lg:px-12">
+      <div className="flex justify-end mt-4">
+      <input
+          type="text"
+          placeholder="Search notes..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="px-3 py-2 mb-4 rounded-md border border-gray-300 focus:outline-none mb"
+        />
+      </div>
          <div className='flex items-start my-3'>
          <button className='bg-[#ff5162]  text-white py-3 inline-block px-6 rounded-lg' onClick={()=>navigate(-1)}>
           back
@@ -99,7 +117,7 @@ function Daily() {
         <div>
           <h2 className='text-center font-bold text-3xl mb-2'>Expenses List</h2>
           <div>
-  {expensesData.map((expense) => (
+  {filteredNotes.map((expense) => (
     <div key={expense.id} className='bg-red-500 text-white p-4 rounded-lg mb-4'>
       <p className='text-lg capitalize'>{expense.daily}</p>
       <p className='text-xl'>amount : &#8358;{expense.price}</p>

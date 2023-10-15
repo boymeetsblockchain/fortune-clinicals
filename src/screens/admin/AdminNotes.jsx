@@ -13,6 +13,8 @@ function AdminNotes() {
   const [date, setDate] = useState('');
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
+  
+  const [searchQuery, setSearchQuery] = useState(''); // State for the search query
   const navigate = useNavigate();
 
   const saveNote = async (e) => {
@@ -65,11 +67,27 @@ function AdminNotes() {
   if (loading) {
     return <Loader />;
   }
-
+  const filteredNotes = notes.filter((noteItem) => {
+    // Convert both the note and the search query to lowercase for a case-insensitive search
+    const noteText = noteItem.note.toLowerCase();
+    const query = searchQuery.toLowerCase();
+    
+    // Check if the note contains the search query
+    return noteText.includes(query);
+  });
   return (
     <>
       <AdminNav />
       <div className="mx-auto max-w-screen-xl py-4 h-full w-full px-4 relative md:px-8 lg:px-12">
+      <div className="flex justify-end">
+      <input
+          type="text"
+          placeholder="Search notes..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="px-3 py-2 mb-4 rounded-md border border-gray-300 focus:outline-none mb"
+        />
+      </div>
         <h1 className="text-center my-6 font-bold text-3xl capitalize">Save Notes</h1>
         <form className="flex flex-col space-y-4 justify-center w-full mx-auto" onSubmit={saveNote}>
           <Input label="Write your note here" type="text" value={note} onChange={(e) => setNote(e.target.value)} />
@@ -79,7 +97,7 @@ function AdminNotes() {
           </button>
         </form>
         <div className="notes-display mt-4">
-          {notes.map((data) => (
+          {filteredNotes.map((data) => (
             <div key={data.id} className="bg-[#FF5162] text-white p-4 mb-2 flex justify-between items-center rounded-lg">
               <p className="text-sm">{data.note}</p>
               <p className="text-sm">{data.date}</p>

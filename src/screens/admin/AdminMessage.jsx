@@ -8,7 +8,7 @@ import Loader from '../../components/Loader';
 function AdminMessage() {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const [searchQuery, setSearchQuery] = useState(''); // State for the search query
   const getMessages = async () => {
     try {
       const data = await getDocs(collection(db, 'messages'));
@@ -37,12 +37,29 @@ function AdminMessage() {
     return <Loader />;
   }
 
+  const filteredNotes = messages.filter((noteItem) => {
+    // Convert both the note and the search query to lowercase for a case-insensitive search
+    const noteText = noteItem.message.toLowerCase();
+    const query = searchQuery.toLowerCase();
+    
+    // Check if the note contains the search query
+    return noteText.includes(query);
+  });
   return (
     <>
       <AdminNav/>
       <div className="mx-auto max-w-screen-xl py-4 h-full w-full px-4 relative md:px-8 lg:px-12">
+      <div className="flex justify-end">
+      <input
+          type="text"
+          placeholder="Search notes..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="px-3 py-2 mb-4 rounded-md border border-gray-300 focus:outline-none mb"
+        />
+      </div>
         {/* Mapping out the messages */}
-        {messages.map((data) => (
+        {filteredNotes.map((data) => (
     <div key={data.id} className="bg-[#FF5162] text-white p-4 mb-2 flex justify-between items-center rounded-lg">
       <p className="text-sm">{data.name}   {""}{data.number}</p>
       <p className='text-sm'>{data.message}</p>
