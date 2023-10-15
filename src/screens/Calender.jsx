@@ -19,7 +19,7 @@ if(!filteredMonthsData){
 
         <div className="flex items-center justify-center h-full">
       
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid md:grid-cols-4 grid-cols-1 gap-4">
             {filteredMonthsData.map((month, index) => (
               <div key={index} className='cursor-pointer'  onClick={() => navigate(`/payments/${month.name}`)} >
                 <div className="bg-gray-200 h-32 w-64 flex items-center justify-center text-center p-4 rounded  flex-col shadow">
