@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { db } from '../../firebase.config';
+import { db } from '../../../firebase.config';
 import { getDocs, collection } from 'firebase/firestore';
-import EshNav from '../../components/EshNav';
-import Loader from '../../components/Loader';
+import Loader from '../../../components/Loader';
 import { Link, useNavigate } from 'react-router-dom';
 import { BsFillCartPlusFill } from 'react-icons/bs';
 
@@ -14,7 +13,7 @@ function Products() {
   useEffect(() => {
     const getProducts = async () => {
       try {
-        const data = await getDocs(collection(db, 'eshproducts'));
+        const data = await getDocs(collection(db, 'products'));
         const filteredData = data.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
@@ -38,7 +37,7 @@ function Products() {
 
   return (
     <>
-      <EshNav />
+    
       <div className="mx-auto max-w-screen-xl my-5 h-full md:overflow-y-hidden relative w-full px-4 md:px-8 lg:px-12">
         <div className="overflow-x-auto">
           <table className="min-w-full table-fixed">

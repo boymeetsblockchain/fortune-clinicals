@@ -37,6 +37,7 @@ import ESH from './screens/esh/Esh'
 import EshMessage from './screens/esh/EshMessage'
 import AddNew from './screens/admin/admincomponents/AddNew'
 import AddNewEsh from './screens/admin/admincomponents/AddNewEsh'
+import AdminProducts from './screens/admin/AdminProducts'
 const App = () => {
   return (
     
@@ -80,6 +81,7 @@ const App = () => {
          <Route path='/payments/:monthName' element={<BreakDown/>}/>
          <Route path='/admin/add-new' element={<AddNew/>}/>
          <Route path='/admin/add-new-esh' element={<AddNewEsh/>}/>
+         <Route path='/admin/products' element={<AdminProducts/>}/>
     </Routes>
     <Toaster/>
    </BrowserRouter>
