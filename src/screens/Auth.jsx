@@ -131,7 +131,7 @@ export default function Home() {
                   {variant === 'login' ? 'Login' : 'Register'}
                 </button>
               </div>
-              <p className="text-black mt-12">
+              {/* <p className="text-black mt-12">
                 {variant === 'login' ? 'First time here?' : 'Already have an account?'}
                 <span
                   onClick={toggleVariant}
@@ -139,7 +139,7 @@ export default function Home() {
                 >
                   {variant === 'login' ? 'Create an account' : 'Login'}
                 </span>
-              </p>
+              </p> */}
               <Oauth />
             </form>
           </div>

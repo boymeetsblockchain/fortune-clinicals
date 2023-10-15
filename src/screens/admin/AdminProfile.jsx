@@ -115,13 +115,15 @@ function Profile() {
       </form>
      </div>
      <div className="notes-display mt-4">
-     <input
+     <div className="flex justify-end">
+      <input
           type="text"
           placeholder="Search notes..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="px-3 py-2 mb-4 rounded-md border border-gray-300 focus:outline-none mb"
         />
+      </div>
   {filteredNotes.map((data) => (
     <div key={data.id} className="bg-[#FF5162] text-white p-4 mb-2 flex justify-between items-center rounded-lg">
       <p className="text-sm">{data.note}</p>
