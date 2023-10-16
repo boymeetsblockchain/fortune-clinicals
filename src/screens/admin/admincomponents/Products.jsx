@@ -28,7 +28,7 @@ function Products() {
   }, []);
 
   const onView = useCallback((id) => {
-    navigate(`/esh/product/${id}`);
+    navigate(`/dashboard/product/${id}`);
   }, [navigate]);
 
   if (loading) {

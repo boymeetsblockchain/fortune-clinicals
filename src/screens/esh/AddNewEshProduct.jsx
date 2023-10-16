@@ -40,7 +40,7 @@ function AddNewProduct() {
         const data = await addDoc(collection(db, 'eshproducts'), formDataCopy);
         console.log(data);
         toast.success("Product saved");
-        navigate('/esh/products');
+        navigate(-1);
       } catch (error) {
         console.log(error);
       }
@@ -51,7 +51,7 @@ function AddNewProduct() {
       
   return (
     <>
-    <EshNav/>
+    {/* <EshNav/> */}
       <div className="mx-auto max-w-screen-xl py-4 h-full w-full px-4 relative md:px-8 lg:px-12">
       <h1 className='text-center my-6 font-bold  text-3xl  capitalize'>Add new Product</h1>
          <form className='flex flex-col space-y-4 justify-center w-full mx-auto' onSubmit={addProduct}>

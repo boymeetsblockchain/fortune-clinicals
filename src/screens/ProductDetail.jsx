@@ -113,9 +113,9 @@ function ProductDetail() {
       if (Object.keys(updatedFields).length > 0) {
         await updateDoc(docRef, updatedFields);
         toast.success('Product Updated');
-        navigate('/dashboard/products');
+        navigate(-1);
       } else {
-        toast.info('No changes to update.');
+        toast.error('No changes to update.');
       }
     } catch (error) {
       console.error('Error updating product:', error);
@@ -154,7 +154,7 @@ function ProductDetail() {
 
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="mx-auto max-w-screen-xl py-4 h-full w-full px-4 relative md:px-8 lg:px-12">
         <h1 className="text-center my-6 font-bold text-3xl capitalize">Edit {product?.name}</h1>
         <form className="flex flex-col space-y-4 justify-center w-full mx-auto">
