@@ -20,7 +20,7 @@ function BreakDown({ match }) {
 
   const handlePatientClick = (patientId) => {
     // Use the patientId to navigate to the appropriate patient dashboard
-    navigate(`/dashboard/patient/${patientId}`);
+    navigate(`/admin/patient/${patientId}`);
   };
 
   return (
