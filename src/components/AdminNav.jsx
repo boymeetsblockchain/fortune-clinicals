@@ -14,7 +14,7 @@ const adminLinks = [
   { to: '/admin/patients', title: 'Patient Dashboard', icon: AiOutlineUnorderedList, size: 32 },
   { to: '/', title: 'Home', icon: AiOutlineHome, size: 60 },
   { to: '/admin/profile', title: 'User Profile', icon: AiOutlineUser, size: 32 },
-  { to: '/admin/calender', title: 'Products', icon: AiTwotoneCalendar, size: 32 },
+  { to: '/admin/calender', title: 'Calender', icon: AiTwotoneCalendar, size: 32 },
 ];
 
 function Navbar() {
