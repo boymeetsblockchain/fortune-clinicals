@@ -1,6 +1,5 @@
-import React from 'react'
+
 import Auth from './screens/Auth'
-import Homescreen from './screens/Homescreen'
 import Dashboard from './screens/Dashboard'
 import Patients from './screens/Patients'
 import ProductDetail from './screens/ProductDetail'
