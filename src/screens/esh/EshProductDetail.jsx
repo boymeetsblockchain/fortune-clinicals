@@ -86,7 +86,6 @@ function ProductDetail() {
   
       const existingData = docSnap.data();
   
-      // Create an object to hold the updated fields
       const updatedFields = {};
   
       if (parseInt(sold) !== existingData.sold) {
@@ -102,20 +101,24 @@ function ProductDetail() {
       }
   
       // Calculate the new quantity
-      const newQuantity =
-        existingData.quantity + (updatedFields.added || 0) -((updatedFields.sold || 0) + (updatedFields.used || 0)) ;
+      const newQuantity = (existingData.quantity || 0) + 
+                         (updatedFields.added || 0) - 
+                         (updatedFields.sold || 0) - 
+                         (updatedFields.used || 0);
   
-      if (newQuantity !== existingData.quantity) {
+      if (newQuantity >= 0) {
         updatedFields.quantity = newQuantity;
+      } else {
+        toast.error('Quantity cannot be negative.');
+        return;
       }
   
-      // Update Firestore document with the updated fields
       if (Object.keys(updatedFields).length > 0) {
         await updateDoc(docRef, updatedFields);
         toast.success('Product Updated');
         navigate(-1);
       } else {
-        toast.info('No changes to update.');
+        toast.error('No changes to update.');
       }
     } catch (error) {
       console.error('Error updating product:', error);
