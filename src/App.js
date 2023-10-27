@@ -37,6 +37,7 @@ import EshMessage from './screens/esh/EshMessage'
 import AddNew from './screens/admin/admincomponents/AddNew'
 import AddNewEsh from './screens/admin/admincomponents/AddNewEsh'
 import AdminProducts from './screens/admin/AdminProducts'
+import AdminStaff from './screens/admin/AdminStaff'
 const App = () => {
   return (
     
@@ -81,6 +82,7 @@ const App = () => {
          <Route path='/admin/add-new' element={<AddNew/>}/>
          <Route path='/admin/add-new-esh' element={<AddNewEsh/>}/>
          <Route path='/admin/products' element={<AdminProducts/>}/>
+         <Route path='/admin/staff' element={<AdminStaff/>}/>
     </Routes>
     <Toaster/>
    </BrowserRouter>

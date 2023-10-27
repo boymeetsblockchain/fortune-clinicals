@@ -156,6 +156,8 @@ function Fortune() {
     ? 'text-green-500'
     : data.selectedValue === "Hospital-Calls"
     ? 'text-purple-500'
+    :data.selectedValue ==="Home-Patient-Admin" ?
+    "text-blue-500"
     : 'text-[#ff5162]'
 }`}>
   {data?.surname[0].toUpperCase()}

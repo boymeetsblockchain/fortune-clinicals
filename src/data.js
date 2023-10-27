@@ -17,6 +17,7 @@ export   const options = [
   { value: 'Vip', label: 'Vip' },
   { value: 'ESH', label: 'ESH' },
   { value: 'Home-Patient', label: 'Home-Patient' },
+  { value: 'Home-Patient-Admin', label: 'Home-Patient-Admin' },
   {value:"Hospital-Calls", label:"Hospital-calls"}
 ];
 
