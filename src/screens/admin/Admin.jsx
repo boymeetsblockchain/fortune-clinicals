@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import { AiOutlineShoppingCart, AiOutlineUser,AiOutlineMessage, AiOutlineUnorderedList,AiTwotoneCalendar } from 'react-icons/ai';
 import {BiMessageSquareCheck} from 'react-icons/bi'
+import {PiMoneyBold} from 'react-icons/pi'
 const menuItems = [
   { to: '/admin/patients', text: 'Click to view and edit Patient Data', icon: AiOutlineUnorderedList },
   { to: '/admin/products', text: 'Click to have access to available Products', icon: AiOutlineShoppingCart },
@@ -9,7 +10,8 @@ const menuItems = [
   { to: '/admin/calender', text: 'Click to have access to monthly report', icon: AiTwotoneCalendar },
   { to: '/admin/messages', text: 'Click to have access to message ', icon: AiOutlineMessage },
   { to: '/admin/notes', text: 'Click to have  access to note ', icon:BiMessageSquareCheck },
-  
+  { to: '/admin/staff', text: 'Click to have  access to note ', icon:PiMoneyBold },
+   
 ];
 function Admin() {
   return (
