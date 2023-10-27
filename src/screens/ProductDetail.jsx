@@ -141,7 +141,6 @@ function ProductDetail() {
         const docRef = await addDoc(collection(db, 'comments'), commentData);
         console.log('Payment added with ID:', docRef.id);
         toast.success("Added successfully")
-        navigate(0)
         // Clear the input fields
         setNewComment('');
         setNewCommentDate('');
