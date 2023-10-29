@@ -38,6 +38,8 @@ import AddNew from './screens/admin/admincomponents/AddNew'
 import AddNewEsh from './screens/admin/admincomponents/AddNewEsh'
 import AdminProducts from './screens/admin/AdminProducts'
 import AdminStaff from './screens/admin/AdminStaff'
+import AdminAddStaff from './screens/admin/AdminAddStaff'
+import AdminStaffDetail from './screens/admin/AdminStaffDetail'
 const App = () => {
   return (
     
@@ -83,6 +85,8 @@ const App = () => {
          <Route path='/admin/add-new-esh' element={<AddNewEsh/>}/>
          <Route path='/admin/products' element={<AdminProducts/>}/>
          <Route path='/admin/staff' element={<AdminStaff/>}/>
+         <Route path='/admin/staff/:id' element={<AdminStaffDetail/>}/>
+         <Route path='/admin/add-staff' element={<AdminAddStaff/>}/>
     </Routes>
     <Toaster/>
    </BrowserRouter>
