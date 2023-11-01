@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import { AiOutlineShoppingCart, AiOutlineUser,AiOutlineMessage, AiOutlineUnorderedList,AiTwotoneCalendar } from 'react-icons/ai';
+import { AiOutlineShoppingCart, AiOutlineUsergroupDelete,AiOutlineUser,AiOutlineMessage, AiOutlineUnorderedList,AiTwotoneCalendar } from 'react-icons/ai';
 import {BiMessageSquareCheck} from 'react-icons/bi'
 import {PiMoneyBold} from 'react-icons/pi'
 const menuItems = [
@@ -11,6 +11,7 @@ const menuItems = [
   { to: '/admin/messages', text: 'Click to have access to message ', icon: AiOutlineMessage },
   { to: '/admin/notes', text: 'Click to have  access to note ', icon:BiMessageSquareCheck },
   { to: '/admin/staff', text: 'Click to have  access to Staff Records', icon:PiMoneyBold },
+  { to: '/admin/staff', text: 'Click to have  access to Staff Records', icon:AiOutlineUsergroupDelete },
    
 ];
 function Admin() {

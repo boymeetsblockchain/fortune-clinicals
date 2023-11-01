@@ -27,7 +27,7 @@ function Dashboard() {
   const userRole = useUserRole(user);
   return (
     <div className='flex items-center flex-col  justify-center h-screen px-4 md:px-8 lg:px-12'>
-      <h1 className="text-center md:text-4xl text-2xl  mb-4 font-bold">Welcome, {user?user.username :""}</h1>
+      <h1 className="text-center md:text-4xl text-2xl  mb-4 font-bold">Welcome, {currentUser? currentUser.displayName :""}</h1>
       <div className="grid  grid-cols-1 md:grid-cols-2  md:gap-6 gap-2">
         {
           userRole === "isESH" ? eshMenuItems.map((item, index) => (
