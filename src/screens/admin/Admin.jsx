@@ -10,7 +10,7 @@ const menuItems = [
   { to: '/admin/calender', text: 'Click to have access to monthly report', icon: AiTwotoneCalendar },
   { to: '/admin/messages', text: 'Click to have access to message ', icon: AiOutlineMessage },
   { to: '/admin/notes', text: 'Click to have  access to note ', icon:BiMessageSquareCheck },
-  { to: '/admin/staff', text: 'Click to have  access to note ', icon:PiMoneyBold },
+  { to: '/admin/staff', text: 'Click to have  access to Staff Records', icon:PiMoneyBold },
    
 ];
 function Admin() {

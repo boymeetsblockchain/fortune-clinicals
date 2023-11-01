@@ -2,7 +2,7 @@ import React from "react";
 
 
 
-const Input = ({id, onChange, value, label, name, type })=>{
+const Input = ({id, onChange, value, label, name, type, disabled})=>{
     return(
         <div className="relative">
              <input 
@@ -12,7 +12,7 @@ const Input = ({id, onChange, value, label, name, type })=>{
               type={type}
               onChange={onChange}
               autoComplete="none"
-      
+               disabled={disabled}
              className="
              block
              rounded-md

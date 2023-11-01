@@ -175,7 +175,7 @@ function ProductDetail() {
             }}
           />
           <p className='text-base text-gray-700 mt-2 ml-4 '> previous price :&#8358; <span className="text-green-500">{product.price}</span></p>
-          <Input label="Quantity" type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+          <Input label="Quantity" type="number" value={quantity} disabled={true} onChange={(e) => setQuantity(e.target.value)} />
         
           <Input label="Added" type="number" value={added} onChange={(e) => setAdded(e.target.value)} />
           <p className="text-grat-700 ml-4 mt-2"> added: <span className="text-green-500">{product.added}</span></p>
