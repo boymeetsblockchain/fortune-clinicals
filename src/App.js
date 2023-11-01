@@ -40,6 +40,7 @@ import AdminProducts from './screens/admin/AdminProducts'
 import AdminStaff from './screens/admin/AdminStaff'
 import AdminAddStaff from './screens/admin/AdminAddStaff'
 import AdminStaffDetail from './screens/admin/AdminStaffDetail'
+import AdminUser from './screens/admin/AdminUser'
 const App = () => {
   return (
     
@@ -87,6 +88,7 @@ const App = () => {
          <Route path='/admin/staff' element={<AdminStaff/>}/>
          <Route path='/admin/staff/:id' element={<AdminStaffDetail/>}/>
          <Route path='/admin/add-staff' element={<AdminAddStaff/>}/>
+         <Route path='/admin/user' element={<AdminUser/>}/>
     </Routes>
     <Toaster/>
    </BrowserRouter>

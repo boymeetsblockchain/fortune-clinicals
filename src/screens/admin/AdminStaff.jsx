@@ -64,7 +64,6 @@ const AdminStaff = () => {
     <span className='mx-2' key={index}>{month}</span>
   ))}
 </th> */}
-  <th className="px-4 py-2">Bonuses</th>
     </tr>
   </thead>
   <tbody>
@@ -73,8 +72,7 @@ const AdminStaff = () => {
      <tr key={data.number} className='border-b border-gray-200 cursor-pointer' onClick={()=>navigate(`/admin/staff/${data.id}`)}>
        <td className="px-4 py-2 text-center">{data.number}</td>
         <td className="px-4 py-2 text-center">{data.name}</td>
-        <td className="px-4 py-2 text-center">{data.salary}</td>
-        <td className="px-4 py-2 text-center">{data.salary}</td>
+        <td className="px-4 py-2 text-center">	&#8358; {data.salary}</td>
      </tr>
     ))
   }

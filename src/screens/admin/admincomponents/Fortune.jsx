@@ -177,9 +177,19 @@ function Fortune() {
                      {data?.dateRegistered}
                    </span>
                  </p>
-                 <button className="px-2 py-0.5 text-sm bg-[#FF5162] text-white" onClick={()=>onView(data?.id)}>
-                   View
-                 </button>
+                 <button
+  className={`px-2 py-0.5 text-sm ${
+    data.selectedValue === "Home-Patient"
+      ? 'bg-green-500'
+      : data.selectedValue === "Hospital-Calls"
+      ? 'bg-purple-500'
+      : 'bg-[#FF5162]'
+  } text-white`}
+  onClick={() => onView(data?.id)}
+>
+  View
+</button>
+
                </div>
                {/* <div className="deletebutton ml-5" onClick={onDelete}>
                  <ImBin size={20} className="text-[#ff5162] cursor-pointer" />
