@@ -54,10 +54,10 @@ function AdminUser() {
         <h1 className="text-3xl font-bold mb-4">User List</h1>
         <ul className='grid grid-cols-3 gap-4 '>
           {users.map((user, index) => (
-            <li key={index} className='bg-[#FF5162] h-20 w-auto flex items-center justify-center text-white' >
+            <li key={index} className='bg-[#FF5162] h-20 w-auto flex items-center gap-3 justify-center text-white' >
               <p>{user.displayName}</p>
               <p>{user.email}</p>
-               <FaTrash onClick={()=>deleteUser(user.id)} />
+               <FaTrash onClick={()=>deleteUser(user.id)} className='cursor-pointer' />
             </li>
           ))}
         </ul>

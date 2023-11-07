@@ -152,7 +152,7 @@ function Esh() {
            >
              <div className="flex flex-row  justify-evenly px-4">
              <div className={`text-center text-5xl h-20 w-20 px-2 py-1 items-center flex font-bold ${
-  data.selectedValue === "Home-Patient" ? 'text-green-500' : 'text-[#ff5162]'
+  data.selectedValue==="Out-patient" ? 'text-green-500' : 'text-[#ff5162]'
 }`}>
   {data?.surname[0].toUpperCase()}
 </div>
@@ -171,9 +171,14 @@ function Esh() {
                      {data?.dateRegistered}
                    </span>
                  </p>
-                 <button className="px-2 py-0.5 text-sm bg-[#FF5162] text-white" onClick={()=>onView(data?.id)}>
-                   View
-                 </button>
+                 <button
+  className={`px-2 py-0.5 text-sm ${
+    data.selectedValue === "Out-patient" ? 'bg-green-500' : 'bg-[#ff5162]'
+  } text-white`}
+  onClick={() => onView(data?.id)}
+>
+  View
+</button>
                </div>
                {/* <div className="deletebutton ml-5" onClick={onDelete}>
                  <ImBin size={20} className="text-[#ff5162] cursor-pointer" />

@@ -11,7 +11,7 @@ const menuItems = [
   { to: '/admin/messages', text: 'Click to have access to message ', icon: AiOutlineMessage },
   { to: '/admin/notes', text: 'Click to have  access to note ', icon:BiMessageSquareCheck },
   { to: '/admin/staff', text: 'Click to have  access to Staff Records', icon:PiMoneyBold },
-  { to: '/admin/user', text: 'Click to have  access to Staff Records', icon:AiOutlineUsergroupDelete },
+  { to: '/admin/user', text: 'Click to have  access to Users', icon:AiOutlineUsergroupDelete },
    
 ];
 function Admin() {

@@ -1,91 +1,46 @@
-import { Link } from 'react-router-dom';
-import AdminNav from '../../components/AdminNav'
-import {PiMoney} from 'react-icons/pi'
-import { useEffect,useState } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../../firebase.config';
-import Loader from '../../components/Loader';
+import AdminNav from '../../components/AdminNav';
 import { useNavigate } from 'react-router-dom';
 
 const months = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
+  { name: "January", id: "January" },
+  { name: "February", id: "February" },
+  { name: "March", id: "March" },
+  { name: "April", id: "April" },
+  { name: "May", id: "May" },
+  { name: "June", id: "June" },
+  { name: "July", id: "July" },
+  { name: "August", id: "August" },
+  { name: "September", id: "September" },
+  { name: "October", id: "October" },
+  { name: "November", id: "November" },
+  { name: "December", id: "December" },
 ];
 
 const AdminStaff = () => {
-  const[staffs,setStaffs]= useState([])
-  const [loading,setLoading]= useState(true)
-  const navigate= useNavigate()
-  useEffect(() => {
-    const getProducts = async () => {
-      try {
-        const data = await getDocs(collection(db, 'staffs'));
-        const filteredData = data.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setStaffs(filteredData);
-        console.log("test",filteredData)
-        setLoading(false);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    getProducts();
-  }, []);
+  const navigate = useNavigate();
 
-  if(loading){
-    return(
-      <Loader/>
-    )
-  }
   return (
     <>
-     <AdminNav/>
-     <div className="mx-auto max-w-6xl  my-5 h-screen md:overflow-y-hidden w-full px-4 md:px-8 relative lg:px-12">
-     <table className="min-w-full table-fixed mh">
-  <thead>
-    <tr>
-    <th className="px-4 py-2">No.</th>
-      <th className="px-4 py-2">Name</th>
-      <th className="px-4 py-2">Salary</th>
-      {/* <th className="py-2 flex justify-between">
-  {months.map((month, index) => (
-    <span className='mx-2' key={index}>{month}</span>
-  ))}
-</th> */}
-    </tr>
-  </thead>
-  <tbody>
-  {
-    staffs.map((data)=>(
-     <tr key={data.number} className='border-b border-gray-200 cursor-pointer' onClick={()=>navigate(`/admin/staff/${data.id}`)}>
-       <td className="px-4 py-2 text-center">{data.number}</td>
-        <td className="px-4 py-2 text-center">{data.name}</td>
-        <td className="px-4 py-2 text-center">	&#8358; {data.salary}</td>
-     </tr>
-    ))
-  }
-  </tbody>
-</table>
-<div className="fixed bottom-4 right-4 h-40 w-40 cursor-pointer bg-white flex justify-center items-center rounded-full shadow-lg">
-          <Link to={'/admin/add-staff'}>
-            <PiMoney size={64} color="red" />
-          </Link>
+      <AdminNav />
+      <div className="mx-auto max-w-6xl my-5 h-screen md:overflow-y-hidden w-full px-4 md:px-8 relative lg:px-12">
+        <div className="grid grid-cols-3 gap-4">
+          {months.map((data) => (
+            <div
+              key={data.id}
+              className="cursor-pointer bg-[#FF5162]  hover:bg-red -900 transition duration-300 rounded-lg"
+              onClick={() => navigate(`/admin/staff/${data.id}`)}
+            >
+              <div className="p-6">
+                <h1 className="text-white text-2xl text-center  font-semibold">
+                  {data.name}
+                </h1>
+              </div>
+            </div>
+          ))}
         </div>
-     </div>
+      </div>
     </>
-  )
-}
+  );
+};
 
-export default AdminStaff
+export default AdminStaff;
