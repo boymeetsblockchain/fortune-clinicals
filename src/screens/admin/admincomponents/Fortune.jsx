@@ -183,6 +183,8 @@ function Fortune() {
       ? 'bg-green-500'
       : data.selectedValue === "Hospital-Calls"
       ? 'bg-purple-500'
+        :data.selectedValue ==="Home-Patient-Admin" ?
+    "bg-blue-500"
       : 'bg-[#FF5162]'
   } text-white`}
   onClick={() => onView(data?.id)}
