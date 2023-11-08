@@ -86,7 +86,7 @@ const App = () => {
          <Route path='/admin/add-new-esh' element={<AddNewEsh/>}/>
          <Route path='/admin/products' element={<AdminProducts/>}/>
          <Route path='/admin/staff' element={<AdminStaff/>}/>
-         <Route path='/admin/staff/:id' element={<AdminStaffDetail/>}/>
+         <Route path='/admin/staff/:month' element={<AdminStaffDetail/>}/>
          <Route path='/admin/add-staff' element={<AdminAddStaff/>}/>
          <Route path='/admin/user' element={<AdminUser/>}/>
     </Routes>

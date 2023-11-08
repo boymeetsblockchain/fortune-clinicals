@@ -1,88 +1,91 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import AdminNav from '../../components/AdminNav'
-const AdminStaffDetail = () => {
-  const [staffData, setStaffData] = useState([
-    {
-      id: 1,
-      name: 'John Doe',
-      salary: 5000,
-      bonus: 200,
-      note: 'Excellent performance',
-    },
-    {
-      id: 2,
-      name: 'Jane Smith',
-      salary: 5500,
-      bonus: 250,
-      note: 'Hardworking employee',
-    },
-    // Add more staff data here
-  ]);
+import React, { useState, useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../../firebase.config';
+import AdminNav from '../../components/AdminNav';
+import { AiOutlineUserAdd } from 'react-icons/ai';
+import Loader from '../../components/Loader';
 
-  const params = useParams()
-  console.log(params.id)
-  const handleEdit = (id, field, value) => {
-    const updatedStaffData = staffData.map((staff) => {
-      if (staff.id === id) {
-        return { ...staff, [field]: value };
+const AdminStaffDetail = () => {
+  const [staffData, setStaffData] = useState([]);
+  const params = useParams();
+  console.log(params.month);
+
+  useEffect(() => {
+    const fetchStaffDetails = async () => {
+      try {
+        const staffCollectionRef = collection(db, 'staffs');
+        const q = query(staffCollectionRef, where('month', '==', params.month));
+        const staffQuerySnapshot = await getDocs(q);
+
+        const staffDetails = [];
+
+        if (!staffQuerySnapshot.empty) {
+          staffQuerySnapshot.forEach((doc) => {
+            staffDetails.push({ id: doc.id, ...doc.data() });
+          });
+          setStaffData(staffDetails);
+        } else {
+          setStaffData([]); // Handle no staff found
+        }
+      } catch (error) {
+        console.error('Error fetching staff details:', error);
+        setStaffData([]); // Handle errors
       }
-      return staff;
-    });
-    setStaffData(updatedStaffData);
-  };
+    };
+
+    fetchStaffDetails();
+  }, [params.month]);
+
+  if (staffData.length === 0) {
+    return (
+      <div>
+        <AdminNav />
+        <div className="mx-auto max-w-screen-xl my-5 h-screen md:overflow-y-hidden relative w-full px-4 md:px-8 lg:px-12">
+          <Loader />
+        </div>
+        <div className="fixed bottom-4 right-4 h-40 w-40 cursor-pointer bg-white flex justify-center items-center rounded-full shadow-lg">
+          <Link to={'/admin/add-staff'}>
+            <AiOutlineUserAdd size={64} color="red" />
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <>
-    <AdminNav />
-    <div className="mx-auto max-w-screen-xl my-5 h-screen md:overflow-y-hidden w-full px-4 md:px-8 lg:px-12">
-      <h1>Staff Details</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Salary</th>
-            <th>Bonus</th>
-            <th>Note</th>
-          </tr>
-        </thead>
-        <tbody>
-          {staffData.map((staff) => (
-            <tr key={staff.id}>
-              <td>
-                <input
-                  type="text"
-                  value={staff.name}
-                  onChange={(e) => handleEdit(staff.id, 'name', e.target.value)}
-                />
-              </td>
-              <td>
-                <input
-                  type="number"
-                  value={staff.salary}
-                  onChange={(e) => handleEdit(staff.id, 'salary', parseFloat(e.target.value))}
-                />
-              </td>
-              <td>
-                <input
-                  type="number"
-                  value={staff.bonus}
-                  onChange={(e) => handleEdit(staff.id, 'bonus', parseFloat(e.target.value))}
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  value={staff.note}
-                  onChange={(e) => handleEdit(staff.id, 'note', e.target.value)}
-                />
-              </td>
+    <div>
+      <AdminNav />
+      <div className="mx-auto max-w-screen-xl my-5 h-screen md:overflow-y-hidden w-full px-4 md:px-8 lg:px-12 relative">
+        <table className="min-w-full table-fixed">
+          <thead>
+            <tr>
+            <th className="px-4 py-2">No.</th>
+              <th className="px-4 py-2">Name</th>
+              <th className="px-4 py-2">Salary</th>
+              <th className="px-4 py-2">Bonus</th>
+              <th className="px-4 py-2">Note</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {staffData.map((staff,index) => (
+              <tr key={staff.id}>
+                 <td className="px-4 text-center py-2">{index + 1}</td>
+                <td className="px-4 text-center py-2">{staff.name}</td>
+                <td className="px-4 text-center py-2">{staff.salary}</td>
+                <td className="px-4 text-center py-2">{staff.bonus}</td>
+                <td className="px-4 text-center py-2">{staff.note}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <div className="fixed bottom-4 right-4 h-40 w-40 cursor-pointer bg-white flex justify-center items-center rounded-full shadow-lg">
+          <Link to={'/admin/add-staff'}>
+            <AiOutlineUserAdd size={64} color="red" />
+          </Link>
+        </div>
+      </div>
     </div>
-    </>
   );
 };
 
