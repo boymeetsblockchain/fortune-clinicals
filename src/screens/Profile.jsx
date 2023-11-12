@@ -92,7 +92,7 @@ function Profile() {
        onClick={onLogOut}>signOut</button>
        <button onClick={()=> navigate('/daily')} className='text-xl capitalize bg-[#FF5162] p-2 text-white rounded-md'>Daily Expenditures</button>
     </div>
-     <div className="note my-8">
+     {/* <div className="note my-8">
       <form  onSubmit={saveNote}> 
         <Input label={"Add a note "} type={"text"} value={note} onChange={e=>setNote(e.target.value)}/>
         <Input label={"pick a date"} type={"date"} value={date} onChange={e=>setDate(e.target.value)}/>
@@ -110,7 +110,7 @@ function Profile() {
       <p className='text-sm'>{data.date}</p>
     </div>
   ))}
-</div>
+</div> */}
 
     </div>
    </>

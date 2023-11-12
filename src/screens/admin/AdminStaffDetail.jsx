@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, query, where, doc, deleteDoc } from 'firebase/firestore';
 import { db } from '../../firebase.config';
 import AdminNav from '../../components/AdminNav';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 import Loader from '../../components/Loader';
+import toast from 'react-hot-toast';
 
 const AdminStaffDetail = () => {
   const [staffData, setStaffData] = useState([]);
@@ -37,6 +38,24 @@ const AdminStaffDetail = () => {
     fetchStaffDetails();
   }, [params.month]);
 
+  const deleteStaff = async (staffId) => {
+    // Display a confirmation dialog
+    const confirmDelete = window.confirm('Are you sure you want to delete this staff member?');
+  
+    if (confirmDelete) {
+      try {
+        // Delete the staff member with the specified ID
+        await deleteDoc(doc(db, 'staffs', staffId));
+        setStaffData((prevStaffData) => prevStaffData.filter((staff) => staff.id !== staffId));
+        toast.success('Staff has been deleted');
+        
+      } catch (error) {
+        console.error('Error deleting staff member:', error);
+      }
+    }
+  };
+  
+
   if (staffData.length === 0) {
     return (
       <div>
@@ -60,21 +79,30 @@ const AdminStaffDetail = () => {
         <table className="min-w-full table-fixed">
           <thead>
             <tr>
-            <th className="px-4 py-2">No.</th>
+              <th className="px-4 py-2">No.</th>
               <th className="px-4 py-2">Name</th>
               <th className="px-4 py-2">Salary</th>
               <th className="px-4 py-2">Bonus</th>
               <th className="px-4 py-2">Note</th>
+              <th className="px-4 py-2">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {staffData.map((staff,index) => (
+            {staffData.map((staff, index) => (
               <tr key={staff.id}>
-                 <td className="px-4 text-center py-2">{index + 1}</td>
+                <td className="px-4 text-center py-2">{index + 1}</td>
                 <td className="px-4 text-center py-2">{staff.name}</td>
                 <td className="px-4 text-center py-2">{staff.salary}</td>
                 <td className="px-4 text-center py-2">{staff.bonus}</td>
                 <td className="px-4 text-center py-2">{staff.note}</td>
+                <td className="px-4 text-center py-2">
+                  <button
+                    className="bg-red-500 text-white py-1 px-3 rounded-md text-sm"
+                    onClick={() => deleteStaff(staff.id)}
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
