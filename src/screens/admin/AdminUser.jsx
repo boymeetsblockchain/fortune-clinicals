@@ -71,18 +71,20 @@ function AdminUser() {
   return (
     <>
       <AdminNav />
-      <div className="mx-auto max-w-screen-xl py-4 h-full w-full px-4 relative md:px-8 lg:px-12">
+      <div className="mx-auto max-w-screen-2xl py-4 h-full w-full px-4 relative md:px-8 lg:px-12">
         <h1 className="text-3xl font-bold mb-4">User List</h1>
-        <ul className='grid grid-cols-3 gap-4 '>
+        <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols4 gap-4 '>
         {users
   .filter(user => !user.isAdmin) 
   .map((user, index) => (
-    <li
+    <div
       key={index}
-      className={`${user.isESH ? "bg-green-400" : "bg-[#FF5162]"} h-20 w-auto flex items-center gap-3 justify-center text-white`}
+      className={`${user.isESH ? "bg-green-400" : "bg-[#FF5162]"} h-auto px-2  py-5 w-auto flex items-center gap-3 justify-center rounded-md text-white`}
     >
-      <p>{user.displayName}</p>
-      <p>{user.email}</p>
+    <div className="flex flex-col gap-y-2">
+    <p className='text-sm'>{user.username}</p>
+      <p className='text-sm'>{user.email}</p>
+    </div>
       {!user.isESH ? (
         <button  className='bg-blue-400 cursor-pointer p-2 text-xs  rounded-md'
         onClick={() => updateIsESH(user.id)} >
@@ -91,10 +93,10 @@ function AdminUser() {
       ) : null}
       
       <FaTrash onClick={() => deleteUser(user.id)} className='cursor-pointer' />
-    </li>
+    </div>
   ))}
 
-        </ul>
+        </div>
       </div>
     </>
   );
