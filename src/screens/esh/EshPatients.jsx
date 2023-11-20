@@ -161,7 +161,7 @@ const filteredPatients = patients ? patients.filter((patient) => {
               <div className={`text-center text-5xl h-20 w-20 px-2 py-1 items-center flex font-bold ${
   data.selectedValue==="Out-patient" ? 'text-green-500' : 'text-[#ff5162]'
 }`}>
-  {data?.surname[0].toUpperCase()}
+  {data?.surname[0]?.toUpperCase()}
 </div>
 
                 <div className="flex ml-4 space-y-2 flex-col">

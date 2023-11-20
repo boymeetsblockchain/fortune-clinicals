@@ -40,24 +40,30 @@ function EshPatient() {
     age,address,phoneNumber,clinician,dateRegistered,reffer,selectedValue,
     numOfSessions,paidSessions,comment,condition,regNumber,phoneNumber2,caregiver
   }
-  const registerPatient = async (e)=>{
-    e.preventDefault()
-     
-     try {
-       const formDataCopy ={
-           ...formData,
-           timestamp: serverTimestamp(),
-           userId:auth?.currentUser?.uid
-        }
-        const data = await addDoc(collection(db, 'eshpatients'), formDataCopy)
-        console.log(data)
-         toast.success("patient saved")
-         navigate(`/esh-patient/${data.id}`)
-         
-     } catch (error) {
-       console.log(error)
-     }
-   }
+  const registerPatient = async (e) => {
+    e.preventDefault();
+  
+    // Check if the required fields are filled
+    if (!surname || !othername) {
+      toast.error("Please fill in both 'Surname' and 'Other Name' fields");
+      return;
+    }
+  
+    try {
+      const formDataCopy = {
+        ...formData,
+        timestamp: serverTimestamp(),
+        userId: auth?.currentUser?.uid,
+      };
+      const data = await addDoc(collection(db, 'eshpatients'), formDataCopy);
+      console.log(data);
+      toast.success('Patient saved');
+      navigate(`/esh-patient/${data.id}`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
   return (
    <>
    <EshNav/>
