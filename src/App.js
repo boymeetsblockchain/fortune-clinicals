@@ -41,6 +41,7 @@ import AdminStaff from './screens/admin/AdminStaff'
 import AdminAddStaff from './screens/admin/AdminAddStaff'
 import AdminStaffDetail from './screens/admin/AdminStaffDetail'
 import AdminUser from './screens/admin/AdminUser'
+import ProductsMoney from './screens/ProductsMoney'
 const App = () => {
   return (
     
@@ -61,6 +62,7 @@ const App = () => {
         <Route path='/dashboard/products' element={<Products/>}/>
         {/* <Route path='/dashboard/calender' element={<Calender/>}/> */}
         <Route path='/add-new-product' element={<AddNewProduct/>}/>
+        <Route path='/add-new-product-money' element={<ProductsMoney/>}/>
         <Route path='/update/:id' element={<UpdatePatient/>}/>
         <Route path='/update/esh/:id' element={<EshUpdatePatient/>}/>
         <Route path='/message' element={<Message/>}/>
