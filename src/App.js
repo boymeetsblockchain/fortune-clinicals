@@ -42,6 +42,7 @@ import AdminAddStaff from './screens/admin/AdminAddStaff'
 import AdminStaffDetail from './screens/admin/AdminStaffDetail'
 import AdminUser from './screens/admin/AdminUser'
 import ProductsMoney from './screens/ProductsMoney'
+import AdminProductFund from './screens/admin/AdminProductFunds'
 const App = () => {
   return (
     
@@ -87,6 +88,7 @@ const App = () => {
          <Route path='/admin/add-new' element={<AddNew/>}/>
          <Route path='/admin/add-new-esh' element={<AddNewEsh/>}/>
          <Route path='/admin/products' element={<AdminProducts/>}/>
+         <Route path='/admin/products/add-money' element={<AdminProductFund/>}/>
          <Route path='/admin/staff' element={<AdminStaff/>}/>
          <Route path='/admin/staff/:month' element={<AdminStaffDetail/>}/>
          <Route path='/admin/add-staff' element={<AdminAddStaff/>}/>
