@@ -43,6 +43,8 @@ import AdminStaffDetail from './screens/admin/AdminStaffDetail'
 import AdminUser from './screens/admin/AdminUser'
 import ProductsMoney from './screens/ProductsMoney'
 import AdminProductFund from './screens/admin/AdminProductFunds'
+import EshProductsFunds from './screens/esh/EshProductsFunds'
+import AdminProductFundEsh from './screens/admin/AdminProductFundsEsh'
 const App = () => {
   return (
     
@@ -75,6 +77,7 @@ const App = () => {
          <Route path='/esh/message' element={<EshMessage/>}/>
          <Route path='/esh' element={<ESH/>}/>
          <Route path='/esh/add-new-product' element={<AddNewEshProduct/>}/>
+         <Route path='add-new-product-esh-money' element={<EshProductsFunds/>}/>
          <Route path='/esh/product/:id' element={<EshProductDetail/>}/>
          <Route path='/admin' element={<Admin/>}/>
          <Route path='/admin/patients' element={<AdminPatients/>}/>
@@ -93,6 +96,7 @@ const App = () => {
          <Route path='/admin/staff/:month' element={<AdminStaffDetail/>}/>
          <Route path='/admin/add-staff' element={<AdminAddStaff/>}/>
          <Route path='/admin/user' element={<AdminUser/>}/>
+         <Route path='/add-new-product-esh-money' element={<AdminProductFundEsh/>}/>
     </Routes>
     <Toaster/>
    </BrowserRouter>
