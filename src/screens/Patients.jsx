@@ -134,23 +134,22 @@ const filteredPatients = patients ? patients.filter((patient) => {
       <Navbar />
       <div className="px-4 md:px-8 lg:px-8 h-full mx-auto my-5 relative">
         {/* Add the search input field */}
-     <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center">
      <div >
-         <p className='text-lg font-bold'>List of Patients: <span className='text-green-500'>{patients.length}</span></p>
+         <p className='   justify-center md:text-lg font-bold'><span className="hidden md:block">List of Patients: </span><span className='text-green-500'>{patients.length}</span></p>
         </div>
-        <div className="sort flex gap-6 justify-between items-center">
-      <button  className='flex text-xs gap-x-3 items-center' onClick={() => toggleSortBy('name')}><BsSortAlphaDown size={24} color='blue'/>Alphabetical Order</button>
-      <button className='flex text-xs gap-x-3 items-center'   onClick={() => toggleSortBy('date')}><BsFillCalendarDateFill size={24} color={'green'}/>Date Added</button>
-      <button className='flex text-xs gap-x-3 items-center'   onClick={() => toggleSortBy('update')}><BsArrowDownUp size={24} color={'purple'}/>Updated patient</button>
+        <div className="sort flex gap-6 space-x-4 px-4 justify-between items-center">
+      <button  className='flex text-xs gap-x-3 items-center' onClick={() => toggleSortBy('name')}><BsSortAlphaDown size={24} color='blue'/><span className='hidden md:block'>Alphabetical Order</span></button>
+      <button className='flex text-xs gap-x-3 items-center'   onClick={() => toggleSortBy('date')}><BsFillCalendarDateFill size={24} color={'green'}/> <span className="hidden md:block">Date Added</span> </button>
+      <button className='flex text-xs gap-x-3 items-center'   onClick={() => toggleSortBy('update')}><BsArrowDownUp size={24} color={'purple'}/> <span className="hidden md:block">Updated patient</span>  </button>
     </div>
-
-      <div className="flex justify-end">
+      <div className="">
       <input
           type="text"
-          placeholder="Search patients..."
+          placeholder="Search"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="px-3 py-2 mb-4 rounded-md border border-gray-300 focus:outline-none mb"
+          className="px-3 w-24 md:w-auto  py-2 mb-4 rounded-md border border-gray-300 focus:outline-none mb"
         />
       </div>
      </div>

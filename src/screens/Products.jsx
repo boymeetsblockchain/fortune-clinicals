@@ -63,13 +63,13 @@ function Products() {
         <table className="min-w-full table-fixed">
   <thead>
     <tr>
-    <th className="px-4 py-2">No.</th>
-      <th className="px-4 py-2">Name</th>
-      <th className="px-4 py-2">Quantity Left</th>
-      <th className="px-4 py-2">Price</th>
-      <th className="px-4 py-2">Sold</th>
-      <th className="px-4 py-2">Used</th>
-      <th className="px-4 py-2">Added</th>
+    <th className="px-4  text-sm md:text-lg">No.</th>
+      <th className="px-4  text-sm md:text-lg">Name</th>
+      <th className="px-4  text-sm md:text-lg">Quantity Left</th>
+      <th className="px-4  text-sm md:text-lg">Price</th>
+      <th className="px-4  text-sm md:text-lg">Sold</th>
+      <th className="px-4  text-sm md:text-lg">Used</th>
+      <th className="px-4  text-sm md:text-lg">Added</th>
     </tr>
   </thead>
   <tbody>
@@ -79,13 +79,13 @@ function Products() {
         className="border-b border-gray-200 cursor-pointer"
         onClick={() => onView(product?.id)}
       >
-        <td className="px-4 py-2 text-center">{index + 1}</td>
-        <td className="px-4 py-2 text-center">{product.name}</td>
-        <td className="px-4 py-2 text-center">{product.quantity}</td>
-        <td className="px-4 py-2 text-center">&#8358;{product.price}</td>
-        <td className="px-4 py-2 text-center">{product.sold}</td>
-        <td className="px-4 py-2 text-center">{product.used}</td>
-        <td className="px-4 py-2 text-center">{product.added}</td>
+        <td className="px-4  text-sm md:text-lg text-center">{index + 1}</td>
+        <td className="px-4  text-sm md:text-lg text-center">{product.name}</td>
+        <td className="px-4  text-sm md:text-lg text-center">{product.quantity}</td>
+        <td className="px-4  text-sm md:text-lg text-center">&#8358;{product.price}</td>
+        <td className="px-4  text-sm md:text-lg text-center">{product.sold}</td>
+        <td className="px-4  text-sm md:text-lg text-center">{product.used}</td>
+        <td className="px-4  text-sm md:text-lg text-center">{product.added}</td>
       </tr>
     ))}
   </tbody>

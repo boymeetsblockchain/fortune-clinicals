@@ -109,7 +109,7 @@ function PatientDetail() {
         <div className="flex flex-col my-4 space-y-8">
           <div className="flex top-details flex-col md:flex-row space-y-4 items-center justify-between">
             <div className="name-age-number flex space-y-4 mx-5 flex-col">
-              <h1 className='bg-slate-100 text-[#fff5162] font-bold px-2 py-1.5 text-3xl rounded-md'>{patient?.selectedTitle} {""}{patient?.surname} &nbsp; {patient?.othername}</h1>
+              <h1 className='bg-slate-100 text-[#fff5162]  text-center font-bold px-2 py-3 text-3xl rounded-md'>{patient?.selectedTitle} {""}{patient?.surname} &nbsp; {patient?.othername}</h1>
               <p> Age:&nbsp; {patient?.age}</p>
               <p> Phone Number: &nbsp; {patient?.phoneNumber}</p>
               <p>Address:&nbsp;{patient?.address}</p>
