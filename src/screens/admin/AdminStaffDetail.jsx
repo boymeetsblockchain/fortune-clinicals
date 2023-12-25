@@ -60,7 +60,7 @@ const AdminStaffDetail = () => {
     return (
       <div>
         <AdminNav />
-        <div className="mx-auto max-w-screen-xl my-5 h-screen md:overflow-y-hidden relative w-full px-4 md:px-8 lg:px-12">
+        <div className="mx-auto max-w-screen-xl my-5 h-screen md:overflow-y-hidden relative w-full  px-4   md:px-8 lg:px-2 text-sm 2">
           <Loader />
         </div>
         <div className="fixed bottom-4 right-4 h-40 w-40 cursor-pointer bg-white flex justify-center items-center rounded-full shadow-lg">
@@ -75,27 +75,27 @@ const AdminStaffDetail = () => {
   return (
     <div>
       <AdminNav />
-      <div className="mx-auto max-w-screen-xl my-5 h-screen md:overflow-y-hidden w-full px-4 md:px-8 lg:px-12 relative">
+      <div className="mx-auto max-w-screen-xl my-5 h-screen md:overflow-y-hidden w-full  px-4 md:px-8 lg:px-12  2 relative">
         <table className="min-w-full table-fixed">
           <thead>
             <tr>
-              <th className="px-4 py-2">No.</th>
-              <th className="px-4 py-2">Name</th>
-              <th className="px-4 py-2">Salary</th>
-              <th className="px-4 py-2">Bonus</th>
-              <th className="px-4 py-2">Note</th>
-              <th className="px-4 py-2">Actions</th>
+              <th className=" px-2 text-sm  md:px-4 py-2">No.</th>
+              <th className=" px-2 text-sm  md:px-4 py-2">Name</th>
+              <th className=" px-2 text-sm  md:px-4 py-2">Salary</th>
+              <th className=" px-2 text-sm  md:px-4 py-2">Bonus</th>
+              <th className=" px-2 text-sm  md:px-4 py-2">Note</th>
+              <th className=" px-2 text-sm  md:px-4 py-2">Actions</th>
             </tr>
           </thead>
           <tbody>
             {staffData.map((staff, index) => (
               <tr key={staff.id}>
-                <td className="px-4 text-center py-2">{index + 1}</td>
-                <td className="px-4 text-center py-2">{staff.name}</td>
-                <td className="px-4 text-center py-2">{staff.salary}</td>
-                <td className="px-4 text-center py-2">{staff.bonus}</td>
-                <td className="px-4 text-center py-2">{staff.note}</td>
-                <td className="px-4 text-center py-2">
+                <td className=" px-2 text-sm  md:px-4 text-left py-2">{index + 1}</td>
+                <td className=" px-2 text-sm  md:px-4 text-left py-2">{staff.name}</td>
+                <td className=" px-2 text-sm  md:px-4 text-left py-2">{staff.salary}</td>
+                <td className=" px-2 text-sm  md:px-4 text-left py-2">{staff.bonus}</td>
+                <td className=" px-2 text-sm  md:px-4 text-left py-2">{staff.note}</td>
+                <td className=" px-2 text-sm  md:px-4 text-left py-2">
                   <button
                     className="bg-red-500 text-white py-1 px-3 rounded-md text-sm"
                     onClick={() => deleteStaff(staff.id)}

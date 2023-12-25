@@ -46,7 +46,7 @@ function Products() {
 
   return (
     <>
-      <div className="mx-auto max-w-screen-xl my-5 h-full md:overflow-y-hidden relative w-full px-1 md:px-4 md:px-8 lg:px-12">
+      <div className="mx-auto max-w-screen-xl my-5 h-full md:overflow-y-hidden relative w-full px-4 md:px-8 lg:px-12">
       <div className="fixed top-24 right-4 left-1 h-40 w-40 cursor-pointer bg-white flex justify-center items-center rounded-full shadow-lg">
           <Link to={'/add-new-product-esh-money'}>
             <CiMoneyCheck1 size={64} color="red" />
