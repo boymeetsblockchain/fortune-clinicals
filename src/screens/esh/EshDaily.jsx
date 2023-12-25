@@ -76,7 +76,7 @@ function EshDaily() {
   return (
     <>
       <EshNav />
-      <div className="h-auto w-full flex md:flex-col max-w-screen-xl mx-auto px-4 md:px-8 lg:px-12">
+      <div className="h-auto w-full flex  flex-col max-w-screen-xl mx-auto px-4 md:px-8 lg:px-12">
         <form onSubmit={saveDaily} className="my-3 flex flex-col gap-y-3">
             <h1 className='text-center font-bold text-3xl'>Add EshDaily Expenses</h1>
           <Input label="Add  EshDaily Expense" type="text" value={daily} onChange={(e) => setDaily(e.target.value)} />

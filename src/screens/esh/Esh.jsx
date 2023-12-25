@@ -1,11 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import { AiOutlineShoppingCart, AiOutlineUser,AiOutlineSetting, AiOutlineUnorderedList, } from 'react-icons/ai';
+import { AiOutlineShoppingCart, AiOutlineUser, AiOutlineUnorderedList, } from 'react-icons/ai';
+import {BiMessageDetail } from 'react-icons/bi'
 const eshMenuItems= [
     { to: '/esh/patients', text: 'Click to view and edit Patient Data', icon: AiOutlineUnorderedList },
     { to: '/esh/products', text: 'Click to have access to available Products', icon: AiOutlineShoppingCart },
     { to: '/esh/profile', text: 'Click to access your details', icon: AiOutlineUser },
-    { to: '/esh/about', text: 'Click to have access to monthly report', icon: AiOutlineSetting },
+    { to: '/esh/message', text: 'Click to send a Message', icon:BiMessageDetail  },
   ]
 function ESH() {
   return (

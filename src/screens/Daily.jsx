@@ -85,7 +85,7 @@ function Daily() {
   return (
     <>
       {/* <Navbar /> */}
-      <div className="h-auto w-full flex md:flex-col max-w-screen-xl mx-auto px-4 md:px-8 lg:px-12">
+      <div className="h-auto w-full flex flex-col max-w-screen-xl mx-auto px-4 md:px-8 lg:px-12">
       <div className="flex justify-end mt-4">
       <input
           type="text"
