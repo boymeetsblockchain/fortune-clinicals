@@ -109,17 +109,19 @@ function Profile() {
     <>
       <AdminNav />
       <div className="max-w-screen-xl mx-auto px-4 md:px-8 lg:px-12">
-        <div className="header hidden md:flex items-center my-4 justify-between">
+        <div className="header  flex  items-center my-4 space-x-4 justify-between">
           <p className='text-2xl capitalize'>
-            Signed in as <span className='ml-4 bg-[#ff5162] text-white p-2 rounded-md'> {auth?.currentUser?.displayName}</span>
+            Signed in as <span className='ml-4 bg-green-500 text-white p-2 rounded-md'> {auth?.currentUser?.displayName}</span>
           </p>
-          <button className='text-xl capitalize bg-[#FF5162] p-2 text-white rounded-md'
+         <div className="buttons flex flex-col space-y-4">
+         <button className='text-xl capitalize bg-[#FF5162] p-2 text-white rounded-md'
             onClick={onLogOut}>
             Sign Out
           </button>
           <button onClick={() => navigate('/daily')} className='text-xl capitalize bg-[#FF5162] p-2 text-white rounded-md'>
             Daily Expenditures
           </button>
+         </div>
         </div>
         <div className="note my-8">
           <form onSubmit={saveNote}>

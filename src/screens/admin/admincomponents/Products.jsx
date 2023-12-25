@@ -45,7 +45,7 @@ function Products() {
   return (
     <>
     
-      <div className="mx-auto max-w-screen-xl my-5 h-full md:overflow-y-hidden relative w-full px-4 md:px-8 lg:px-12">
+      <div className="mx-auto max-w-screen-xl my-5 h-full md:overflow-y-hidden relative w-full  px-1 md:px-4 md:px-8 lg:px-12">
       <div className="fixed top-24 right-4 left-1 h-40 w-40 cursor-pointer bg-white flex justify-center items-center rounded-full shadow-lg">
           <Link to={'/admin/products/add-money'}>
             <CiMoneyCheck1 size={64} color="red" />
@@ -63,13 +63,13 @@ function Products() {
           <table className="min-w-full table-fixed">
             <thead>
               <tr>
-              <th className="px-4 py-2 text-sm md:text-lg">No.</th>
-                <th className="px-4 py-2 text-sm md:text-lg">Name</th>
-                <th className="px-4 py-2 text-sm md:text-lg">Quantity Left</th>
-                <th className="px-4 py-2 text-sm md:text-lg">Price</th>
-                <th className="px-4 py-2 text-sm md:text-lg">Sold</th>
-                <th className="px-4 py-2 text-sm md:text-lg">Used</th>
-                <th className="px-4 py-2 text-sm md:text-lg">Added</th>
+              <th className=" px-1 md:px-4 py-2 text-sm md:text-lg">No.</th>
+                <th className=" px-1 md:px-4 py-2 text-sm md:text-lg">Name</th>
+                <th className=" px-1 md:px-4 py-2 text-sm md:text-lg">Quantity Left</th>
+                <th className=" px-1 md:px-4 py-2 text-sm md:text-lg">Price</th>
+                <th className=" px-1 md:px-4 py-2 text-sm md:text-lg">Sold</th>
+                <th className=" px-1 md:px-4 py-2 text-sm md:text-lg">Used</th>
+                <th className=" px-1 md:px-4 py-2 text-sm md:text-lg">Added</th>
               </tr>
             </thead>
             <tbody>
@@ -79,13 +79,13 @@ function Products() {
                   className="border-b border-gray-200 cursor-pointer"
                   onClick={() => onView(product?.id)}
                 > 
-                 <td className="px-4 text-center py-2 text-sm md:text-lg">{index + 1}</td>
-                  <td className="px-4 text-center py-2 text-sm md:text-lg">{product.name}</td>
-                  <td className="px-4 text-center py-2 text-sm md:text-lg">{product.quantity}</td>
-                  <td className="px-4 text-center py-2 text-sm md:text-lg">&#8358; {product.price}</td>
-                  <td className="px-4 text-center py-2 text-sm md:text-lg">{product.sold}</td>
-                  <td className="px-4 text-center py-2 text-sm md:text-lg">{product.used}</td>
-                  <td className="px-4 text-center py-2 text-sm md:text-lg">{product.added}</td>
+                 <td className=" px-1 md:px-4 text-center py-2 text-sm md:text-lg">{index + 1}</td>
+                  <td className=" px-1 md:px-4 text-center py-2 text-sm md:text-lg">{product.name}</td>
+                  <td className=" px-1 md:px-4 text-center py-2 text-sm md:text-lg">{product.quantity}</td>
+                  <td className=" px-1 md:px-4 text-center py-2 text-sm md:text-lg">&#8358; {product.price}</td>
+                  <td className=" px-1 md:px-4 text-center py-2 text-sm md:text-lg">{product.sold}</td>
+                  <td className=" px-1 md:px-4 text-center py-2 text-sm md:text-lg">{product.used}</td>
+                  <td className=" px-1 md:px-4 text-center py-2 text-sm md:text-lg">{product.added}</td>
                 </tr>
               ))}
             </tbody>
