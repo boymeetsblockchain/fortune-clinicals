@@ -119,11 +119,13 @@ function UpdatePatient() {
 
   return (
     <>
-    <Navbar/>
+    {/* <Navbar/> */}
       <div className="mx-auto max-w-screen-xl py-4 h-full w-full px-4 md:px-8 lg:px-12">
-      <Link to={'/dashboard/patients'}>
-          <AiOutlineArrowLeft size={32} className='my-2  text-[#FF5162]  cursor-pointer'/>
-          </Link>
+   
+         <button onClick={()=>navigate(-1)}>
+         <AiOutlineArrowLeft size={32} className='my-2  text-[#FF5162]  cursor-pointer'/>
+         </button>
+       
 
           <h1 className='text-center my-6 font-bold  text-3xl  capitalize'>Update Patient</h1>
             <form className='flex flex-col space-y-4 justify-center w-full mx-auto' onSubmit={updatePatient}>
