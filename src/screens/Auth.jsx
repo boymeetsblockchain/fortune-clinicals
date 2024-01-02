@@ -77,7 +77,7 @@ export default function Home() {
       }
     } catch (error) {
       console.log(error);
-      toast.error('Something went wrong');
+      toast.error('Invalid email or password');
     }
   };
   
@@ -137,7 +137,7 @@ export default function Home() {
                   onClick={toggleVariant}
                   className="text-[#FF5162] ml-1 hover:underline cursor-pointer"
                 >
-                  {variant === 'login' ? 'Create an account' : 'Login'}
+                 Sign Up
                 </span>
               </p>
               <Oauth />

@@ -6,7 +6,7 @@ import ComponentLoader from './ComponentLoader';
 import toast from 'react-hot-toast';
 import {ImBin} from 'react-icons/im'
 import { useNavigate } from 'react-router-dom';
-function Session({ patientId}) {
+function Session({ patientId,patientType}) {
   const [comment, setComment] = useState('');
   const [sessions, setSessions] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -15,7 +15,7 @@ const navigate= useNavigate()
   // Function to fetch session details based on patientId
   const fectchSessionDetails = async () => {
     try {
-      const paymentsQuery = query(collection(db, 'patientssessions'), where('patientId', '==', patientId));
+      const paymentsQuery = query(collection(db, 'newsessions'), where('patientId', '==', patientId));
       const querySnapshot = await getDocs(paymentsQuery);
 
       // Use map to directly transform querySnapshot to an array of sessionDetails
@@ -47,14 +47,15 @@ const navigate= useNavigate()
     const paymentData = {
       comment,
       patientId,
-      date
+      date,
+      patientType
     };
 
     try {
        if(!comment || !date){
         toast.error("please fill in all details ")
        }else{
-        const data = await addDoc(collection(db, 'patientssessions'), paymentData);
+        const data = await addDoc(collection(db, 'newsessions'), paymentData);
         console.log('Session added with ID:', data.id);
   
         // After adding a new session, refetch the session details to include the new one
@@ -72,16 +73,26 @@ const navigate= useNavigate()
 
   const deleteSession = async (sessionId) => {
     try {
-      // Delete the payment document from Firebase using its ID
-      await deleteDoc(doc(db, 'patientssessions',sessionId));
-      toast.success('Payment deleted successfully');
+      // Display a confirmation dialog
+      const confirmed = window.confirm('Are you sure you want to delete this session?');
   
-      // After deleting the payment, refetch the payment details to update the list
-      fectchSessionDetails();
+      // If the user confirms, proceed with the deletion
+      if (confirmed) {
+        // Delete the session document from Firebase using its ID
+        await deleteDoc(doc(db, 'newsessions', sessionId));
+        toast.success('Session deleted successfully');
+  
+        // After deleting the session, refetch the session details to update the list
+        fectchSessionDetails();
+      } else {
+        // If the user cancels, do nothing or handle it as needed
+        toast.success('Deletion canceled by the user');
+      }
     } catch (error) {
-      console.error('Error deleting payment:', error);
+      console.error('Error deleting session:', error);
     }
   };
+  
   
 
   if (loading) {
@@ -96,11 +107,11 @@ const navigate= useNavigate()
   return (
     <div className='flex justify-center my-2 gap-y-3 flex-col px-3'>
       <h1 className='text-center font-bold'>Sessions Info</h1>
-      {/* <form className='space-y-2 flex flex-col' onSubmit={addNewPayment}>
+      <form className='space-y-2 flex flex-col' onSubmit={addNewPayment}>
         <Input type={"text"} label={"Comment"} value={comment} onChange={(e) => setComment(e.target.value)} />
         <Input label={"Date Registered"} type={"date"} value={date} onChange={(e) => setDate(e.target.value)} />
         <button type="submit" className='bg-[#FF5162] text-white py-1.5'>Submit</button>
-      </form> */}
+      </form>
       <div className="session-details-container">
         <h1 className="text-xl font-semibold flex flex-col gap-3 mb-4">Completed Sessions :{sessionLength}</h1>
         <div className="session-details">

@@ -1,12 +1,11 @@
 import AdminNav from '../components/AdminNav'
 import { useNavigate } from "react-router-dom";
 import useMonthsData from "../hooks/useMonthData";
-import { useState } from "react";
 import Loader from '../components/Loader'
 function Calendar() {
-  const [loading,setLoading]= useState(true)
   const navigate = useNavigate();
   const { filteredMonthsData } = useMonthsData(); 
+  console.log(filteredMonthsData)
 if(!filteredMonthsData){
   return(
   <Loader/>

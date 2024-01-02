@@ -6,7 +6,7 @@ import { db } from '../firebase.config';
 import ComponentLoader from './ComponentLoader';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-function Payment({ patientId }) {
+function Payment({ patientId,patientType}) {
   const [comment, setComment] = useState('');
   const [amount, setAmount] = useState('');
   const [payments, setPayments] = useState(null);
@@ -18,7 +18,7 @@ function Payment({ patientId }) {
   // Function to fetch payment details based on patientId
   const fetchPaymentDetails = async () => {
     try {
-      const paymentsQuery = query(collection(db, 'patientspayments'), where('patientId', '==', patientId));
+      const paymentsQuery = query(collection(db, 'newpayments'), where('patientId', '==', patientId));
       const querySnapshot = await getDocs(paymentsQuery);
 
       // Use map to directly transform querySnapshot to an array of paymentDetails
@@ -56,6 +56,7 @@ function Payment({ patientId }) {
       amount,
       patientId,
       datePayed,
+      patientType
     };
 
     
@@ -65,7 +66,7 @@ function Payment({ patientId }) {
       if(!comment || !amount || !datePayed){
         toast.error("Please fill in all details")
       }else{
-        const data = await addDoc(collection(db, 'patientspayments'), paymentData);
+        const data = await addDoc(collection(db, 'newpayments'), paymentData);
         console.log('Payment added with ID:', data.id);
     
         // After adding a new payment, refetch the payment details to include the new one
@@ -100,8 +101,17 @@ function Payment({ patientId }) {
   const deletePayment = async (paymentId) => {
     try {
       // Delete the payment document from Firebase using its ID
-      await deleteDoc(doc(db, 'patientspayments',paymentId));
+      const confirmed = window.confirm('Are you sure you want to delete this session?');
+
+      if(confirmed){
+        await deleteDoc(doc(db, 'newpayments',paymentId));
       toast.success('Payment deleted successfully');
+      fetchPaymentDetails()
+      }else {
+        // If the user cancels, do nothing or handle it as needed
+        toast.success('Deletion canceled by the user');
+      }
+     
        
       // After deleting the payment, refetch the payment details to update the list
       fetchPaymentDetails();
@@ -125,12 +135,12 @@ function Payment({ patientId }) {
         <h1 className='text-center font-bold'>Payments Info </h1>
         <h1 className='text-center font-bold'>Total Payment:  &nbsp; <span className='text-green-400'>{calculateTotalPayment()}</span></h1>
         </div>
-      {/* <form className='space-y-2 flex flex-col' onSubmit={addNewPayment}>
+      <form className='space-y-2 flex flex-col' onSubmit={addNewPayment}>
         <Input type={"text"} label={"Comment"} value={comment} onChange={(e) => setComment(e.target.value)} />
         <Input type={"number"} label={"Amount Paid"} value={amount} onChange={(e) => setAmount(e.target.value)} />
         <Input label={"Date Registered"} type={"date"} value={datePayed} onChange={(e) => setDatePayed(e.target.value)} />
         <button type="submit " className='bg-[#FF5162] text-white py-1.5'>Submit</button>
-      </form> */}
+      </form>
       <div className="payment-details-container">
         <h1 className="text-xl font-semibold flex flex-col gap-3 mb-4 ">Completed Payments :{payments.length === 0 ? ("") :payments.length}</h1>
         <div className="payment-details">

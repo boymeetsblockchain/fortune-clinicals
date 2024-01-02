@@ -12,6 +12,8 @@ import { useParams } from 'react-router-dom';
 import Loader from '../../components/Loader';
 import Payment from '../../components/Payment';
 import Session from '../../components/Session';
+import NewSession from '../../components/NewSession'
+import NewPayment from '../../components/NewPayment'
 import Input from '../../components/Input';
 
 function AdminPatientDetail() {
@@ -20,9 +22,11 @@ function AdminPatientDetail() {
   const [loading, setLoading] = useState(true);
   const [patient, setPatient] = useState(null);
   const[updatedDate,setUpdatedDate]= useState("")
-  const [isActive, setIsActive] = useState('session'); 
   const [payment,setPayment]= useState("")
   const [session,setSession]= useState("")
+  const [newsession,setNewSession]= useState("")
+  const [newpayment,setNewPayment]= useState("")
+  const [isActive, setIsActive] = useState('newsession');
 
 
   useEffect(() => {
@@ -44,6 +48,15 @@ function AdminPatientDetail() {
       const paymentDetails =  querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       setPayment(paymentDetails)
     }
+    const getNewPayment = async()=>{
+      const paymentsQuery = query(collection(db, 'newpayments'), where('patientId', '==', params.id));
+      const querySnapshot = await getDocs(paymentsQuery);
+  
+      // Use map to directly transform querySnapshot to an array of paymentDetails
+      const paymentDetails =  querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      setNewPayment(paymentDetails)
+    }
+
     const getSession = async()=>{
       const paymentsQuery = query(collection(db, 'patientssessions'), where('patientId', '==', params.id));
       const querySnapshot = await getDocs(paymentsQuery);
@@ -52,10 +65,19 @@ function AdminPatientDetail() {
       const sessionDetails =  querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       setSession(sessionDetails)
     }
+    const getNewSession = async()=>{
+      const paymentsQuery = query(collection(db, 'newsessions'), where('patientId', '==', params.id));
+      const querySnapshot = await getDocs(paymentsQuery);
+      // Use map to directly transform querySnapshot to an array of paymentDetails
+      const sessionDetails =  querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      setNewSession(sessionDetails)
+    }
 
     getPayment()
     getPatient();
     getSession()
+    getNewSession()
+    getNewPayment()
   }, []);
 
   const onDelete = async () => {
@@ -143,6 +165,8 @@ function AdminPatientDetail() {
             <div className="bg-slate-200 rounded-md shadow-lg col-span-3 p-4 overflow-y-auto">
               {isActive === 'payment' && <Payment patientId={params.id} />}
               {isActive === 'session' && <Session patientId={params.id} />}
+              {isActive === 'newsession' && <NewSession patientId={params.id}  patientType={'fortune'}/>}
+              {isActive === 'newpayment' && <NewPayment patientId={params.id} patientType={'fortune'} />}
             </div>
             <div className="bg-slate-200 rounded-md shadow-lg col-span-1 flex flex-col space-y-4 p-6 col-span-">
               <div className='flex gap-3 cursor-pointer hover:opacity-50'>
@@ -152,21 +176,29 @@ function AdminPatientDetail() {
               <div className='flex gap-3 items-center justify-between cursor-pointer hover:opacity-50'>
                 <div className="detials flex gap-2" onClick={() => setIsActive('session')}>
                   <FaCheck size={32} color='green' />
-                  <h1 className=''>SESSIONS <span className='ml-4 bg-green-500 px-3 py-1 rounded-md text-white'>{session.length}</span> </h1>
+                  <h1 className=''> 2023 SESSIONS <span className='ml-4 bg-green-500 px-3 py-1 rounded-md text-white'>{session.length}</span> </h1>
                 </div>
-                <div>
-                  {patient?.session}
-                </div>
+              
               </div>
               <div className='flex gap-3 items-center justify-between cursor-pointer hover:opacity-50'>
                 <div className="detials flex gap-2" onClick={()=> setIsActive("payment")}>
                   <FaCheck size={32} color='green' />
-                  <h1 className=''>PAYMENT <span className='ml-4 bg-green-500 px-3 py-1 rounded-md text-white'>{payment.length}</span></h1>
+                  <h1 className=''> 2023 PAYMENT <span className='ml-4 bg-green-500 px-3 py-1 rounded-md text-white'>{payment.length}</span></h1>
                 </div>
-                <div>
-                  {patient?.sessionPaid}
+               
+              </div>
+              <div className='flex gap-3 items-center justify-between cursor-pointer hover:opacity-50'>
+                <div className="detials flex gap-2" onClick={()=>setIsActive("newsession")}>
+                  <FaCheck size={32} color='green' />
+                  <h1 className=''>2024 SESSIONS <span className='ml-4 bg-green-500 px-3 py-1 rounded-md text-white'>{newsession?.length}</span></h1>
                 </div>
               </div>
+              <div className='flex gap-3 items-center justify-between cursor-pointer hover:opacity-50'>
+                <div className="detials flex gap-2" onClick={()=> setIsActive("newpayment")}>
+                  <FaCheck size={32} color='green' />
+                  <h1 className=''> 2024 PAYMENTS <span className='ml-4 bg-green-500 px-3 py-1 rounded-md text-white'>{newpayment?.length}</span></h1>
+                </div>
+                </div>
               <div className="flex gap-3 cursor-pointer hover:opacity-50" onClick={()=>UpdatePatientDetails(params.id)}>
             
                <AiTwotoneEdit size={32} color='blue'/>
