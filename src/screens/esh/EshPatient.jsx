@@ -9,7 +9,8 @@ import { db } from '../../firebase.config';
 import { getDoc, doc, deleteDoc,collection,query,getDocs,where,updateDoc} from 'firebase/firestore'; // Import deleteDoc
 import { useParams } from 'react-router-dom';
 import Loader from '../../components/Loader';
-import NewSession from '../../components/NewSession'
+// import NewSession from '../../components/NewSession'
+import EshSession from '../../components/EshSession'
 import Session from '../../components/Session';
 import InitialReview from '../../components/InitialReview';
 import Input from '../../components/Input';
@@ -45,7 +46,7 @@ function PatientDetail() {
     }
 
     const getNewSession = async()=>{
-      const paymentsQuery = query(collection(db, 'newsessions'), where('patientId', '==', params.id));
+      const paymentsQuery = query(collection(db, 'eshsessions'), where('patientId', '==', params.id));
       const querySnapshot = await getDocs(paymentsQuery);
       // Use map to directly transform querySnapshot to an array of paymentDetails
       const sessionDetails =  querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -129,7 +130,7 @@ function PatientDetail() {
           </div>
           <div className="session-payment md:grid md:gap-x-8 md:grid-cols-4 md:h-[420px] flex flex-col gap-4 justify-center">
             <div className="bg-slate-200 rounded-md shadow-lg col-span-3 p-4 overflow-y-auto">
-              {isActive === 'newsession' && <NewSession patientId={params.id} patientType={'esh'} />}
+              {isActive === 'newsession' && <EshSession patientId={params.id} patientType={'esh'} />}
               {isActive === 'session' && <Session patientId={params.id}  patientType={'esh'}/>}
               {isActive === 'review' && <InitialReview patientId={params.id} />}
             </div>

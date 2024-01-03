@@ -28,6 +28,7 @@ import Admin from './screens/admin/Admin'
 import AdminPatients from './screens/admin/AdminPatients'
 import AdminNotes from './screens/admin/AdminNotes'
 import BreakDown from './components/BreakDown'
+import NewBreakDown from './components/NewBreakDown'
 import AdminMessage from './screens/admin/AdminMessage'
 import AdminProfile from './screens/admin/AdminProfile'
 import AdminPatientDetails from './screens/admin/AdminPatientDetails'
@@ -45,6 +46,7 @@ import ProductsMoney from './screens/ProductsMoney'
 import AdminProductFund from './screens/admin/AdminProductFunds'
 import EshProductsFunds from './screens/esh/EshProductsFunds'
 import AdminProductFundEsh from './screens/admin/AdminProductFundsEsh'
+import NewCalender from './screens/NewCalender'
 const App = () => {
   return (
     
@@ -85,9 +87,11 @@ const App = () => {
          <Route path='/admin/patient/esh/:id' element={<AdminEshPatient/>}/>
          <Route path='/admin/profile' element={<AdminProfile/>}/>
          <Route path='/admin/calender' element={<Calender/>}/>
+         <Route path='/admin/calender/new' element={<NewCalender/>}/>
          <Route path='/admin/notes' element={<AdminNotes/>}/>
          <Route path='/admin/messages' element={<AdminMessage/>}/>
          <Route path='/payments/:monthName' element={<BreakDown/>}/>
+         <Route path='/payments/new/:monthName' element={<NewBreakDown/>}/>
          <Route path='/admin/add-new' element={<AddNew/>}/>
          <Route path='/admin/add-new-esh' element={<AddNewEsh/>}/>
          <Route path='/admin/products' element={<AdminProducts/>}/>

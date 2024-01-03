@@ -165,8 +165,9 @@ function AdminPatientDetail() {
             <div className="bg-slate-200 rounded-md shadow-lg col-span-3 p-4 overflow-y-auto">
               {isActive === 'payment' && <Payment patientId={params.id} />}
               {isActive === 'session' && <Session patientId={params.id} />}
-              {isActive === 'newsession' && <NewSession patientId={params.id}  patientType={'fortune'}/>}
-              {isActive === 'newpayment' && <NewPayment patientId={params.id} patientType={'fortune'} />}
+              {isActive === 'newsession' && <NewSession patientId={params.id} patientType={patient?.selectedValue || 'fortune'} />}
+              {isActive === 'newpayment' && <NewPayment patientId={params.id} patientType={patient?.selectedValue || 'fortune'} />}
+
             </div>
             <div className="bg-slate-200 rounded-md shadow-lg col-span-1 flex flex-col space-y-4 p-6 col-span-">
               <div className='flex gap-3 cursor-pointer hover:opacity-50'>
