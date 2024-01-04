@@ -13,9 +13,9 @@ function ProductDetail() {
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [quantity, setQuantity] = useState('');
-  const [sold, setSold] = useState('');
-  const [used, setUsed] = useState('');
-  const [added, setAdded] = useState('');
+  const [sold, setSold] = useState(0);
+  const [used, setUsed] = useState(0);
+  const [added, setAdded] = useState(0);
   const [newComment, setNewComment] = useState('');
   const [newCommentDate, setNewCommentDate] = useState('');
   const [loading, setLoading] = useState(true);
@@ -29,7 +29,6 @@ function ProductDetail() {
     
       if (docSnap.exists()) {
         const data = docSnap.data();
-        console.log(data)
         setProduct(data);
         setLoading(false);
         setName(data.name || '');
@@ -98,7 +97,8 @@ function ProductDetail() {
       if (parseInt(added) !== existingData.added) {
         updatedFields.added = parseInt(added);
       }
-  
+    
+      updatedFields.price= price
       // Calculate the new quantity
       const newQuantity = (existingData.quantity || 0) + 
                          (updatedFields.added || 0) - 
@@ -182,10 +182,10 @@ function ProductDetail() {
           <p className="text-base text-gray-700 mt-2 ml-4">used: <span className="text-green-500">{product.used}</span></p>
           <Input label="Sold" type="number" value={sold} onChange={(e) => setSold(e.target.value)} />
           <p className="text-base text-gray-700 mt-2 ml-4">sold: <span className='text-green-500'>{product.sold}</span></p>
-          <div className="flex justify-end">
+          <div className="flex justify-end mb-4">
             <button
               onClick={updateProduct}
-              className="bg-green-500 py-3 flex items-center justify-center gap-x-2 text-white text-sm rounded-md w-1/4 mt-4 hover:bg-green-700 transition"
+              className="bg-green-500 py-3 flex items-center justify-center gap-x-2  text-white text-sm rounded-md w-1/4 mt-4 hover:bg-green-700 transition"
               type="submit"
             >
               Update Product <AiOutlineArrowRight />
