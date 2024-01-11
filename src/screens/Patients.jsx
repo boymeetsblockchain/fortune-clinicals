@@ -154,13 +154,13 @@ const filteredPatients = patients ? patients.filter((patient) => {
       </div>
      </div>
         <div className="data-box grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-8">
-          {filteredPatients
-          .filter((data) => data.selectedValue !== "Home-Patient-Admin")
-          .map((data) => (
-             <div
-             className="h-30 py-4 w-auto shadow-md rounded-lg flex flex-col items-start"
-             key={data?.id}
-           >
+        {filteredPatients
+  .filter((data) => data.selectedValue !== "Home-Patient-Admin" && data.selectedValue !== "Home-Patient")
+  .map((data) => (
+    <div
+      className="h-30 py-4 w-auto shadow-md rounded-lg flex flex-col items-start"
+      key={data?.id}
+    >
              <div className="flex flex-row  justify-evenly px-4">
              <div className={`text-center text-5xl h-20 w-20 px-2 py-1 items-center flex font-bold ${
   data.selectedValue === "Home-Patient"
