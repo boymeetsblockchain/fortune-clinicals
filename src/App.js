@@ -47,6 +47,8 @@ import AdminProductFund from './screens/admin/AdminProductFunds'
 import EshProductsFunds from './screens/esh/EshProductsFunds'
 import AdminProductFundEsh from './screens/admin/AdminProductFundsEsh'
 import NewCalender from './screens/NewCalender'
+import EshData from './screens/admin/EshData'
+import EshBreakDown from './components/EshBreakDown'
 const App = () => {
   return (
     
@@ -92,6 +94,7 @@ const App = () => {
          <Route path='/admin/messages' element={<AdminMessage/>}/>
          <Route path='/payments/:monthName' element={<BreakDown/>}/>
          <Route path='/payments/new/:monthName' element={<NewBreakDown/>}/>
+         <Route path='/esh/:monthName' element={<EshBreakDown/>}/>
          <Route path='/admin/add-new' element={<AddNew/>}/>
          <Route path='/admin/add-new-esh' element={<AddNewEsh/>}/>
          <Route path='/admin/products' element={<AdminProducts/>}/>
@@ -100,6 +103,7 @@ const App = () => {
          <Route path='/admin/staff/:month' element={<AdminStaffDetail/>}/>
          <Route path='/admin/add-staff' element={<AdminAddStaff/>}/>
          <Route path='/admin/user' element={<AdminUser/>}/>
+         <Route path='/admin/eshdata' element={<EshData/>}/>
          <Route path='/add-new-product-esh-money' element={<AdminProductFundEsh/>}/>
     </Routes>
     <Toaster/>

@@ -78,7 +78,7 @@ function PatientDetail() {
     getSession()
     getNewSession()
     getNewPayment()
-  }, []);
+  }, [params.id]);
 
   const onDelete = async () => {
     if (window.confirm("Are you sure you want to delete this patient record?")) {

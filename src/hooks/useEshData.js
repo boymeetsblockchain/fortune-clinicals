@@ -10,7 +10,6 @@ const useEshData = () => {
     const querySnapshot = await getDocs(sessionsQuery);
     const sessionDetails = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
     setSessions(sessionDetails);
-    console.log(sessionDetails);
   };
 
   useEffect(() => {
@@ -66,13 +65,13 @@ const useEshData = () => {
   });
 
   // Calculate total sessions per month
-  const totalSessionsPerMonth = monthsData.map((month) => month.totalSessions);
+ 
 
   const filteredMonthsData = monthsData.filter((month) => month.totalSessions > 0);
 
   return {
     filteredMonthsData,
-    totalSessionsPerMonth,
+
   };
 };
 
