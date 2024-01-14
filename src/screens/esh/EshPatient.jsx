@@ -130,7 +130,7 @@ function PatientDetail() {
           </div>
           <div className="session-payment md:grid md:gap-x-8 md:grid-cols-4 md:h-[420px] flex flex-col gap-4 justify-center">
             <div className="bg-slate-200 rounded-md shadow-lg col-span-3 p-4 overflow-y-auto">
-              {isActive === 'newsession' && <EshSession patientId={params.id} patientType={'esh'} />}
+              {isActive === 'newsession' && <EshSession patientId={params.id} patientType={patient.selectedValue} />}
               {isActive === 'session' && <Session patientId={params.id}  patientType={'esh'}/>}
               {isActive === 'review' && <InitialReview patientId={params.id} />}
             </div>

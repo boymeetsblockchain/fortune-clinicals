@@ -6,7 +6,7 @@ import ComponentLoader from './ComponentLoader';
 import toast from 'react-hot-toast';
 import {ImBin} from 'react-icons/im'
 import { useNavigate } from 'react-router-dom';
-function Session({ patientId}) {
+function Session({ patientId,patientType}) {
   const [comment, setComment] = useState('');
   const [sessions, setSessions] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -47,7 +47,8 @@ const navigate= useNavigate()
     const paymentData = {
       comment,
       patientId,
-      date
+      date,
+      patientType
     };
 
     try {
@@ -58,6 +59,7 @@ const navigate= useNavigate()
         console.log('Session added with ID:', data.id);
   
         // After adding a new session, refetch the session details to include the new one
+        
         fectchSessionDetails();
   
         // Clear the input fields
