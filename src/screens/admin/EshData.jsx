@@ -24,7 +24,6 @@ const EshData = () => {
                   <h1 className="text-3xl font-bold">{month.name}</h1>
                   <div className="flex gap-2">
                     <span className="text-green-800 font-semibold">Sessions: {month.ses}</span>
-                    <span className="text-red-800 font-semibold">Payments: {month.pay}</span>
                   </div>
                 </div>
               </div>
