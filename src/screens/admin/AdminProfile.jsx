@@ -144,9 +144,9 @@ function Profile() {
             />
           </div>
           {filteredNotes.map((data) => (
-            <div key={data.id} className="bg-[#FF5162] text-white p-4 mb-2 flex justify-between  flex-wrap items-center rounded-lg">
-              <p className="text-xs text-justify">{data.note}</p>
-              <p className='text-xs text-justify'>{data.date}</p>
+            <div key={data.id} className="bg-[#FF5162] text-white text-pretty p-4 mb-2 flex space-x-4 justify-between  text-nowrap items-center rounded-lg">
+              <p className="text-xs text-left">{data.note}</p>
+              <p className='text-xs text-center'>{data.date}</p>
               <button
           className=" text-white py-1 px-3 rounded-md text-sm"
           onClick={() => deleteNote(data.id)}
