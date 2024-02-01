@@ -37,7 +37,7 @@ function useUserRole(user) {
     return 'loading';
   }
 
-  return user.role; // Retrieve the user role from the user object
+  return user.role; 
 }
 
 export { useUser, useUserRole };

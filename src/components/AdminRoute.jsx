@@ -1,18 +1,15 @@
-import { Navigate, Outlet } from 'react-router-dom';
-import { useUserRole } from '../hooks/useUserRole';
 
-function AdminPrivateRoute() {
-  const { loggedIn, isAdmin } = useUserRole();
+import { Navigate, Outlet,} from 'react-router-dom';
+import useAdminStatus from '../hooks/useUserAdmin';
+import Loader from './Loader';
 
-  if (!loggedIn) {
-    return <Navigate to="/auth" />;
-  }
+const PrivateRoute = () => {
+  const { isAdmin, loading } = useAdminStatus();
 
-  if (isAdmin) {
-    return <Outlet />;
-  }
-
-  return <Navigate to="/dashboard" />;
+if(loading){
+  return <Loader/>
 }
+return isAdmin ? <Outlet /> : <Navigate to='/' />
+};
 
-export default AdminPrivateRoute;
+export default PrivateRoute;

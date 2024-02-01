@@ -9,7 +9,6 @@ import EshPatient from './screens/esh/EshPatient'
 import { Toaster } from 'react-hot-toast'
 import {BrowserRouter, Route,Routes} from 'react-router-dom'
 import Profile from './screens/Profile'
-import PrivateRoute from './components/PrivateRoute'
 import Products from './screens/Products'
 import AddNewPatient from './screens/AddNewPatient'
 import AddNewProduct from './screens/AddNewProduct'
@@ -49,6 +48,7 @@ import AdminProductFundEsh from './screens/admin/AdminProductFundsEsh'
 import NewCalender from './screens/NewCalender'
 import EshData from './screens/admin/EshData'
 import EshBreakDown from './components/EshBreakDown'
+import PrivateRoute from './components/AdminRoute'
 const App = () => {
   return (
     
@@ -56,9 +56,9 @@ const App = () => {
    <Routes>
         {/* <Route path='/' index element={<Homescreen/>}/> */}
         <Route path='/' index element={<Auth/>}/> 
-         <Route path='/dashboard' element={<PrivateRoute/>}>
+        
          <Route path='/dashboard' element={<Dashboard/>}/>
-         </Route>
+        
         <Route path='/dashboard/patient/:id' element={<PatientDetail/>}/>
         <Route path='/dashboard/product/:id' element={<ProductDetail/>}/>
         <Route path='/dashboard/profile' element={<Profile/>}/>
@@ -83,8 +83,9 @@ const App = () => {
          <Route path='/esh/add-new-product' element={<AddNewEshProduct/>}/>
          <Route path='add-new-product-esh-money' element={<EshProductsFunds/>}/>
          <Route path='/esh/product/:id' element={<EshProductDetail/>}/>
-         <Route path='/admin' element={<Admin/>}/>
-         <Route path='/admin/patients' element={<AdminPatients/>}/>
+           <Route path='/admin' element={<PrivateRoute/>}>
+           <Route path='/admin' element={<Admin/>}/>
+           <Route path='/admin/patients' element={<AdminPatients/>}/>
          <Route path='/admin/patient/:id' element={<AdminPatientDetails/>}/>
          <Route path='/admin/patient/esh/:id' element={<AdminEshPatient/>}/>
          <Route path='/admin/profile' element={<AdminProfile/>}/>
@@ -92,9 +93,6 @@ const App = () => {
          <Route path='/admin/calender/new' element={<NewCalender/>}/>
          <Route path='/admin/notes' element={<AdminNotes/>}/>
          <Route path='/admin/messages' element={<AdminMessage/>}/>
-         <Route path='/payments/:monthName' element={<BreakDown/>}/>
-         <Route path='/payments/new/:monthName' element={<NewBreakDown/>}/>
-         <Route path='/esh/:monthName' element={<EshBreakDown/>}/>
          <Route path='/admin/add-new' element={<AddNew/>}/>
          <Route path='/admin/add-new-esh' element={<AddNewEsh/>}/>
          <Route path='/admin/products' element={<AdminProducts/>}/>
@@ -104,6 +102,12 @@ const App = () => {
          <Route path='/admin/add-staff' element={<AdminAddStaff/>}/>
          <Route path='/admin/user' element={<AdminUser/>}/>
          <Route path='/admin/eshdata' element={<EshData/>}/>
+           </Route>
+        
+         <Route path='/payments/:monthName' element={<BreakDown/>}/>
+         <Route path='/payments/new/:monthName' element={<NewBreakDown/>}/>
+         <Route path='/esh/:monthName' element={<EshBreakDown/>}/>
+       
          <Route path='/add-new-product-esh-money' element={<AdminProductFundEsh/>}/>
     </Routes>
     <Toaster/>

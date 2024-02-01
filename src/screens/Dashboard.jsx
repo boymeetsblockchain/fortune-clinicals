@@ -23,7 +23,6 @@ function Dashboard() {
 
   const currentUser=GetUser()
   const user = useUser();
-  console.log(currentUser)
   const userRole = useUserRole(user);
   return (
     <div className='flex items-center flex-col  justify-center h-screen px-4 md:px-8 lg:px-12'>
