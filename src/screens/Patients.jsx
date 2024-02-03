@@ -153,12 +153,12 @@ const filteredPatients = patients ? patients.filter((patient) => {
         />
       </div>
      </div>
-        <div className="data-box grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-8">
+        <div className="data-box grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-10">
         {filteredPatients
   .filter((data) => data.selectedValue !== "Home-Patient-Admin" && data.selectedValue !== "Home-Patient")
   .map((data) => (
     <div
-      className="h-30 py-4 w-auto shadow-md rounded-lg flex flex-col items-start"
+      className="h-auto  py-3 w-auto shadow-md rounded-md  flex flex-col items-center"
       key={data?.id}
     >
              <div className="flex flex-row  justify-evenly px-4">
@@ -167,6 +167,8 @@ const filteredPatients = patients ? patients.filter((patient) => {
     ? 'text-green-500'
     : data.selectedValue === "Hospital-Calls"
     ? 'text-purple-500'
+    : data.selectedValue === "Vip"
+    ? 'text-blue-500'
     : 'text-[#ff5162]'
 }`}>
 
@@ -187,12 +189,24 @@ const filteredPatients = patients ? patients.filter((patient) => {
                      {data?.dateRegistered}
                    </span>
                  </p>
+                 {
+                  data?.updatedDate ? (
+                    <p className="text-sm hidden md:block">
+                  Last Session:{' '}
+                   <span className="text-gray-800 text-xs gap-x-3 items-center">
+                     {data?.updatedDate}
+                   </span>
+                 </p>
+                  ) :("")
+                 }
                  <button
-  className={`px-2 py-0.5 text-sm ${
+  className={`px-2 py-0.5  block w-full text-sm ${
     data.selectedValue === "Home-Patient"
       ? 'bg-green-500'
       : data.selectedValue === "Hospital-Calls"
       ? 'bg-purple-500'
+      : data.selectedValue === "Vip"
+      ? 'bg-blue-500'
       : 'bg-[#FF5162]'
   } text-white`}
   onClick={() => onView(data?.id)}
@@ -201,9 +215,6 @@ const filteredPatients = patients ? patients.filter((patient) => {
 </button>
 
                </div>
-               {/* <div className="deletebutton ml-5" onClick={onDelete}>
-                 <ImBin size={20} className="text-[#ff5162] cursor-pointer" />
-               </div> */}
              </div>
            </div>
           ))}
