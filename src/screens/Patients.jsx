@@ -200,7 +200,7 @@ const filteredPatients = patients ? patients.filter((patient) => {
                   ) :("")
                  }
                  <button
-  className={`px-2 py-0.5  block w-full text-sm ${
+  className={`px-2 py-0.5  block w-[100px] text-sm ${
     data.selectedValue === "Home-Patient"
       ? 'bg-green-500'
       : data.selectedValue === "Hospital-Calls"

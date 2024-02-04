@@ -146,7 +146,7 @@ function Fortune() {
         <div className="data-box grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-8">
           {filteredPatients.map((data) => (
              <div
-             className="h-30 py-4 w-auto shadow-md rounded-lg flex flex-col items-start"
+             className="h-30 py-4 w-auto shadow-md rounded-lg flex flex-col items-center"
              key={data?.id}
            >
              <div className="flex flex-row  justify-evenly px-4">
@@ -176,8 +176,18 @@ function Fortune() {
                      {data?.dateRegistered}
                    </span>
                  </p>
+                 {
+                  data?.updatedDate ? (
+                    <p className="text-sm hidden md:block">
+                  Last Session:{' '}
+                   <span className="text-gray-800 text-xs gap-x-3 items-center">
+                     {data?.updatedDate}
+                   </span>
+                 </p>
+                  ) :("")
+                 }
                  <button
-  className={`px-2 py-0.5 text-sm ${
+  className={`px-2 py-0.5 text-sm w-[100px] ${
     data.selectedValue === "Home-Patient"
       ? 'bg-green-500'
       : data.selectedValue === "Hospital-Calls"
