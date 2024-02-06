@@ -40,7 +40,7 @@ function BreakDown({ match }) {
                key={index}
                className={`flex items-center py-3 justify-between mb-2 cursor-pointer ${
                  payment.patientType === "Home-Patient"
-                 ? 'bg-green-500' : payment.patientType ==="Hospital-Calls" ? "bg-purple-500" :payment.patientType==="Home-Patient-Admin"? "bg-blue-500" : "bg-[#ff5162]"
+                 ? 'bg-green-500' : payment.patientType ==="Hospital-Calls" ? "bg-purple-500" :payment.patientType==="Home-Patient-Admin"? "bg-yellow-500" : payment.patientType==="Vip"? "bg-blue-500": "bg-[#ff5162]"
                } text-white`}
                onClick={() => handlePatientClick(payment.patientId)}
              >

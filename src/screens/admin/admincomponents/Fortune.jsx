@@ -156,7 +156,9 @@ function Fortune() {
     : data.selectedValue === "Hospital-Calls"
     ? 'text-purple-500'
     :data.selectedValue ==="Home-Patient-Admin" ?
-    "text-blue-500"
+    "text-yellow-500"
+    : data.selectedValue === "Vip"
+    ? 'text-blue-500'
     : 'text-[#ff5162]'
 }`}>
   {data?.surname[0].toUpperCase()}
@@ -193,7 +195,9 @@ function Fortune() {
       : data.selectedValue === "Hospital-Calls"
       ? 'bg-purple-500'
         :data.selectedValue ==="Home-Patient-Admin" ?
-    "bg-blue-500"
+    "bg-yellow-500"
+    : data.selectedValue === "Vip"
+    ? 'bg-blue-500'
       : 'bg-[#FF5162]'
   } text-white`}
   onClick={() => onView(data?.id)}
