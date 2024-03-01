@@ -69,6 +69,26 @@ function ProductDetail() {
  
 
   const navigate = useNavigate();
+  
+  const updateQuantity = async (newQuantity) => {
+    try {
+      const docRef = doc(db, 'products', params.id);
+      const docSnap = await getDoc(docRef);
+  
+      if (!docSnap.exists()) {
+        toast.error('Product does not exist.');
+        return;
+      }
+  
+      // Update the quantity field
+      await updateDoc(docRef, { quantity: newQuantity });
+      toast.success('Quantity Updated Successfully');
+    } catch (error) {
+      console.error('Error updating quantity:', error);
+      toast.error('Failed to update quantity');
+    }
+  };
+  
 
   const updateProduct = async (e) => {
     e.preventDefault();
@@ -82,28 +102,18 @@ function ProductDetail() {
         return;
       }
   
-      const existingData = docSnap.data();
+      const updatedFields = {
+        sold: parseInt(sold),
+        used: parseInt(used),
+        added: parseInt(added),
+        price: price
+      };
   
-      const updatedFields = {};
-  
-      if (parseInt(sold) !== existingData.sold) {
-        updatedFields.sold = parseInt(sold);
-      }
-  
-      if (parseInt(used) !== existingData.used) {
-        updatedFields.used = parseInt(used);
-      }
-  
-      if (parseInt(added) !== existingData.added) {
-        updatedFields.added = parseInt(added);
-      }
-    
-      updatedFields.price= price
       // Calculate the new quantity
-      const newQuantity = (existingData.quantity || 0) + 
-                         (updatedFields.added || 0) - 
-                         (updatedFields.sold || 0) - 
-                         (updatedFields.used || 0);
+      const newQuantity = (parseInt(quantity) || 0) +
+                         (parseInt(added) || 0) - 
+                         (parseInt(sold) || 0) - 
+                         (parseInt(used) || 0);
   
       if (newQuantity >= 0) {
         updatedFields.quantity = newQuantity;
@@ -112,6 +122,7 @@ function ProductDetail() {
         return;
       }
   
+      // Update the document if there are changes
       if (Object.keys(updatedFields).length > 0) {
         await updateDoc(docRef, updatedFields);
         toast.success('Product Updated');
@@ -123,6 +134,7 @@ function ProductDetail() {
       console.error('Error updating product:', error);
     }
   };
+  
   
   
   const addComment = async () => {
@@ -174,7 +186,7 @@ function ProductDetail() {
             }}
           />
           <p className='text-base text-gray-700 mt-2 ml-4 '> previous price :&#8358; <span className="text-green-500">{product.price}</span></p>
-          <Input label="Quantity" type="number" value={quantity} disabled={true} onChange={(e) => setQuantity(e.target.value)} />
+          <Input label="Quantity" type="number" value={quantity}  onChange={(e) => setQuantity(e.target.value)} />
         
           <Input label="Added" type="number" value={added} onChange={(e) => setAdded(e.target.value)} />
           <p className="text-grat-700 ml-4 mt-2"> added: <span className="text-green-500">{product.added}</span></p>
