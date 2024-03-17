@@ -126,9 +126,9 @@ function AddNewPatient() {
         <Input label={"Date Registered"} type={"date"} value={dateRegistered} onChange={(e) => setDateRegistered(e.target.value)} />
 
             <div className="flex items-center flex-col md:flex-row gap-4  justify-between ">
-            <Input label={"Number of Session"} type={"number"} value={numOfSessions} onChange={(e) => setNumOfSessions(e.target.value)} />
-  <Input label={"Paid Session"} type={"number"} value={paidSessions} onChange={(e) => setPaidSessions(e.target.value)} />
-  <Input label={"Amount per Session"} type={"number"} value={amountPerSession} onChange={(e) => setAmountPerSession(e.target.value)} />
+            <Input label={"Number of Session"} type={"text"} value={numOfSessions} onChange={(e) => setNumOfSessions(e.target.value)} />
+  <Input label={"Paid Session"} type={"text"} value={paidSessions} onChange={(e) => setPaidSessions(e.target.value)} />
+  <Input label={"Amount per Session"} type={"text"} value={amountPerSession} onChange={(e) => setAmountPerSession(e.target.value)} />
 
             </div>
             <Input label={"Comment"} type={"text"} value={comment} onChange={(e) => setComment(e.target.value)} />
