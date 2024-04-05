@@ -146,7 +146,7 @@ function Fortune() {
         <div className="data-box grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-8">
           {filteredPatients.map((data) => (
              <div
-             className="h-30 py-4 w-auto shadow-md rounded-lg flex flex-col items-center"
+             className="h-auto py-4 w-auto shadow-md rounded-lg flex flex-col  justify-center items-center"
              key={data?.id}
            >
              <div className="flex flex-row  justify-evenly px-4">
