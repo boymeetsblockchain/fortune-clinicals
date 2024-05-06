@@ -61,9 +61,6 @@ function Products() {
                 <th className="px-4 py-2">Name</th>
                 <th className="px-4 py-2">Quantity Left</th>
                 <th className="px-4 py-2">Price</th>
-                <th className="px-4 py-2">Sold</th>
-                <th className="px-4 py-2">Used</th>
-                <th className="px-4 py-2">Added</th>
               </tr>
             </thead>
             <tbody>
@@ -77,9 +74,6 @@ function Products() {
                   <td className="px-4 text-center py-2">{product.name}</td>
                   <td className="px-4 text-center py-2">{product.quantity}</td>
                   <td className="px-4 text-center py-2">&#8358; {product.price}</td>
-                  <td className="px-4 text-center py-2">{product.sold}</td>
-                  <td className="px-4 text-center py-2">{product.used}</td>
-                  <td className="px-4 text-center py-2">{product.added}</td>
                 </tr>
               ))}
             </tbody>
