@@ -17,6 +17,7 @@ function AddNewProduct() {
     const [used,setUsed]= useState("")
     const [added,setAdded]= useState("")
     const [comment,setComment]= useState("")
+    const [date,setDate]= useState("")
   
 
     const auth = getAuth()
@@ -31,6 +32,7 @@ function AddNewProduct() {
           sold,
           added,
           used,
+          date,
           comment, // Initialize with an array containing the current comment
           timestamp: serverTimestamp(),
           userId: auth?.currentUser?.uid,
@@ -62,6 +64,7 @@ function AddNewProduct() {
             <Input label="Added" type={"number"} value={added} onChange={(e)=>setAdded(e.target.value)}/>
             <Input label="Sold" type={"number"} value={sold} onChange={(e)=>setSold(e.target.value)}/>
             <Input label="Comment" type={"text"} value={comment} onChange={(e)=>setComment(e.target.value)}/>
+            <Input label="Date" type={"date"} value={date} onChange={(e)=>setDate(e.target.value)}/>
               
             <div className="flex justify-end">
                 <button className="bg-[#FF5162] py-3 flex  items-center justify-center gap-x-2 text-white text-sm rounded-md w-1/4 mt-4 hover:bg-red-700 transition">
