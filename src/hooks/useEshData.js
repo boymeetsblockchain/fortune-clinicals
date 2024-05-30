@@ -48,9 +48,16 @@ const useEshData = () => {
         const sessionDate = new Date(ses.date);
         return sessionDate.getDate() === day;
       });
+
+      // Separate sessions by patient type
+      const inPatients = sessionsForDay.filter(session => session.patientType === 'In-patient');
+      const outPatients = sessionsForDay.filter(session => session.patientType === 'Out-patient');
+
       dailySessions.push({
         day,
         sessions: sessionsForDay,
+        inPatients,
+        outPatients,
       });
     }
 
@@ -64,14 +71,11 @@ const useEshData = () => {
     };
   });
 
-  // Calculate total sessions per month
- 
-
-  const filteredMonthsData = monthsData.filter((month) => month.totalSessions > 0);
+  // Filter out months with zero sessions
+  const filteredMonthsData = monthsData.filter((month) => month.ses > 0);
 
   return {
     filteredMonthsData,
-
   };
 };
 

@@ -49,6 +49,8 @@ import NewCalender from './screens/NewCalender'
 import EshData from './screens/admin/EshData'
 import EshBreakDown from './components/EshBreakDown'
 import PrivateRoute from './components/AdminRoute'
+import EshInitial from './screens/admin/EshInitial'
+import InitialBreakDown from './components/InitialBreakDown'
 const App = () => {
   return (
     
@@ -102,11 +104,13 @@ const App = () => {
          <Route path='/admin/add-staff' element={<AdminAddStaff/>}/>
          <Route path='/admin/user' element={<AdminUser/>}/>
          <Route path='/admin/eshdata' element={<EshData/>}/>
+         <Route path='/admin/Initial' element={<EshInitial/>}/>
            </Route>
         
          <Route path='/payments/:monthName' element={<BreakDown/>}/>
          <Route path='/payments/new/:monthName' element={<NewBreakDown/>}/>
          <Route path='/esh/:monthName' element={<EshBreakDown/>}/>
+         <Route path='/esh/initial/:monthName' element={<InitialBreakDown/>}/>
        
          <Route path='/add-new-product-esh-money' element={<AdminProductFundEsh/>}/>
     </Routes>

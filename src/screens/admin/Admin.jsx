@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import { AiOutlineShoppingCart, AiOutlineUsergroupDelete, AiFillDatabase,
   AiOutlineUser,AiOutlineMessage, AiOutlineUnorderedList,AiTwotoneCalendar } from 'react-icons/ai';
+  import { AiOutlineBorderlessTable } from "react-icons/ai";
 import {BiMessageSquareCheck} from 'react-icons/bi'
 import {PiMoneyBold} from 'react-icons/pi'
 const menuItems = [
@@ -14,6 +15,7 @@ const menuItems = [
   { to: '/admin/staff', text: 'Click to have  access to Staff Records', icon:PiMoneyBold },
   { to: '/admin/user', text: 'Click to have  access to Users', icon:AiOutlineUsergroupDelete },
   { to: '/admin/eshdata', text: 'Click to have  access to EshData', icon:AiFillDatabase },
+  { to: '/admin/Initial', text: 'Click to have  access to Esh Initial Reviews', icon:AiOutlineBorderlessTable }
    
 ];
 function Admin() {

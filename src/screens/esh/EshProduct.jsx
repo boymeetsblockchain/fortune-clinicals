@@ -45,7 +45,7 @@ function Products() {
       [id]: {
         ...prevState[id],
         [field]: value,
-        editedDate: new Date().toISOString() // Add editedDate property with current date and time
+        editedDate: new Date().toISOString() 
       }
     }));
   };
@@ -72,21 +72,15 @@ function Products() {
         const added = parseFloat(updatedData.added);
         const sold = parseFloat(updatedData.sold);
 
-        console.log({
-          oldQuantity, sold,added
-        })
 
-        // // Check for invalid values
-        // if (isNaN(oldQuantity) || isNaN(added) || isNaN(sold)) {
-        //     throw new Error('Invalid quantity, added, or sold value');
-        // }
+    
 
         if (!isNaN(added)) {
             updatedData.quantity = oldQuantity + added;
         } else if (!isNaN(sold)) {
             updatedData.quantity = oldQuantity - sold;
         } else {
-            // No change in quantity if both added and sold remain the same
+      
             updatedData.quantity = oldQuantity;
         }
 
