@@ -51,8 +51,7 @@ const useEshData = () => {
 
       // Separate sessions by patient type
       const inPatients = sessionsForDay.filter(session => session.patientType === 'In-patient');
-      const outPatients = sessionsForDay.filter(session => session.patientType === 'Out-patient');
-
+      const outPatients = sessionsForDay.filter(session => session.patientType === 'Out-patient')
       dailySessions.push({
         day,
         sessions: sessionsForDay,
@@ -72,7 +71,7 @@ const useEshData = () => {
   });
 
   // Filter out months with zero sessions
-  const filteredMonthsData = monthsData.filter((month) => month.ses > 0);
+  const filteredMonthsData = monthsData.filter((month) => month.totalSessions > 0);
 
   return {
     filteredMonthsData,

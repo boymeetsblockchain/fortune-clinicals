@@ -20,7 +20,7 @@ const EshData = () => {
           <div className="grid md:grid-cols-3 lg:grid-cols-4 grid-cols-1 gap-4">
             {filteredMonthsData.map((month, index) => (
               <div key={index} className='cursor-pointer'  onClick={() => navigate(`/esh/${month.name}`)} >
-                <div className="bg-gray-200 h-32 w-64 flex items-center justify-center text-center p-4 rounded  flex-col shadow">
+                <div className="bg-gray-200 h-32 w-64 flex items-center justify-center text-center p-4 rounded  flex-col shadow-md">
                   <h1 className="text-3xl font-bold">{month.name}</h1>
                   <div className="flex gap-2">
                     <span className="text-green-800 font-semibold">Sessions: {month?.ses}</span>

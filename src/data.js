@@ -22,10 +22,9 @@ export   const options = [
 ];
 
 export   const Eshoptions = [
-  { value: 'In-Patient', label: 'In-patient' },
+  { value: 'In-patient', label: 'In-patient' },
   { value: 'Out-patient', label: 'Out-patient' },
   
-
 ];
 
 export const ageData=[
