@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { db } from '../firebase.config';
 import { getDocs, collection, updateDoc, doc, deleteDoc } from 'firebase/firestore';
-import Navbar from '../components/EshNav';
+import Navbar from '../components/Navbar';
 import Loader from '../components/Loader';
 import { Link, useNavigate } from 'react-router-dom';
 import { BsFillCartPlusFill } from 'react-icons/bs';
@@ -26,6 +26,7 @@ function Products() {
           ...doc.data(),
         }));
         setProducts(filteredData);
+        console.log(filteredData)
         setLoading(false);
       } catch (error) {
         console.error(error);
