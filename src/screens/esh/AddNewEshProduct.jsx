@@ -40,7 +40,6 @@ function AddNewProduct() {
         };
       
         const data = await addDoc(collection(db, 'eshproducts'), formDataCopy);
-        console.log(data);
         toast.success("Product saved");
         navigate(-1);
       } catch (error) {
