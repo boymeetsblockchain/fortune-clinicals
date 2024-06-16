@@ -20,7 +20,7 @@ function Products() {
   useEffect(() => {
     const getProducts = async () => {
       try {
-        const data = await getDocs(collection(db, 'products'));
+        const data = await getDocs(collection(db, 'goods'));
         const filteredData = data.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
@@ -84,7 +84,7 @@ function Products() {
         }
 
         // Update the document in Firestore
-        await updateDoc(doc(db, 'products', id), updatedData);
+        await updateDoc(doc(db, 'goods', id), updatedData);
 
         // Reset states and navigate
         setEditingId(null);
@@ -208,7 +208,7 @@ function Products() {
         </div>
 
         <div className="fixed bottom-4 right-4 h-40 w-40 cursor-pointer bg-white flex justify-center  items-center text-sm rounded-full shadow-lg">
-          <Link to={'/esh/add-new-product'}>
+          <Link to={'/add-new-product'}>
             <BsFillCartPlusFill size={64} color="red" />
           </Link>
         </div>

@@ -20,7 +20,7 @@ function Products() {
   useEffect(() => {
     const getProducts = async () => {
       try {
-        const data = await getDocs(collection(db, 'products'));
+        const data = await getDocs(collection(db, 'goods'));
         const filteredData = data.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
@@ -84,7 +84,7 @@ function Products() {
         }
       });
   
-      await updateDoc(doc(db, 'products', id), updatedData);
+      await updateDoc(doc(db, 'goods', id), updatedData);
   
       setEditingId(null);
       setEditedData({});
@@ -98,7 +98,7 @@ function Products() {
 
   const handleDelete = async (id) => {
     try {
-      await deleteDoc(doc(db, 'products', id));
+      await deleteDoc(doc(db, 'goods', id));
       const updatedProducts = products.filter(product => product.id !== id);
       setProducts(updatedProducts);
     } catch (error) {

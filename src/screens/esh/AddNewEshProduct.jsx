@@ -39,7 +39,7 @@ function AddNewProduct() {
 
         };
       
-        const data = await addDoc(collection(db, 'eshproducts'), formDataCopy);
+        const data = await addDoc(collection(db, 'eshgoods'), formDataCopy);
         toast.success("Product saved");
         navigate(-1);
       } catch (error) {

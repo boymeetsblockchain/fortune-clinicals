@@ -63,7 +63,7 @@ function AddNewProduct() {
 
       console.log("Form Data: ", formDataCopy);
 
-      const data = await addDoc(collection(db, 'products'), formDataCopy);
+      const data = await addDoc(collection(db, 'goods'), formDataCopy);
 
       toast.success("Product saved");
       navigate(-1);
@@ -75,7 +75,7 @@ function AddNewProduct() {
 
   return (
     <>
-      {/* <AdminNav/> */}
+  
       <div className="mx-auto max-w-screen-xl py-4 h-full w-full px-4 relative md:px-8 lg:px-12">
         <h1 className='text-center my-6 font-bold text-3xl capitalize'>Add new Product</h1>
         <form className='flex flex-col space-y-4 justify-center w-full mx-auto' onSubmit={addProduct}>

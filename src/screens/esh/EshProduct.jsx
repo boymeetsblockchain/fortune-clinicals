@@ -20,7 +20,7 @@ function Products() {
   useEffect(() => {
     const getProducts = async () => {
       try {
-        const data = await getDocs(collection(db, 'eshproducts'));
+        const data = await getDocs(collection(db, 'eshgoods'));
         const filteredData = data.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
@@ -85,7 +85,7 @@ function Products() {
         }
 
         // Update the document in Firestore
-        await updateDoc(doc(db, 'eshproducts', id), updatedData);
+        await updateDoc(doc(db, 'eshgoods', id), updatedData);
 
         // Reset states and navigate
         setEditingId(null);
@@ -102,7 +102,7 @@ function Products() {
 
   const handleDelete = async (id) => {
     try {
-      await deleteDoc(doc(db, 'eshproducts', id));
+      await deleteDoc(doc(db, 'eshgoods', id));
       const updatedProducts = products.filter(product => product.id !== id);
       setProducts(updatedProducts);
     } catch (error) {

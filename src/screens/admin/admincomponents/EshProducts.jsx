@@ -17,7 +17,7 @@ function Products() {
   useEffect(() => {
     const getProducts = async () => {
       try {
-        const data = await getDocs(collection(db, 'eshproducts'));
+        const data = await getDocs(collection(db, 'eshgoods'));
         const filteredData = data.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
