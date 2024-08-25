@@ -128,79 +128,85 @@ function Products() {
           <table className="min-w-full table-fixed">
             <thead>
               <tr>
-                <th className=" px-1 md:px-4 py-2 text-sm md:text-lg">No.</th>
-                <th className=" px-1 md:px-4 py-2 text-sm md:text-lg">Name</th>
-                <th className=" px-1 md:px-4 py-2 text-sm md:text-lg">Quantity Left</th>
-                <th className=" px-1 md:px-4 py-2 text-sm md:text-lg">Price</th>
-                <th className=" px-1 md:px-4 py-2 text-sm md:text-lg">Sold</th>
-                <th className=" px-1 md:px-4 py-2 text-sm md:text-lg">Used</th>
-                <th className=" px-1 md:px-4 py-2 text-sm md:text-lg">Added</th>
-                <th className=" px-1 md:px-4 py-2 text-sm md:text-lg">Actions</th>
+              <th className="px-4 py-2">No.</th>
+                <th className="px-4 py-2">Name</th>
+                <th className="px-4 py-2">Quantity</th>
+                <th className="px-4 py-2">Price</th>
+                <th className="px-4 py-2">Addedd</th>
+                <th className="px-4 py-2">Used/Sold</th>
+                <th className="px-4 py-2">Comment</th>
+                <th className="px-4 py-2">Date</th>
+                <th className="px-4 py-2">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {filteredProducts?.map((product, index) => (
-                <tr key={product.id} className="border-b border-gray-200 cursor-pointer">
-                  <td className=" px-1 md:px-4 text-center py-2 text-sm md:text-lg">{index + 1}</td>
-                  <td className=" px-1 md:px-4 text-center py-2 text-sm md:text-lg">
-                    {editingId === product.id ? (
-                      <Input
-                        value={editedData[product.id]?.name || product.name}
-                        onChange={(e) => handleEdit(product.id, 'name', e.target.value)}
-                      />
-                    ) : (
-                      product.name
-                    )}
-                  </td>
-                  <td className=" px-1 md:px-4 text-center py-2 text-sm md:text-lg">
-                    {editingId === product.id ? (
-                      <Input value={editedData[product.id]?.quantity || product.quantity} onChange={(e) => handleEdit(product.id, 'quantity', e.target.value)} />
-                    ) : (
-                      product.quantity
-                    )}
-                  </td>
-                  <td className=" px-1 md:px-4 text-center py-2 text-sm md:text-lg">
-                    {editingId === product.id ? (
-                      <Input value={editedData[product.id]?.price || product.price} onChange={(e) => handleEdit(product.id, 'price', e.target.value)} />
-                    ) : (
-                      product.price
-                    )}
-                  </td>
-                  <td className=" px-1 md:px-4 text-center py-2 text-sm md:text-lg">
-                    {editingId === product.id ? (
-                      <Input value={editedData[product.id]?.sold || product.sold} onChange={(e) => handleEdit(product.id, 'sold', e.target.value)} />
-                    ) : (
-                      product.sold
-                    )}
-                  </td>
-                  <td className=" px-1 md:px-4 text-center py-2 text-sm md:text-lg">
-                    {editingId === product.id ? (
-                      <Input value={editedData[product.id]?.used || product.used} onChange={(e) => handleEdit(product.id, 'used', e.target.value)} />
-                    ) : (
-                      product.used
-                    )}
-                  </td>
-                  <td className=" px-1 md:px-4 text-center py-2 text-sm md:text-lg">
-                    {editingId === product.id ? (
-                      <Input value={editedData[product.id]?.added || product.added} onChange={(e) => handleEdit(product.id, 'added', e.target.value)} />
-                    ) : (
-                      product.added
-                    )}
-                  </td>
-                  <td className=" px-1 md:px-4 text-center py-2 text-sm md:text-lg">
-                    {editingId === product.id ? (
-                      <button className='bg-green-500 px-3 py-2 rounded-md text-white' onClick={() => handleSave(product.id)}>Save</button>
-                    ) : (
-                      <button className='bg-blue-500 px-3 py-2 rounded-md text-white' onClick={() => setEditingId(product.id)}>Edit</button>
-                    )}
-                  </td>
-                  <td className=" px-1 md:px-4 text-center text-sm py-2">
-                    {editingId === product.id ? (
-                      <button className='bg-red-500 px-3 py-2 rounded-md text-white' onClick={() => handleDelete(product.id)}>Delete</button>
-                    ) : null}
-                  </td>
-                </tr>
-              ))}
+            {filteredProducts?.map((product, index) => (
+    <tr key={product.id} className="border-b border-gray-200 cursor-pointer">
+      <td className="px-4 text-center py-2">{index + 1}</td>
+      <td className="px-4 text-center py-2">
+        {editingId === product.id ? (
+          <Input
+            value={editedData[product.id]?.name || product.name}
+            onChange={(e) => handleEdit(product.id, 'name', e.target.value)}
+          />
+        ) : (
+          product.name
+        )}
+      </td>
+      <td className="px-4 text-center text-sm py-2">
+        {editingId === product.id ? (
+          <Input value={editedData[product.id]?.quantity || product.quantity} onChange={(e) => handleEdit(product.id, 'quantity', e.target.value)} />
+        ) : (
+          product.quantity
+        )}
+      </td>
+      <td className="px-4 text-center text-sm py-2">
+        {editingId === product.id ? (
+          <Input value={editedData[product.id]?.price || product.price} onChange={(e) => handleEdit(product.id, 'price', e.target.value)} />
+        ) : (
+          product.price
+        )}
+      </td>
+      <td className="px-4 text-center text-sm py-2">
+        {editingId === product.id ? (
+          <Input value={editedData[product.id]?.added || product.added} onChange={(e) => handleEdit(product.id, 'added', e.target.value)} />
+        ) : (
+          product.added
+        )}
+      </td>
+      <td className="px-4 text-center text-sm py-2">
+        {editingId === product.id ? (
+          <Input value={editedData[product.id]?.sold || product.sold} onChange={(e) => handleEdit(product.id, 'sold', e.target.value)} />
+        ) : (
+          product.sold
+        )}
+      </td>
+      <td className="px-4 text-center text-xs py-2">
+        {editingId === product.id ? (
+          <Input value={editedComments[product.id] || product.comment} onChange={(e) => handleEditComment(product.id, e.target.value)} />
+        ) : (
+          product.comment
+        )}
+      </td>
+      <td className="px-4 text-center text-xs py-2">
+  {editingId === product.id ? (
+    <Input value={editedData[product.id]?.date || product.date} onChange={(e) => handleEdit(product.id, 'date', e.target.value)} />
+  ) : (
+    product.date
+  )}
+</td>
+
+      <td className="px-4 text-center text-sm py-2">
+        {editingId === product.id ? (
+          <button className='bg-green-500 px-3 py-2 rounded-md text-white' onClick={() => handleSave(product.id)}>Save</button>
+        ) : (
+          <button className='bg-blue-500 px-3 py-2 rounded-md text-white' onClick={() => setEditingId(product.id)}>Edit</button>
+        )}
+      </td>
+
+
+    </tr>
+  ))}
             </tbody>
           </table>
         </div>
