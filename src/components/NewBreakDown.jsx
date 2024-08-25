@@ -32,7 +32,10 @@ function BreakDown({ match }) {
         {selectedMonth.dailyPayments.map((dayData) => (
             
           <div key={dayData.day} className="mb-4 p-4 rounded-lg">
+            <div className='flex justify-between items-center'>
             <h2 className="text-xl font-semibold mb-2">{`Day ${dayData.day}`}</h2>
+            <h2 className="text-xl font-semibold mb-2">{`Total Payment for today:  ${dayData.payments.length}`}</h2>
+            </div>
             <p className="text-lg mb-2 font-bold ">Total Payment: &#8358;{dayData.payments.reduce((total, payment) => total + parseFloat(payment.amount), 0)}</p>
             <ul className='flex flex-col space-y-4 '>
               {dayData.payments.map((payment, index) => (
