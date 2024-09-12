@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getAuth } from 'firebase/auth';
 import { toast } from 'react-hot-toast';
-import {FaTrash} from 'react-icons/fa'
+import { FaTrash } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import {
   addDoc,
@@ -23,6 +23,7 @@ function Profile() {
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [expandedNotes, setExpandedNotes] = useState({});
   const navigate = useNavigate();
   const auth = getAuth();
 
@@ -30,7 +31,7 @@ function Profile() {
     await auth.signOut();
     toast.success('Successfully logged out');
     navigate('/');
-  }
+  };
 
   const saveNote = async (e) => {
     e.preventDefault();
@@ -45,17 +46,16 @@ function Profile() {
       if (!note || !date) {
         toast.error('Please fill in both fields');
       } else {
-        const data = await addDoc(collection(db, 'notes'), noteCopy);
-        console.log(data);
+        await addDoc(collection(db, 'notes'), noteCopy);
         toast.success('Note saved');
         setNote('');
         setDate('');
-        navigate(0);
+        navigate(0); // Reload page after saving note
       }
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const getNotes = async () => {
     try {
@@ -75,60 +75,82 @@ function Profile() {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
+
+  const toggleNoteExpansion = (noteId) => {
+    setExpandedNotes((prevExpandedNotes) => ({
+      ...prevExpandedNotes,
+      [noteId]: !prevExpandedNotes[noteId],
+    }));
+  };
 
   useEffect(() => {
     getNotes();
-  }, [])
+  }, []);
 
   const filteredNotes = notes.filter((noteItem) => {
     const noteText = noteItem.note.toLowerCase();
     const query = searchQuery.toLowerCase();
     return noteText.includes(query);
-  })
+  });
 
   const deleteNote = async (noteId) => {
     try {
-      // Delete the note with the specified ID
       await deleteDoc(doc(db, 'notes', noteId));
       toast.success('Note deleted');
-      // Update the list of notes to reflect the deletion
       setNotes((prevNotes) => prevNotes.filter((note) => note.id !== noteId));
     } catch (error) {
       console.error('Error deleting note:', error);
       toast.error('Failed to delete note');
     }
   };
+
   if (loading) {
-    return (
-      <Loader />
-    )
+    return <Loader />;
   }
 
   return (
     <>
       <AdminNav />
       <div className="max-w-screen-xl mx-auto px-4 md:px-8 lg:px-12">
-        <div className="header  flex  items-center my-4 space-x-4 justify-between">
-          <p className='text-2xl capitalize'>
-            Signed in as <span className='ml-4 bg-green-500 text-white p-2 rounded-md'> {auth?.currentUser?.displayName}</span>
+        <div className="header flex items-center my-4 space-x-4 justify-between">
+          <p className="text-lg md:text-2xl capitalize">
+            Signed in as{' '}
+            <span className="ml-4 bg-green-500 text-white p-2 rounded-md">
+              {auth?.currentUser?.displayName}
+            </span>
           </p>
-         <div className="buttons flex flex-col space-y-4">
-         <button className='text-xl capitalize bg-[#FF5162] p-2 text-white rounded-md'
-            onClick={onLogOut}>
-            Sign Out
-          </button>
-          <button onClick={() => navigate('/daily')} className='text-xl capitalize bg-[#FF5162] p-2 text-white rounded-md'>
-            Daily Expenditures
-          </button>
-         </div>
+          <div className="buttons flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+            <button
+              className="text-sm md:text-xl capitalize bg-[#FF5162] p-2 text-white rounded-md"
+              onClick={onLogOut}
+            >
+              Sign Out
+            </button>
+            <button
+              onClick={() => navigate('/daily')}
+              className="text-sm md:text-xl capitalize bg-[#FF5162] p-2 text-white rounded-md"
+            >
+              Daily Expenditures
+            </button>
+          </div>
         </div>
         <div className="note my-8">
           <form onSubmit={saveNote}>
-            <Input label="Add a note" type="text" value={note} onChange={e => setNote(e.target.value)} />
-            <Input label="Pick a date" type="date" value={date} onChange={e => setDate(e.target.value)} />
+            <Input
+              label="Add a note"
+              type="text"
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+            />
+            <Input
+              label="Pick a date"
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+            />
             <div className="flex justify-end">
-              <button className="bg-[#FF5162] py-3 flex items-center justify-center gap-x-2 text-white text-sm rounded-md w-1/2 md:w-1/4 mt-4 hover:bg-red-700 transition">
+              <button className="bg-[#FF5162] py-3 flex items-center justify-center gap-x-2 text-white text-sm rounded-md w-full md:w-1/4 mt-4 hover:bg-red-700 transition">
                 Add New Note <AiOutlineArrowRight />
               </button>
             </div>
@@ -138,27 +160,47 @@ function Profile() {
           <div className="flex justify-end">
             <Input
               type="text"
-             label="Search notes..."
+              label="Search notes..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          {filteredNotes.map((data) => (
-            <div key={data.id} className="bg-[#FF5162] text-white text-pretty p-4 mb-2 flex space-x-4 justify-between  text-nowrap items-center rounded-lg">
-              <p className="text-xs text-left">{data.note}</p>
-              <p className='text-xs text-center'>{data.date}</p>
-              <button
-          className=" text-white py-1 px-3 rounded-md text-sm"
-          onClick={() => deleteNote(data.id)}
-        >
-        <FaTrash/>
-        </button>
-            </div>
-          ))}
+          {filteredNotes.map((data) => {
+            const isExpanded = expandedNotes[data.id];
+            const notePreview =
+              data.note.length > 100 && !isExpanded
+                ? `${data.note.slice(0, 100)}...`
+                : data.note;
+            return (
+              <div
+                key={data.id}
+                className="bg-[#FF5162] text-white p-4 mb-2 flex space-x-4 justify-between items-start rounded-lg"
+              >
+                <div className="flex-grow">
+                  <p className="text-xs md:text-sm text-left">{notePreview}</p>
+                  {data.note.length > 100 && (
+                    <button
+                      className="text-xs text-blue-200 mt-2 underline"
+                      onClick={() => toggleNoteExpansion(data.id)}
+                    >
+                      {isExpanded ? 'Read Less' : 'Read More'}
+                    </button>
+                  )}
+                  <p className="text-xs mt-2">{data.date}</p>
+                </div>
+                <button
+                  className="text-white bg-red-500 py-1 px-3 rounded-md hover:bg-red-600 text-sm"
+                  onClick={() => deleteNote(data.id)}
+                >
+                  <FaTrash />
+                </button>
+              </div>
+            );
+          })}
         </div>
       </div>
     </>
-  )
+  );
 }
 
 export default Profile;

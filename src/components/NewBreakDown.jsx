@@ -23,10 +23,15 @@ function BreakDown({ match }) {
     navigate(`/admin/patient/${patientId}`);
   };
 
+  console.log(selectedMonth)
+
   return (
     <>
       <AdminNav />
       <div className="px-4 md:px-8 lg:px-8 h-full mx-auto my-5">
+        {
+          selectedMonth.ses
+        }
         <h1 className="text-2xl font-semibold mb-4 text-center">{selectedMonth?.name} Daily Transactions</h1>
         <h1 className='text-2xl font-bold mb-4 text-center'> Total Payment for {selectedMonth?.name}: {""} &#8358;{selectedMonth.totalPaymentsForMonth}</h1>
         {selectedMonth.dailyPayments.map((dayData) => (
