@@ -36,6 +36,8 @@ function EshBreakDown() {
     return <Loader />;
   }
 
+  console.log(selectedMonth.ses-(totalInPatients + totalOutPatients))
+ 
   const handlePatientClick = (patientId) => {
     // Use the patientId to navigate to the appropriate patient dashboard
     navigate(`/admin/patient/esh/${patientId}`);
