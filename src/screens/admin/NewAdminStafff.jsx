@@ -1,5 +1,6 @@
 import AdminNav from '../../components/AdminNav';
-import { useNavigate,Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
 const months = [
   { name: "January", id: "January" },
   { name: "February", id: "February" },
@@ -15,22 +16,19 @@ const months = [
   { name: "December", id: "December" },
 ];
 
-const AdminStaff = () => {
+const NewAdminStaff = () => {
   const navigate = useNavigate();
 
   return (
     <>
       <AdminNav />
       <div className="mx-auto max-w-6xl my-5 h-screen md:overflow-y-hidden w-full px-4 md:px-8 relative lg:px-12">
-        <Link to={'/admin/newstaff'}>
-        <h1 className='text-center bg-[#ff5162] text-white p-3 cursor-pointer rounded-2xl my-4'>New Staff Records</h1>
-        </Link>
         <div className="grid  grid-cols-2  md:grid-cols-4  gap-4">
           {months.map((data) => (
             <div
               key={data.id}
               className="cursor-pointer bg-[#FF5162]  hover:bg-red -900 transition duration-300 rounded-lg"
-              onClick={() => navigate(`/admin/staff/${data.id}`)}
+              onClick={() => navigate(`/admin/newstaff/${data.id}`)}
             >
               <div className="p-6">
                 <h1 className="text-white text-2xl text-center  font-semibold">
@@ -45,4 +43,4 @@ const AdminStaff = () => {
   );
 };
 
-export default AdminStaff;
+export default NewAdminStaff;

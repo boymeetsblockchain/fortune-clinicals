@@ -51,6 +51,9 @@ import EshBreakDown from './components/EshBreakDown'
 import PrivateRoute from './components/AdminRoute'
 import EshInitial from './screens/admin/EshInitial'
 import InitialBreakDown from './components/InitialBreakDown'
+import NewAdminStaff from './screens/admin/NewAdminStafff'
+import NewAdminStaffDetail from './screens/admin/NewAdminStaffDetail'
+
 const App = () => {
   return (
     
@@ -100,6 +103,8 @@ const App = () => {
          <Route path='/admin/products' element={<AdminProducts/>}/>
          <Route path='/admin/products/add-money' element={<AdminProductFund/>}/>
          <Route path='/admin/staff' element={<AdminStaff/>}/>
+         <Route path='/admin/newstaff' element={<NewAdminStaff/>}/>
+         <Route path='/admin/newstaff/:month' element={<NewAdminStaffDetail/>}/>
          <Route path='/admin/staff/:month' element={<AdminStaffDetail/>}/>
          <Route path='/admin/add-staff' element={<AdminAddStaff/>}/>
          <Route path='/admin/user' element={<AdminUser/>}/>

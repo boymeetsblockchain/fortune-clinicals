@@ -50,10 +50,10 @@ const AdminAddStaff = () => {
               userId:auth?.currentUser?.uid
            }
           //  console.log(formDataCopy)
-           const data = await addDoc(collection(db, 'staffs'), formDataCopy)
+           const data = await addDoc(collection(db, 'newstaffs'), formDataCopy)
            console.log(data)
             toast.success("patient saved")
-            navigate(`/admin/staff/${formDataCopy.month}`)
+            navigate(`/admin/newstaff/${formDataCopy.month}`)
         
             
         } catch (error) {

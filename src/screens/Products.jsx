@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '../firebase.config';
-import { getDocs, collection, updateDoc, doc } from 'firebase/firestore';
+import { getDocs, collection, updateDoc, doc, addDoc, query, where } from 'firebase/firestore';
 import Navbar from '../components/Navbar';
 import Loader from '../components/Loader';
 import { Link, useNavigate } from 'react-router-dom';
 import { BsFillCartPlusFill } from 'react-icons/bs';
 import Input from '../components/Input';
-
+import { ViewCommentModal } from '../components/products/viewCommentModal';
+import CommentModal from '../components/products/commentModal';
 
 function Products() {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [editingId, setEditingId] = useState(null);
-  const [editedComments, setEditedComments] = useState({});
   const [editedData, setEditedData] = useState({});
+  const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
+  const [isCommentViewModalOpen, setIsViewCommentModalOpen] = useState(false);
+  const [commentProductId, setCommentProductId] = useState(null);
+  const [comments, setComments] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,35 +38,24 @@ function Products() {
     getProducts();
   }, []);
 
-
-
   const handleEdit = (id, field, value) => {
     setEditingId(id);
-    setEditedData(prevState => ({
+    setEditedData((prevState) => ({
       ...prevState,
       [id]: {
         ...prevState[id],
         [field]: value,
-        editedDate: new Date().toISOString()
-      }
-    }));
-  };
-
-
-  const handleEditComment = (id, value) => {
-    setEditedComments(prevState => ({
-      ...prevState,
-      [id]: value
+        editedDate: new Date().toISOString(),
+      },
     }));
   };
 
   const handleSave = async (id) => {
     try {
-      const oldProduct = products.find(product => product.id === id);
+      const oldProduct = products.find((product) => product.id === id);
       const updatedData = {
         ...editedData[id],
-        comment: editedComments[id] || oldProduct.comment,
-        editedDate: new Date().toISOString()
+        editedDate: new Date().toISOString(),
       };
 
       const oldQuantity = parseFloat(oldProduct.quantity);
@@ -81,7 +74,6 @@ function Products() {
 
       setEditingId(null);
       setEditedData({});
-      setEditedComments({});
       navigate(0);
     } catch (error) {
       console.error(error);
@@ -92,6 +84,45 @@ function Products() {
     product.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const viewComment = async (id) => {
+    try {
+      const q = query(collection(db, 'productcomments'), where('productId', '==', id));
+      const querySnapshot = await getDocs(q);
+      const fetchedComments = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setComments(fetchedComments);
+      setIsViewCommentModalOpen(true);
+    } catch (error) {
+      console.error('Error fetching comments: ', error);
+    }
+  };
+
+  const openCommentModal = (id) => {
+    setCommentProductId(id);
+    setIsCommentModalOpen(true);
+  };
+
+  const openViewCommentModal = (id) => {
+    setCommentProductId(id);
+    viewComment(id);
+  };
+
+  const saveComment = async (productId, commentData) => {
+    try {
+      await addDoc(collection(db, 'productcomments'), {
+        productId: productId,
+        comment: commentData.comment,
+        date: commentData.date,
+      });
+  
+      console.log('Comment saved successfully!');
+    } catch (error) {
+      console.error('Error saving comment: ', error);
+    }
+  };
+
   if (loading) {
     return <Loader />;
   }
@@ -101,9 +132,12 @@ function Products() {
       <Navbar />
       <div className="mx-auto max-w-screen-xl my-5 h-full relative w-full px-4 md:px-8 lg:px-12">
         <div className="flex justify-end mb-3">
-          <Input value={searchQuery} label={"Search Products"} onChange={(e) => setSearchQuery(e.target.value)} />
+          <Input
+            value={searchQuery}
+            label={'Search Products'}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
-        {/* Responsive container with horizontal overflow */}
         <div className="overflow-x-auto">
           <table className="min-w-full table-fixed text-sm">
             <thead>
@@ -119,11 +153,9 @@ function Products() {
               </tr>
             </thead>
 
-            {/* Each product and its comment grouped in a <tbody> */}
-            {filteredProducts?.map((product, index) => (
-              <tbody key={product.id}>
-                {/* Product data row */}
-                <tr className="border-b border-gray-200 cursor-pointer">
+            <tbody>
+              {filteredProducts?.map((product, index) => (
+                <tr key={product.id} className="border-b border-gray-200 cursor-pointer">
                   <td className="px-4 text-center py-2">{index + 1}</td>
                   <td className="px-4 text-center py-2">
                     {editingId === product.id ? (
@@ -137,64 +169,107 @@ function Products() {
                   </td>
                   <td className="px-4 text-center text-sm py-2">
                     {editingId === product.id ? (
-                      <Input value={editedData[product.id]?.quantity || product.quantity} onChange={(e) => handleEdit(product.id, 'quantity', e.target.value)} />
+                      <Input
+                        value={editedData[product.id]?.quantity || product.quantity}
+                        onChange={(e) => handleEdit(product.id, 'quantity', e.target.value)}
+                      />
                     ) : (
                       product.quantity
                     )}
                   </td>
                   <td className="px-4 text-center text-sm py-2">
                     {editingId === product.id ? (
-                      <Input value={editedData[product.id]?.price || product.price} onChange={(e) => handleEdit(product.id, 'price', e.target.value)} />
+                      <Input
+                        value={editedData[product.id]?.price || product.price}
+                        onChange={(e) => handleEdit(product.id, 'price', e.target.value)}
+                      />
                     ) : (
                       product.price
                     )}
                   </td>
                   <td className="px-4 text-center text-sm py-2">
                     {editingId === product.id ? (
-                      <Input value={editedData[product.id]?.added || product.added} onChange={(e) => handleEdit(product.id, 'added', e.target.value)} />
+                      <Input
+                        value={editedData[product.id]?.added || product.added}
+                        onChange={(e) => handleEdit(product.id, 'added', e.target.value)}
+                      />
                     ) : (
                       product.added
                     )}
                   </td>
                   <td className="px-4 text-center text-sm py-2">
                     {editingId === product.id ? (
-                      <Input value={editedData[product.id]?.sold || product.sold} onChange={(e) => handleEdit(product.id, 'sold', e.target.value)} />
+                      <Input
+                        value={editedData[product.id]?.sold || product.sold}
+                        onChange={(e) => handleEdit(product.id, 'sold', e.target.value)}
+                      />
                     ) : (
                       product.sold
                     )}
                   </td>
                   <td className="px-4 text-center text-xs py-2">
                     {editingId === product.id ? (
-                      <Input value={editedData[product.id]?.date || product.date} onChange={(e) => handleEdit(product.id, 'date', e.target.value)} />
+                      <Input
+                        value={editedData[product.id]?.date || product.date}
+                        onChange={(e) => handleEdit(product.id, 'date', e.target.value)}
+                      />
                     ) : (
                       product.date
                     )}
                   </td>
                   <td className="px-4 text-center text-sm py-2">
                     {editingId === product.id ? (
-                      <button className="bg-green-500 px-3 py-2 rounded-md text-white" onClick={() => handleSave(product.id)}>Save</button>
+                      <button
+                        className="bg-green-500 px-3 py-2 rounded-md text-white"
+                        onClick={() => handleSave(product.id)}
+                      >
+                        Save
+                      </button>
                     ) : (
-                      <button className="bg-blue-500 px-3 py-2 rounded-md text-white" onClick={() => setEditingId(product.id)}>Edit</button>
+                      <div className='flex flex-row gap-x-4'>
+                              <button
+                        className="bg-blue-500 px-3 py-2 rounded-md text-white text-xs"
+                        onClick={() => setEditingId(product.id)}
+                      >
+                        Edit
+                      </button>
+                              <button
+                        className="bg-pink-500 px-3 py-2 rounded-md text-white text-xs"
+                        onClick={() => openCommentModal(product.id)}
+                      >
+                        Comment
+                      </button>
+                              <button
+                        className="bg-purple-500 px-3 py-2 rounded-md text-white text-xs"
+                        onClick={() => openViewCommentModal(product.id)}
+                      >
+                        View Comment
+                      </button>
+                      </div>
                     )}
                   </td>
                 </tr>
-
-                {/* Comment row */}
-                <tr>
-                  <td colSpan="8" className="px-4 py-2 bg-gray-50 text-center">
-                    {editingId === product.id ? (
-                      <Input value={editedComments[product.id] || product.comment} onChange={(e) => handleEditComment(product.id, e.target.value)} placeholder="Enter comment" />
-                    ) : (
-                      <div className="text-gray-600 text-sm">{product.comment || 'No comment available'}</div>
-                    )}
-                  </td>
-                </tr>
-              </tbody>
-            ))}
+              ))}
+            </tbody>
           </table>
         </div>
 
-        {/* Add new product button */}
+        {isCommentModalOpen && (
+          <CommentModal
+            productId={commentProductId}
+            onSave={saveComment}
+            onClose={() => setIsCommentModalOpen(false)}
+          />
+        )}
+        
+        {isCommentViewModalOpen && (
+          <ViewCommentModal
+            productId={commentProductId}
+            comments={comments}
+            onClose={() => setIsViewCommentModalOpen(false)}
+          />
+        )}
+
         <div className="fixed bottom-4 right-4 h-40 w-40 cursor-pointer bg-white flex justify-center items-center text-sm rounded-full shadow-lg">
           <Link to={'/add-new-product'}>
             <BsFillCartPlusFill size={64} color="red" />

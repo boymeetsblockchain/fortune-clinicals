@@ -1,10 +1,12 @@
 import React, { useEffect, useState} from 'react';
 import { db } from '../../../firebase.config';
-import { getDocs, collection, updateDoc, doc, deleteDoc } from 'firebase/firestore';
+import { getDocs, collection, updateDoc, doc, addDoc, query, where, deleteDoc } from 'firebase/firestore';
 import Loader from '../../../components/Loader';
 import { Link, useNavigate } from 'react-router-dom';
 import { BsFillCartPlusFill } from 'react-icons/bs';
 import Input from '../../../components/Input';
+import CommentModal from '../../../components/products/commentModal';
+import { ViewCommentModal } from '../../../components/products/viewCommentModal';
 
 
 
@@ -15,6 +17,10 @@ function Products() {
   const [editingId, setEditingId] = useState(null);
   const [editedComments, setEditedComments] = useState({});
   const [editedData, setEditedData] = useState({});
+  const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
+  const [isCommentViewModalOpen, setIsViewCommentModalOpen] = useState(false);
+  const [commentProductId, setCommentProductId] = useState(null);
+  const [comments, setComments] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -42,7 +48,7 @@ function Products() {
       [id]: {
         ...prevState[id],
         [field]: value,
-        editedDate: new Date().toISOString() // Add editedDate property with current date and time
+        editedDate: new Date().toISOString() 
       }
     }));
   };
@@ -103,6 +109,46 @@ function Products() {
       setProducts(updatedProducts);
     } catch (error) {
       console.error(error);
+    }
+  };
+
+
+  const viewComment = async (id) => {
+    try {
+      const q = query(collection(db, 'productcomments'), where('productId', '==', id));
+      const querySnapshot = await getDocs(q);
+      const fetchedComments = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setComments(fetchedComments);
+      setIsViewCommentModalOpen(true);
+    } catch (error) {
+      console.error('Error fetching comments: ', error);
+    }
+  };
+
+  const openCommentModal = (id) => {
+    setCommentProductId(id);
+    setIsCommentModalOpen(true);
+  };
+
+  const openViewCommentModal = (id) => {
+    setCommentProductId(id);
+    viewComment(id);
+  };
+
+  const saveComment = async (productId, commentData) => {
+    try {
+      await addDoc(collection(db, 'productcomments'), {
+        productId: productId,
+        comment: commentData.comment,
+        date: commentData.date,
+      });
+  
+      console.log('Comment saved successfully!');
+    } catch (error) {
+      console.error('Error saving comment: ', error);
     }
   };
 
@@ -200,7 +246,28 @@ function Products() {
         {editingId === product.id ? (
           <button className='bg-green-500 px-3 py-2 rounded-md text-white' onClick={() => handleSave(product.id)}>Save</button>
         ) : (
-          <button className='bg-blue-500 px-3 py-2 rounded-md text-white' onClick={() => setEditingId(product.id)}>Edit</button>
+         <div>
+              <div className='flex flex-row gap-x-4'>
+                              <button
+                        className="bg-blue-500 px-3 py-2 rounded-md text-white text-xs"
+                        onClick={() => setEditingId(product.id)}
+                      >
+                        Edit
+                      </button>
+                              <button
+                        className="bg-pink-500 px-3 py-2 rounded-md text-white text-xs"
+                        onClick={() => openCommentModal(product.id)}
+                      >
+                        Comment
+                      </button>
+                              <button
+                        className="bg-purple-500 px-3 py-2 rounded-md text-white text-xs"
+                        onClick={() => openViewCommentModal(product.id)}
+                      >
+                        View Comment
+                      </button>
+                      </div>
+         </div>
         )}
       </td>
 
@@ -211,6 +278,22 @@ function Products() {
           </table>
         </div>
 
+
+        {isCommentModalOpen && (
+          <CommentModal
+            productId={commentProductId}
+            onSave={saveComment}
+            onClose={() => setIsCommentModalOpen(false)}
+          />
+        )}
+        
+        {isCommentViewModalOpen && (
+          <ViewCommentModal
+            productId={commentProductId}
+            comments={comments}
+            onClose={() => setIsViewCommentModalOpen(false)}
+          />
+        )}
         <div className="fixed bottom-4 right-4 h-40 w-40 cursor-pointer bg-white flex justify-center items-center rounded-full shadow-lg">
           <Link to={'/add-new-product'}>
             <BsFillCartPlusFill size={64} color="red" />
