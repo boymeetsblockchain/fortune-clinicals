@@ -1,5 +1,5 @@
-import AdminNav from '../../components/AdminNav';
-import { useNavigate } from 'react-router-dom';
+import AdminNav from "../../components/AdminNav";
+import { useNavigate } from "react-router-dom";
 
 const months = [
   { name: "January", id: "January" },
@@ -27,7 +27,7 @@ const NewAdminStaff = () => {
           {months.map((data) => (
             <div
               key={data.id}
-              className="cursor-pointer bg-[#FF5162]  hover:bg-red -900 transition duration-300 rounded-lg"
+              className="cursor-pointer bg-blue-500  hover:bg-red -900 transition duration-300 rounded-lg"
               onClick={() => navigate(`/admin/newstaff/${data.id}`)}
             >
               <div className="p-6">
