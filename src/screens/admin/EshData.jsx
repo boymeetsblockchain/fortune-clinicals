@@ -1,38 +1,75 @@
-import useEshData from "../../hooks/useEshData"
-import AdminNav from '../../components/AdminNav'
+import useEshData from "../../hooks/useEshData";
+import AdminNav from "../../components/AdminNav";
 import Loader from "../../components/Loader";
 import { useNavigate } from "react-router-dom";
+
 const EshData = () => {
   const navigate = useNavigate();
-  const { filteredMonthsData } = useEshData(); 
+  const { yearsData } = useEshData();
 
-
-  if(!filteredMonthsData){
-    return <Loader/>
+  if (!yearsData) {
+    return <Loader />;
   }
+
+  // Sort yearsData to show the current year first
+  const currentYear = new Date().getFullYear();
+  const sortedYearsData = [...yearsData].sort((a, b) => {
+    if (a.year === currentYear) return -1; // Move current year to the beginning
+    if (b.year === currentYear) return 1;
+    return b.year - a.year; // Descending order for the rest
+  });
+
   return (
     <>
-    <AdminNav/>
-    <div className="px-4 md:px-8 lg:px-12 h-full mx-auto my-5">
-
-        <div className="flex items-center justify-center h-full">
-      
-          <div className="grid md:grid-cols-3 lg:grid-cols-4 grid-cols-1 gap-4">
-            {filteredMonthsData.map((month, index) => (
-              <div key={index} className='cursor-pointer'  onClick={() => navigate(`/esh/${month.name}`)} >
-                <div className="bg-gray-200 h-32 w-64 flex items-center justify-center text-center p-4 rounded  flex-col shadow-md">
-                  <h1 className="text-3xl font-bold">{month.name}</h1>
-                  <div className="flex gap-2">
-                    <span className="text-green-800 font-semibold">Sessions: {month?.ses}</span>
-                  </div>
-                </div>
+      <AdminNav />
+      <div className="container mx-auto py-10">
+        <div className="flex flex-col items-center space-y-8">
+          {sortedYearsData.map((yearData) => (
+            <div key={yearData.year} className="w-full">
+              {/* Year Header */}
+              <div className="text-center">
+                <h2
+                  className={`text-4xl font-bold ${
+                    yearData.year === currentYear
+                      ? "text-red-600"
+                      : "text-indigo-600"
+                  } mb-6`}
+                >
+                  {yearData.year}
+                </h2>
               </div>
-            ))}
-          </div>
+              {/* Months Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {yearData.monthsData.map((month, index) => (
+                  <div
+                    key={index}
+                    className="cursor-pointer transition-transform transform hover:scale-105"
+                    onClick={() =>
+                      navigate(`/esh/${yearData.year}/${month.name}`)
+                    }
+                  >
+                    <div className="bg-white border border-gray-200 shadow-md rounded-lg p-6 flex flex-col items-center justify-center space-y-3">
+                      <h3 className="text-2xl font-bold text-gray-800">
+                        {month.name}
+                      </h3>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-sm font-medium text-gray-600">
+                          Sessions:
+                        </span>
+                        <span className="text-lg font-semibold text-green-700">
+                          {month?.ses}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
-        
       </div>
     </>
-  )
-}
-export default EshData
+  );
+};
+
+export default EshData;
