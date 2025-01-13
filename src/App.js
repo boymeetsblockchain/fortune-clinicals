@@ -125,7 +125,10 @@ const App = () => {
           element={<NewBreakDown />}
         />
         <Route path="/esh/:year/:monthName" element={<EshBreakDown />} />
-        <Route path="/esh/initial/:monthName" element={<InitialBreakDown />} />
+        <Route
+          path="/esh/initial/:year/:monthName"
+          element={<InitialBreakDown />}
+        />
 
         <Route
           path="/add-new-product-esh-money"

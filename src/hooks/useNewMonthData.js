@@ -68,7 +68,7 @@ const useNewMonthData = () => {
     const year = paymentDate.getFullYear();
 
     // Filter years outside the range 2024-2027
-    if (year < 2024 || year > 2027) return;
+    if (year < 2024 || year > 2080) return;
 
     const monthIndex = paymentDate.getMonth();
 

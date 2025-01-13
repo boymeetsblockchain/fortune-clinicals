@@ -19,8 +19,6 @@ const useEshData = () => {
     getSession();
   }, []);
 
-  const calculateTotalSessions = () => sessions.length;
-
   const months = [
     { name: "January" },
     { name: "February" },

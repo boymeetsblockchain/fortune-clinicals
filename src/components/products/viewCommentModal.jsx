@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from '../../firebase.config';
+import React, { useEffect, useState } from "react";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from "../../firebase.config";
 
 export const ViewCommentModal = ({ productId, onClose }) => {
   const [comments, setComments] = useState([]);
@@ -9,12 +9,18 @@ export const ViewCommentModal = ({ productId, onClose }) => {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const q = query(collection(db, 'productcomments'), where('productId', '==', productId));
+        const q = query(
+          collection(db, "productcomments"),
+          where("productId", "==", productId)
+        );
         const querySnapshot = await getDocs(q);
-        const fetchedComments = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        const fetchedComments = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
         setComments(fetchedComments);
       } catch (error) {
-        console.error('Error fetching comments: ', error);
+        console.error("Error fetching comments: ", error);
       } finally {
         setLoading(false);
       }
@@ -42,21 +48,23 @@ export const ViewCommentModal = ({ productId, onClose }) => {
         >
           &times;
         </button>
-    
 
         {comments.length > 0 ? (
-          <ul className="space-y-4">
+          <ul className="space-y-4 overflow-auto">
             {comments.map((comment) => (
               <li key={comment.id} className="border rounded-lg p-4 bg-gray-50">
                 <p className="text-sm text-gray-600">
-                  <strong>Date:</strong> {new Date(comment.date).toLocaleDateString()}
+                  <strong>Date:</strong>{" "}
+                  {new Date(comment.date).toLocaleDateString()}
                 </p>
                 <p className="mt-1 text-gray-800">{comment.comment}</p>
               </li>
             ))}
           </ul>
         ) : (
-          <p className="text-center text-gray-500">No comments available for this product.</p>
+          <p className="text-center text-gray-500">
+            No comments available for this product.
+          </p>
         )}
       </div>
     </div>
