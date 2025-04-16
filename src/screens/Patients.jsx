@@ -179,7 +179,7 @@ function Patients() {
             />
           </div>
         </div>
-        <div className="data-box grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-10">
+        <div className="data-box grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-x-4 gap-y-10">
           {filteredPatients
             .filter((data) => data.selectedValue === "Basic")
             .map((data) => (
