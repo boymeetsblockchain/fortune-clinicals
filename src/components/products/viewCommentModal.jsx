@@ -40,11 +40,11 @@ export const ViewCommentModal = ({ productId, onClose }) => {
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto z-50">
+      <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full h-[400px] overflow-y-auto relative">
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-lg font-semibold"
+          className="absolute top-1 right-1 text-gray-400 hover:text-gray-600 text-2xl font-semibold"
         >
           &times;
         </button>
