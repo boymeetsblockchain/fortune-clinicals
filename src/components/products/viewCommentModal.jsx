@@ -18,6 +18,7 @@ export const ViewCommentModal = ({ productId, onClose }) => {
           id: doc.id,
           ...doc.data(),
         }));
+        fetchedComments.sort((a, b) => new Date(b.date) - new Date(a.date));
         setComments(fetchedComments);
       } catch (error) {
         console.error("Error fetching comments: ", error);
