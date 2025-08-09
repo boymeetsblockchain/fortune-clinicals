@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
 import { db } from "../../firebase.config";
 
 export const ViewCommentModal = ({ productId, onClose }) => {
@@ -10,16 +10,17 @@ export const ViewCommentModal = ({ productId, onClose }) => {
     const fetchComments = async () => {
       try {
         const q = query(
-           collection(db, "productcomments"),
-  where("productId", "==", productId),
-  orderBy("date", "desc")
+          collection(db, "productcomments"),
+          where("productId", "==", productId)
         );
         const querySnapshot = await getDocs(q);
         const fetchedComments = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
-    
+
+        fetchedComments.sort((a, b) => new Date(b.date) - new Date(a.date));
+
         setComments(fetchedComments);
       } catch (error) {
         console.error("Error fetching comments: ", error);
@@ -57,12 +58,11 @@ export const ViewCommentModal = ({ productId, onClose }) => {
               <li key={comment.id} className="border rounded-lg p-4 bg-gray-50">
                 <p className="text-sm text-gray-600">
                   <strong>Date:</strong>{" "}
-                 {new Date(comment.date).toLocaleDateString("en-GB", {
-  day: "2-digit",
-  month: "2-digit",
-  year: "numeric",
-}).replace(/\//g, ".").replace(".", ".")}
-
+                  {new Date(comment.date).toLocaleDateString("en-GB", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                  })}
                 </p>
                 <p className="mt-1 text-gray-800">{comment.comment}</p>
               </li>
