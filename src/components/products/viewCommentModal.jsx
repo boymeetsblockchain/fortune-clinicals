@@ -12,13 +12,14 @@ export const ViewCommentModal = ({ productId, onClose }) => {
         const q = query(
           collection(db, "productcomments"),
           where("productId", "==", productId)
+           orderBy("date", "desc")
         );
         const querySnapshot = await getDocs(q);
         const fetchedComments = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
-        fetchedComments.sort((a, b) => new Date(b.date) - new Date(a.date));
+    
         setComments(fetchedComments);
       } catch (error) {
         console.error("Error fetching comments: ", error);
