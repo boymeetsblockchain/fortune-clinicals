@@ -77,6 +77,10 @@ const NewAdminStaffDetail = () => {
     );
   }
 
+const totalSalary = staffData.reduce((sum, staff) => sum + Number(staff.salary || 0), 0);
+const totalBonus = staffData.reduce((sum, staff) => sum + Number(staff.bonus || 0), 0);
+
+
   return (
     <div>
       <AdminNav />
@@ -94,31 +98,38 @@ const NewAdminStaffDetail = () => {
               <th className="border px-4 py-2 text-left">Actions</th>
             </tr>
           </thead>
-          <tbody>
-            {staffData.map((staff, index) => (
-              <tr
-                key={staff.id}
-                className={`${
-                  index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                } hover:bg-gray-100`}
-              >
-                <td className="border px-4 py-2">{index + 1}</td>
-                <td className="border px-4 py-2">{staff.name}</td>
-                <td className="border px-4 py-2">${staff.salary}</td>
-                <td className="border px-4 py-2">${staff.bonus}</td>
-                <td className="border px-4 py-2">{staff.date}</td>
-                <td className="border px-4 py-2">{staff.note}</td>
-                <td className="border px-4 py-2">
-                  <button
-                    className="bg-red-500 text-white py-1 px-3 rounded-md text-sm hover:bg-red-600 transition"
-                    onClick={() => deleteStaff(staff.id)}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
+  <tbody>
+  {staffData.map((staff, index) => (
+    <tr
+      key={staff.id}
+      className={`${index % 2 === 0 ? "bg-white" : "bg-gray-50"} hover:bg-gray-100`}
+    >
+      <td className="border px-4 py-2">{index + 1}</td>
+      <td className="border px-4 py-2">{staff.name}</td>
+      <td className="border px-4 py-2">₦{staff.salary}</td>
+      <td className="border px-4 py-2">₦{staff.bonus}</td>
+      <td className="border px-4 py-2">{staff.date}</td>
+      <td className="border px-4 py-2">{staff.note}</td>
+      <td className="border px-4 py-2">
+        <button
+          className="bg-red-500 text-white py-1 px-3 rounded-md text-sm hover:bg-red-600 transition"
+          onClick={() => deleteStaff(staff.id)}
+        >
+          Delete
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
+<tfoot>
+  <tr className="bg-gray-200 font-bold">
+    <td className="border px-4 py-2" colSpan={2}>Totals</td>
+    <td className="border px-4 py-2">₦{totalSalary}</td>
+    <td className="border px-4 py-2">₦{totalBonus}</td>
+    <td className="border px-4 py-2" colSpan={3}></td>
+  </tr>
+</tfoot>
+
         </table>
         <div className="fixed bottom-4 right-4 h-16 w-16 cursor-pointer bg-red-500 flex justify-center items-center rounded-full shadow-lg hover:bg-red-600 transition">
           <Link to={"/admin/add-staff"}>
