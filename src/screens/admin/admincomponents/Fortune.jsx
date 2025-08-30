@@ -16,6 +16,7 @@ function Fortune() {
   const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState(""); // State for the search query
+  const [clinicianQuery, setClinicianQuery] = useState("");
   const [sortOrder, setSortOrder] = useState("ascending"); // State for sorting order
   const [sortBy, setSortBy] = useState("name");
 
@@ -124,7 +125,14 @@ function Fortune() {
     ? patients.filter((patient) => {
         const fullName =
           `${patient.surname} ${patient.othername}`.toLowerCase();
-        return fullName.includes(searchQuery.toLowerCase());
+        const matchesName = fullName.includes(searchQuery.toLowerCase());
+        const matchesClinician = clinicianQuery
+          ? patient.clinician &&
+            patient.clinician
+              .toLowerCase()
+              .includes(clinicianQuery.toLowerCase())
+          : true;
+        return matchesName && matchesClinician;
       })
     : [];
 
@@ -165,25 +173,32 @@ function Fortune() {
               <span className="hidden md:block">Updated patient</span>{" "}
             </button>
           </div>
-          <div className="">
+          <div className=" space-x-3 ">
             <input
               type="text"
-              placeholder="Search"
+              placeholder="Search by Patient Name"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="px-3 w-24 md:w-auto  py-2 mb-4 rounded-md border border-gray-300 focus:outline-none mb"
             />
+            <input
+              type="text"
+              placeholder="Search by Clinician Name"
+              value={clinicianQuery}
+              onChange={(e) => setClinicianQuery(e.target.value)}
+              className="px-3 w-24 md:w-auto  py-2 mb-4 rounded-md border border-gray-300 focus:outline-none mb"
+            />
           </div>
         </div>
-        <div className="data-box grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-8">
+        <div className="data-box grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-x-4 gap-y-8">
           {filteredPatients.map((data) => (
             <div
               className="h-auto py-4 w-auto shadow-md rounded-lg flex flex-col  justify-center items-center"
               key={data?.id}
             >
-              <div className="flex flex-row  justify-evenly px-4">
+              <div className="flex gap-x-4 items-center px-4">
                 <div
-                  className={`text-center text-5xl h-20 w-20 px-2 py-1 items-center flex font-bold ${
+                  className={`text-center text-3xl h-20 w-20 px-2 py-1 items-center flex font-bold ${
                     data.selectedValue === "Home-Patient"
                       ? "text-green-500"
                       : data.selectedValue === "Hospital-Calls"
@@ -197,7 +212,7 @@ function Fortune() {
                 >
                   {data?.surname[0].toUpperCase()}
                 </div>
-                <div className="flex ml-4 space-y-2 flex-col">
+                <div className="flex  space-y-2 flex-col">
                   <p className="text-sm">
                     Name:{" "}
                     <span className="text-gray-800">

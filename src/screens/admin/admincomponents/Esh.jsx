@@ -14,6 +14,7 @@ import { getDocs, collection } from "firebase/firestore";
 function Esh() {
   const navigate = useNavigate();
   const [patients, setPatients] = useState([]);
+  const [clinicianQuery, setClinicianQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState(""); // State for the search query
   const [sortOrder, setSortOrder] = useState("ascending"); // State for sorting order
@@ -124,10 +125,16 @@ function Esh() {
     ? patients.filter((patient) => {
         const fullName =
           `${patient.surname} ${patient.othername}`.toLowerCase();
-        return fullName.includes(searchQuery.toLowerCase());
+        const matchesName = fullName.includes(searchQuery.toLowerCase());
+        const matchesClinician = clinicianQuery
+          ? patient.clinician &&
+            patient.clinician
+              .toLowerCase()
+              .includes(clinicianQuery.toLowerCase())
+          : true;
+        return matchesName && matchesClinician;
       })
     : [];
-
   if (loading) {
     return <Loader />;
   }
@@ -165,25 +172,32 @@ function Esh() {
               <span className="hidden md:block">Updated patient</span>{" "}
             </button>
           </div>
-          <div className="">
+          <div className=" space-x-3 ">
             <input
               type="text"
-              placeholder="Search"
+              placeholder="Search by Patient Name"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="px-3 w-24 md:w-auto  py-2 mb-4 rounded-md border border-gray-300 focus:outline-none mb"
             />
+            <input
+              type="text"
+              placeholder="Search by Clinician Name"
+              value={clinicianQuery}
+              onChange={(e) => setClinicianQuery(e.target.value)}
+              className="px-3 w-24 md:w-auto  py-2 mb-4 rounded-md border border-gray-300 focus:outline-none mb"
+            />
           </div>
         </div>
-        <div className="data-box grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-10">
+        <div className="data-box grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-x-4 gap-y-10">
           {filteredPatients.map((data) => (
             <div
               className="h-30 py-4 w-auto shadow-md rounded-lg flex flex-col items-center"
               key={data?.id}
             >
-              <div className="flex flex-row  justify-evenly px-4">
+              <div className="flex gap-x-4 items-center px-4">
                 <div
-                  className={`text-center text-5xl h-20 w-20 px-2 py-1 items-center flex font-bold ${
+                  className={`text-center text-4xl h-20 w-20 px-2 py-1 items-center flex font-bold ${
                     data.selectedValue === "Out-patient"
                       ? "text-green-500"
                       : "text-[#ff5162]"
