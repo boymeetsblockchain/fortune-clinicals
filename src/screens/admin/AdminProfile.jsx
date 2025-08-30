@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { getAuth } from 'firebase/auth';
-import { toast } from 'react-hot-toast';
-import { FaTrash } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { getAuth } from "firebase/auth";
+import { toast } from "react-hot-toast";
+import { FaTrash } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import {
   addDoc,
   serverTimestamp,
@@ -10,27 +10,28 @@ import {
   getDocs,
   deleteDoc,
   doc,
-} from 'firebase/firestore';
-import { db } from '../../firebase.config';
-import AdminNav from '../../components/AdminNav';
-import { AiOutlineArrowRight } from 'react-icons/ai';
-import Loader from '../../components/Loader';
-import Input from '../../components/Input';
+} from "firebase/firestore";
+import { db } from "../../firebase.config";
+import AdminNav from "../../components/AdminNav";
+import { AiOutlineArrowRight } from "react-icons/ai";
+import Loader from "../../components/Loader";
+import Input from "../../components/Input";
+import FeeTable from "./admincomponents/FeeTable";
 
 function Profile() {
-  const [note, setNote] = useState('');
-  const [date, setDate] = useState('');
+  const [note, setNote] = useState("");
+  const [date, setDate] = useState("");
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [expandedNotes, setExpandedNotes] = useState({});
   const navigate = useNavigate();
   const auth = getAuth();
 
   const onLogOut = async () => {
     await auth.signOut();
-    toast.success('Successfully logged out');
-    navigate('/');
+    toast.success("Successfully logged out");
+    navigate("/");
   };
 
   const saveNote = async (e) => {
@@ -44,12 +45,12 @@ function Profile() {
 
     try {
       if (!note || !date) {
-        toast.error('Please fill in both fields');
+        toast.error("Please fill in both fields");
       } else {
-        await addDoc(collection(db, 'notes'), noteCopy);
-        toast.success('Note saved');
-        setNote('');
-        setDate('');
+        await addDoc(collection(db, "notes"), noteCopy);
+        toast.success("Note saved");
+        setNote("");
+        setDate("");
         navigate(0); // Reload page after saving note
       }
     } catch (error) {
@@ -59,7 +60,7 @@ function Profile() {
 
   const getNotes = async () => {
     try {
-      const data = await getDocs(collection(db, 'notes'));
+      const data = await getDocs(collection(db, "notes"));
       const filteredData = data.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
@@ -96,12 +97,12 @@ function Profile() {
 
   const deleteNote = async (noteId) => {
     try {
-      await deleteDoc(doc(db, 'notes', noteId));
-      toast.success('Note deleted');
+      await deleteDoc(doc(db, "notes", noteId));
+      toast.success("Note deleted");
       setNotes((prevNotes) => prevNotes.filter((note) => note.id !== noteId));
     } catch (error) {
-      console.error('Error deleting note:', error);
-      toast.error('Failed to delete note');
+      console.error("Error deleting note:", error);
+      toast.error("Failed to delete note");
     }
   };
 
@@ -115,7 +116,7 @@ function Profile() {
       <div className="max-w-screen-xl mx-auto px-4 md:px-8 lg:px-12">
         <div className="header flex items-center my-4 space-x-4 justify-between">
           <p className="text-lg md:text-2xl capitalize">
-            Signed in as{' '}
+            Signed in as{" "}
             <span className="ml-4 bg-green-500 text-white p-2 rounded-md">
               {auth?.currentUser?.displayName}
             </span>
@@ -128,13 +129,20 @@ function Profile() {
               Sign Out
             </button>
             <button
-              onClick={() => navigate('/daily')}
+              onClick={() => navigate("/daily")}
               className="text-sm md:text-xl capitalize bg-[#FF5162] p-2 text-white rounded-md"
             >
               Daily Expenditures
             </button>
           </div>
         </div>
+        {/* Fee Tables Section */}
+        <div className="my-8 flex  justify-between items-center">
+          <FeeTable tableName="inpatientfee" label="Inpatient Fee" />
+          <FeeTable tableName="outpatientfee" label="Outpatient Fee" />
+          <FeeTable tableName="initialreviewfee" label="Initial Review Fee" />
+        </div>
+        {/* Notes Section */}
         <div className="note my-8">
           <form onSubmit={saveNote}>
             <Input
@@ -183,7 +191,7 @@ function Profile() {
                       className="text-xs text-blue-200 mt-2 underline"
                       onClick={() => toggleNoteExpansion(data.id)}
                     >
-                      {isExpanded ? 'Read Less' : 'Read More'}
+                      {isExpanded ? "Read Less" : "Read More"}
                     </button>
                   )}
                   <p className="text-xs mt-2">{data.date}</p>

@@ -1,31 +1,55 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import useEshData from "../hooks/useEshData";
 import { useParams, useNavigate } from "react-router-dom";
 import AdminNav from "./AdminNav";
 import Loader from "./Loader";
+import { fetchFeeTable } from "../hooks/feeTables";
 
 function EshBreakDown() {
   const { yearsData } = useEshData();
   const params = useParams();
-  const { year, monthName } = params;
   const navigate = useNavigate();
 
-  // Find the year data
+  const [inpatientFee, setInpatientFee] = useState(null);
+  const [outpatientFee, setOutpatientFee] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const { year, monthName } = params;
+
+  useEffect(() => {
+    async function loadFees() {
+      try {
+        const [inpatient, outpatient] = await Promise.all([
+          fetchFeeTable("inpatientfee"),
+          fetchFeeTable("outpatientfee"),
+        ]);
+        setInpatientFee(inpatient);
+        setOutpatientFee(outpatient);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadFees();
+  }, []);
+
+  const inpatientMultiplier = inpatientFee?.[0]?.fee || 2000;
+  const outpatientMultiplier = outpatientFee?.[0]?.fee || 2000;
+
+  // ✅ Hooks always run, even if data is missing
   const selectedYear = useMemo(
     () => yearsData.find((yearData) => yearData.year === year),
     [yearsData, year]
   );
 
-  // Find the month data within the selected year
   const selectedMonth = useMemo(
     () =>
-      selectedYear
-        ? selectedYear.monthsData.find((month) => month.name === monthName)
-        : null,
+      selectedYear?.monthsData?.find((month) => month.name === monthName) ||
+      null,
     [selectedYear, monthName]
   );
 
-  if (!selectedMonth) {
+  // ❌ Conditional return happens AFTER hooks
+  if (loading || !inpatientFee || !outpatientFee || !selectedMonth) {
     return <Loader />;
   }
 
@@ -65,12 +89,43 @@ function EshBreakDown() {
         <h1 className="text-2xl font-bold mb-4 text-center">
           Total Sessions for {selectedMonth?.name}: {selectedMonth.ses}
         </h1>
-        <h2 className="text-xl font-bold mb-4 text-center">
-          Total In-patients: {totalInPatients}
-        </h2>
-        <h2 className="text-xl font-bold mb-4 text-center">
-          Total Out-patients: {totalOutPatients}
-        </h2>
+        <div className="flex justify-center gap-x-4 mb-2">
+          <h2 className="text-xl font-bold text-center">
+            Total In-patients: {totalInPatients}
+          </h2>
+          <h2 className="text-xl font-bold text-center">
+            Total Out-patients: {totalOutPatients}
+          </h2>
+        </div>
+
+        <div className="flex flex-col justify-center mb-2">
+          <h2 className="text-xl font-bold text-center">
+            Total In-patients Revenue Generated:
+            {(totalInPatients * inpatientMultiplier).toLocaleString("en-NG", {
+              style: "currency",
+              currency: "NGN",
+            })}
+          </h2>
+          <h2 className="text-xl font-bold text-center">
+            Total Out-patients Revenue Generated:
+            {(totalOutPatients * outpatientMultiplier).toLocaleString("en-NG", {
+              style: "currency",
+              currency: "NGN",
+            })}
+          </h2>
+          <h2 className="text-2xl font-bold mt-4 text-center">
+            General Total Revenue:
+            <span className="ml-2">
+              {(
+                totalInPatients * inpatientMultiplier +
+                totalOutPatients * outpatientMultiplier
+              ).toLocaleString("en-NG", {
+                style: "currency",
+                currency: "NGN",
+              })}
+            </span>
+          </h2>
+        </div>
 
         {dailySessionsWithFilteredPatients.map((dayData) => (
           <div key={dayData.day} className="mb-4 p-4 rounded-lg">

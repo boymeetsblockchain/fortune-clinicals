@@ -1,16 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import AdminNav from "./AdminNav";
 import Loader from "./Loader";
 import useInitialReview from "../hooks/useEshInitial";
+import { fetchFeeTable } from "../hooks/feeTables";
 
 function InitialBreakDown() {
   const { yearsData } = useInitialReview(); // Use the hook to fetch data
   const { year, monthName } = useParams(); // Get year and month from URL params
   const navigate = useNavigate();
+  const [inpatientFee, setInpatientFee] = useState([]);
+
+  useEffect(() => {
+    fetchFeeTable("initialreviewfee").then(setInpatientFee);
+  }, ["initialreviewfee"]);
+
+  const inpatientMultiplier = inpatientFee?.[0]?.fee || 2000;
+
+  console.log(inpatientMultiplier);
 
   // Ensure yearsData exists before trying to access it
-  if (!yearsData || yearsData.length === 0) {
+  if (!yearsData || yearsData.length === 0 || !inpatientFee) {
     return <Loader />;
   }
 
@@ -45,6 +55,14 @@ function InitialBreakDown() {
         <h1 className="text-2xl font-bold mb-4 text-center">
           Total Initial Reviews for {selectedMonth?.name}: {selectedMonth.rev}
         </h1>
+
+        <h2 className="text-xl font-bold text-center">
+          Total IntialReview Revenue Generated: {""}
+          {(selectedMonth.rev * inpatientMultiplier).toLocaleString("en-NG", {
+            style: "currency",
+            currency: "NGN",
+          })}
+        </h2>
         {selectedMonth.dailyReviews.map((dayData) => (
           <div
             key={dayData.day}
