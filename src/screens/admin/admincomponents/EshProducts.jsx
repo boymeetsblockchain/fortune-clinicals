@@ -355,7 +355,7 @@ function Products() {
           />
         )}
         <div className="fixed bottom-4 right-4 h-40 w-40 cursor-pointer bg-white flex justify-center items-center rounded-full shadow-lg">
-          <Link to={"/add-new-product"}>
+          <Link to={"/esh/add-new-product"}>
             <BsFillCartPlusFill size={64} color="red" />
           </Link>
         </div>
