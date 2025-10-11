@@ -69,14 +69,8 @@ function Products() {
   const handleSave = async (id) => {
     try {
       const oldProduct = products.find((product) => product.id === id);
-
-      // Ensure that the comment field is never undefined
       const updatedData = {
         ...editedData[id],
-        comment:
-          editedComments[id] !== undefined
-            ? editedComments[id]
-            : oldProduct.comment,
         editedDate: new Date().toISOString(),
       };
 
@@ -84,6 +78,7 @@ function Products() {
       const added = parseFloat(updatedData.added);
       const sold = parseFloat(updatedData.sold);
 
+      // ✅ Calculate new quantity
       if (!isNaN(added)) {
         updatedData.quantity = oldQuantity + added;
       } else if (!isNaN(sold)) {
@@ -92,24 +87,27 @@ function Products() {
         updatedData.quantity = oldQuantity;
       }
 
-      // Remove fields that are undefined from updatedData
-      Object.keys(updatedData).forEach((key) => {
-        if (updatedData[key] === undefined) {
-          delete updatedData[key];
-        }
-      });
+      // ✅ Reset added & sold to 0 after operation
+      updatedData.added = 0;
+      updatedData.sold = 0;
 
+      // ✅ Update Firestore
       await updateDoc(doc(db, "eshgoods", id), updatedData);
 
+      // ✅ Update local state (reset added/sold locally too)
+      setProducts((prev) =>
+        prev.map((product) =>
+          product.id === id ? { ...product, ...updatedData } : product
+        )
+      );
+
+      // ✅ Reset edit state
       setEditingId(null);
       setEditedData({});
-      setEditedComments({});
-      navigate(0);
     } catch (error) {
       console.error(error);
     }
   };
-
   const handleDelete = async (id) => {
     try {
       await deleteDoc(doc(db, "eshgoods", id));

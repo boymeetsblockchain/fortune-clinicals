@@ -70,6 +70,7 @@ function Products() {
       const added = parseFloat(updatedData.added);
       const sold = parseFloat(updatedData.sold);
 
+      // ✅ Calculate new quantity
       if (!isNaN(added)) {
         updatedData.quantity = oldQuantity + added;
       } else if (!isNaN(sold)) {
@@ -78,11 +79,23 @@ function Products() {
         updatedData.quantity = oldQuantity;
       }
 
+      // ✅ Reset added & sold to 0 after operation
+      updatedData.added = 0;
+      updatedData.sold = 0;
+
+      // ✅ Update Firestore
       await updateDoc(doc(db, "eshgoods", id), updatedData);
 
+      // ✅ Update local state (reset added/sold locally too)
+      setProducts((prev) =>
+        prev.map((product) =>
+          product.id === id ? { ...product, ...updatedData } : product
+        )
+      );
+
+      // ✅ Reset edit state
       setEditingId(null);
       setEditedData({});
-      navigate(0);
     } catch (error) {
       console.error(error);
     }
@@ -304,7 +317,7 @@ function Products() {
         )}
 
         <div className="fixed bottom-4 right-4 h-40 w-40 cursor-pointer bg-white flex justify-center items-center text-sm rounded-full shadow-lg">
-          <Link to={"/add-new-product"}>
+          <Link to={"/esh/add-new-product"}>
             <BsFillCartPlusFill size={64} color="red" />
           </Link>
         </div>

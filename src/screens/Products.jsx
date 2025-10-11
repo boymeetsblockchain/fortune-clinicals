@@ -70,6 +70,7 @@ function Products() {
       const added = parseFloat(updatedData.added);
       const sold = parseFloat(updatedData.sold);
 
+      // ✅ Calculate new quantity
       if (!isNaN(added)) {
         updatedData.quantity = oldQuantity + added;
       } else if (!isNaN(sold)) {
@@ -78,11 +79,23 @@ function Products() {
         updatedData.quantity = oldQuantity;
       }
 
+      // ✅ Reset added & sold to 0 after operation
+      updatedData.added = 0;
+      updatedData.sold = 0;
+
+      // ✅ Update Firestore
       await updateDoc(doc(db, "goods", id), updatedData);
 
+      // ✅ Update local state (reset added/sold locally too)
+      setProducts((prev) =>
+        prev.map((product) =>
+          product.id === id ? { ...product, ...updatedData } : product
+        )
+      );
+
+      // ✅ Reset edit state
       setEditingId(null);
       setEditedData({});
-      navigate(0);
     } catch (error) {
       console.error(error);
     }
