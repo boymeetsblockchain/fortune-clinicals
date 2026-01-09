@@ -9,20 +9,7 @@ import { db } from "../../firebase.config";
 import { addDoc, serverTimestamp, collection } from "firebase/firestore";
 import Select from "../../components/Select";
 
-const months = [
-  { value: "January", label: "January" },
-  { value: "February", label: "February" },
-  { value: "March", label: "March" },
-  { value: "April", label: "April" },
-  { value: "May", label: "May" },
-  { value: "June", label: "June" },
-  { value: "July", label: "July" },
-  { value: "August", label: "August" },
-  { value: "September", label: "September" },
-  { value: "October", label: "October" },
-  { value: "November", label: "November" },
-  { value: "December", label: "December" },
-];
+
 
 const AdminAddStaff = () => {
   const navigate = useNavigate();
@@ -32,15 +19,33 @@ const AdminAddStaff = () => {
     salary: 0,
     note: "",
     bonus: 0,
-    month: "November",
-    date: "", // Added field for date
+    month: new Intl.DateTimeFormat('en-US', { month: 'long' }).format(new Date()),
+    year: new Date().getFullYear().toString(),
+    date: new Date().toISOString().split('T')[0],
   });
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.id]: e.target.value,
-    });
+    const { id, value } = e.target;
+    if (id === "date") {
+      const selectedDate = new Date(value);
+      if (!isNaN(selectedDate.getTime())) {
+        const monthNames = [
+          "January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December"
+        ];
+        setFormData({
+          ...formData,
+          date: value,
+          month: monthNames[selectedDate.getMonth()],
+          year: selectedDate.getFullYear().toString(),
+        });
+      }
+    } else {
+      setFormData({
+        ...formData,
+        [id]: value,
+      });
+    }
   };
 
   const registerStaff = async (e) => {
@@ -56,7 +61,7 @@ const AdminAddStaff = () => {
       const data = await addDoc(collection(db, "newstaffs"), formDataCopy);
       console.log(data);
       toast.success("Staff added successfully");
-      navigate(`/admin/newstaff/${formDataCopy.month}`);
+      navigate(`/admin/newstaff/${formDataCopy.year}/${formDataCopy.month}`);
     } catch (error) {
       console.log(error);
       toast.error("Failed to add staff");
@@ -102,13 +107,7 @@ const AdminAddStaff = () => {
             value={formData.note}
             onChange={handleChange}
           />
-          <Select
-            id="month"
-            value={formData.month}
-            onChange={handleChange}
-            label="Month Paid"
-            options={months}
-          />
+
           <Input
             type={"date"}
             label={"Date of Payment"}

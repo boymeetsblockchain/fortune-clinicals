@@ -109,7 +109,7 @@ const App = () => {
           <Route path="/admin/staff" element={<AdminStaff />} />
           <Route path="/admin/newstaff" element={<NewAdminStaff />} />
           <Route
-            path="/admin/newstaff/:month"
+            path="/admin/newstaff/:year/:month"
             element={<NewAdminStaffDetail />}
           />
           <Route path="/admin/staff/:month" element={<AdminStaffDetail />} />

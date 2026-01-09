@@ -96,6 +96,9 @@ export default function Home() {
     }
   };
 
+
+
+
   return (
     <div className="mx-auto max-w-screen-xl h-full w-full px-4 md:px-8 lg:px-12">
       <div className="h-screen flex flex-col items-center justify-center">
