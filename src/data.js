@@ -9,6 +9,9 @@
   { value: 'Pastor', label: 'Pastor' },
   { value: 'Bar', label: 'Bar' },
   { value: 'Rev', label: 'Rev' },
+  { value: 'Bishop', label: 'Bishop' },
+  { value: 'Justice', label: 'Justice' },
+  { value: 'Evangelist', label: 'Evangelist' },
 ];
 
 
