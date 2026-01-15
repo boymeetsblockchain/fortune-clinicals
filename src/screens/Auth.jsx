@@ -159,7 +159,9 @@ export default function Home() {
                   onClick={toggleVariant}
                   className="text-[#FF5162] ml-1 hover:underline cursor-pointer"
                 >
-                  Sign Up
+                   {variant === "login"
+                  ? "Sign in"
+                  : "Sign Up"}
                 </span>
               </p>
               <Oauth />
