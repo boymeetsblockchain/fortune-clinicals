@@ -182,6 +182,7 @@ function Products() {
                 <th className="px-4 py-2">Added</th>
                 <th className="px-4 py-2">Used/Sold</th>
                 <th className="px-4 py-2">Date</th>
+                <th className="px-4 py-2">Updated By</th>
                 <th className="px-4 py-2">Actions</th>
               </tr>
             </thead>
@@ -271,6 +272,11 @@ function Products() {
                     ) : (
                       product.date
                     )}
+                  </td>
+                  <td className="px-4 text-center text-[10px] py-2">
+                    {product.updatedBy}<br/>
+                    {product.updatedByEmail}<br/>
+                    {product.editedDate && new Date(product.editedDate).toLocaleString()}
                   </td>
                   <td className="px-4 text-center text-sm py-2">
                     {editingId === product.id ? (

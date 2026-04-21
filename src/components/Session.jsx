@@ -6,7 +6,9 @@ import ComponentLoader from './ComponentLoader';
 import toast from 'react-hot-toast';
 import {ImBin} from 'react-icons/im'
 import { useNavigate } from 'react-router-dom';
+import { getAuth } from 'firebase/auth';
 function Session({ patientId}) {
+  const auth = getAuth();
   const [comment, setComment] = useState('');
   const [sessions, setSessions] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -47,7 +49,10 @@ const navigate= useNavigate()
     const paymentData = {
       comment,
       patientId,
-      date
+      date,
+      userName: auth.currentUser?.displayName || 'Unknown',
+      userEmail: auth.currentUser?.email || 'N/A',
+      createdAt: new Date().toLocaleString(),
     };
 
     try {
@@ -109,6 +114,10 @@ const navigate= useNavigate()
               <div className="flex flex-col">
                 <p className="text-gray-700 text-lg">{session?.comment}</p>
                 <p className="text-green-600 text-sm font-semibold"> Date: {session?.date}</p>
+                <div className="mt-2 pt-2 border-t border-gray-100 text-[10px] text-gray-400">
+                  <p>Created by: {session?.userName} ({session?.userEmail})</p>
+                  <p>Date created: {session?.createdAt}</p>
+                </div>
               </div>
               <div className="delete">
                 <ImBin size={24} color='red' className='cursor-pointer'

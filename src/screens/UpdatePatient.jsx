@@ -5,13 +5,14 @@ import Select from '../components/Select'
 import { useState,useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 import { getDoc, doc, updateDoc } from 'firebase/firestore'
+import { getAuth } from 'firebase/auth'
 import { db } from '../firebase.config'
 import Navbar from '../components/Navbar'
 import { options,titleOptions, ageData, genderOptions } from '../data'
 import { Link, useNavigate,useParams} from 'react-router-dom'
 function UpdatePatient() {
-  const navigate = useNavigate()
   const params = useParams();
+  const auth = getAuth();
     const [surname, setSurname] = useState("");
     const [othername, setOthername] = useState("");
     const [age, setAge] = useState("");
@@ -106,6 +107,9 @@ function UpdatePatient() {
           ageRange,
           regNum,
           gender,
+          updatedBy: auth.currentUser?.displayName || 'Unknown',
+          updatedByEmail: auth.currentUser?.email || 'N/A',
+          lastUpdatedAt: new Date().toLocaleString()
         };
     
         // Update the document in Firestore

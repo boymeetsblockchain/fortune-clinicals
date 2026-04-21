@@ -17,6 +17,7 @@ import {
   updateDoc,
 } from "firebase/firestore"; // Import deleteDoc
 import { useParams } from "react-router-dom";
+import { getAuth } from "firebase/auth";
 import Loader from "../../components/Loader";
 // import NewSession from '../../components/NewSession'
 import EshSession from "../../components/EshSession";
@@ -27,6 +28,7 @@ import { AiTwotoneEdit } from "react-icons/ai";
 function PatientDetail() {
   const params = useParams();
   const navigate = useNavigate();
+  const auth = getAuth();
   const [loading, setLoading] = useState(true);
   const [patient, setPatient] = useState(null);
   const [updatedDate, setUpdatedDate] = useState("");
@@ -106,7 +108,13 @@ function PatientDetail() {
 
       // Update the patient data with the new updatedDate
       const docRef = doc(db, "eshpatients", params.id);
-      const updatedPatientData = { ...patient, updatedDate };
+      const updatedPatientData = { 
+        ...patient, 
+        updatedDate,
+        updatedBy: auth.currentUser?.displayName || 'Unknown',
+        updatedByEmail: auth.currentUser?.email || 'N/A',
+        lastUpdatedAt: new Date().toLocaleString()
+      };
       await updateDoc(docRef, updatedPatientData);
 
       // Show success message and navigate
@@ -155,6 +163,14 @@ function PatientDetail() {
                 >
                   Update
                 </button>
+              </div>
+              <div className="mt-8 pt-4 border-t border-gray-200 text-xs text-gray-500">
+                {patient?.userName && (
+                  <p>Created by: {patient?.userName} ({patient?.userEmail}) on {patient?.createdAt}</p>
+                )}
+                {patient?.updatedBy && (
+                  <p>Last updated by: {patient?.updatedBy} ({patient?.updatedByEmail}) on {patient?.lastUpdatedAt}</p>
+                )}
               </div>
             </div>
             <div className="reg-number bg-green-500 text-2xl text-white px-2 py-1.5 ">
