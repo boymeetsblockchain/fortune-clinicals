@@ -166,13 +166,33 @@ function UpdatePatient() {
             label="Select an option"
             options={options}
           />
-          <Select
-            id="genderSelect"
-            value={gender}
-            onChange={(e) => setGender(e.target.value)}
-            label="Gender"
-            options={genderOptions}
-          />
+          <div className="flex flex-col space-y-2">
+            <label className="text-gray-700 font-semibold text-sm">Gender</label>
+            <div className="flex gap-4">
+              <button
+                type="button"
+                onClick={() => setGender("Male")}
+                className={`flex-1 py-3 rounded-md border transition-all ${
+                  gender === "Male"
+                    ? "bg-[#FF5162] text-white border-[#FF5162] shadow-md"
+                    : "bg-white text-gray-700 border-gray-300 hover:border-[#FF5162]"
+                }`}
+              >
+                Male
+              </button>
+              <button
+                type="button"
+                onClick={() => setGender("Female")}
+                className={`flex-1 py-3 rounded-md border transition-all ${
+                  gender === "Female"
+                    ? "bg-[#FF5162] text-white border-[#FF5162] shadow-md"
+                    : "bg-white text-gray-700 border-gray-300 hover:border-[#FF5162]"
+                }`}
+              >
+                Female
+              </button>
+            </div>
+          </div>
           <Input label={"Address"} type={"text"} value={address} onChange={(e) => setAddress(e.target.value)} />
           <Input label={"Registration Number"} type={"text"} value={regNum} onChange={(e) => setRegNum(e.target.value)} />
           <Input label={"Phone Number"} type={"number"} value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
