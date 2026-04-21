@@ -138,12 +138,14 @@ function Patients() {
           `${patient.surname} ${patient.othername}`.toLowerCase();
         const condition = (patient.condition || "").toLowerCase();
         const gender = (patient.gender || "").toLowerCase();
+        const clinician = (patient.clinician || "").toLowerCase();
         const query = searchQuery.toLowerCase();
         
         return (
           fullName.includes(query) ||
           condition.includes(query) ||
-          gender.includes(query)
+          gender.includes(query) ||
+          clinician.includes(query)
         );
       })
     : [];
@@ -201,10 +203,10 @@ function Patients() {
           <div className="">
             <input
               type="text"
-              placeholder="Search"
+              placeholder="Search Name, Condition, Gender..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="px-3 w-24 md:w-auto  py-2 mb-4 rounded-md border border-gray-300 focus:outline-none mb"
+              className="px-4 py-2 w-full md:w-64 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all shadow-sm"
             />
           </div>
         </div>

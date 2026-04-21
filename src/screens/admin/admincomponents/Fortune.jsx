@@ -17,7 +17,6 @@ function Fortune() {
   const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState(""); // State for the search query
-  const [clinicianQuery, setClinicianQuery] = useState("");
   const [sortOrder, setSortOrder] = useState("ascending"); // State for sorting order
   const [sortBy, setSortBy] = useState("name");
 
@@ -146,21 +145,15 @@ function Fortune() {
           `${patient.surname} ${patient.othername}`.toLowerCase();
         const condition = (patient.condition || "").toLowerCase();
         const gender = (patient.gender || "").toLowerCase();
+        const clinician = (patient.clinician || "").toLowerCase();
         const query = searchQuery.toLowerCase();
 
-        const matchesName =
+        return (
           fullName.includes(query) ||
           condition.includes(query) ||
-          gender.includes(query);
-
-        const matchesClinician = clinicianQuery
-          ? patient.clinician &&
-            patient.clinician
-              .toLowerCase()
-              .includes(clinicianQuery.toLowerCase())
-          : true;
-          
-        return matchesName && matchesClinician;
+          gender.includes(query) ||
+          clinician.includes(query)
+        );
       })
     : [];
 
@@ -208,20 +201,13 @@ function Fortune() {
               <span className="hidden md:block">Gender</span>{" "}
             </button>
           </div>
-          <div className=" space-x-3 ">
+          <div className="">
             <input
               type="text"
-              placeholder="Search by Patient Name"
+              placeholder="Search by Name, Condition, Gender, or Clinician"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="px-3 w-24 md:w-auto  py-2 mb-4 rounded-md border border-gray-300 focus:outline-none mb"
-            />
-            <input
-              type="text"
-              placeholder="Search by Clinician Name"
-              value={clinicianQuery}
-              onChange={(e) => setClinicianQuery(e.target.value)}
-              className="px-3 w-24 md:w-auto  py-2 mb-4 rounded-md border border-gray-300 focus:outline-none mb"
+              className="px-4 py-2 w-full md:w-80 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all shadow-sm"
             />
           </div>
         </div>
