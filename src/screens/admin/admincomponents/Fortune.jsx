@@ -19,6 +19,7 @@ function Fortune() {
   const [searchQuery, setSearchQuery] = useState(""); // State for the search query
   const [sortOrder, setSortOrder] = useState("ascending"); // State for sorting order
   const [sortBy, setSortBy] = useState("name");
+  const [genderFilter, setGenderFilter] = useState("All"); // State for gender filter
 
   const sortPatientsByDate = (data, order) => {
     const sortedData = [...data];
@@ -148,12 +149,17 @@ function Fortune() {
         const clinician = (patient.clinician || "").toLowerCase();
         const query = searchQuery.toLowerCase();
 
-        return (
+        const matchesQuery = 
           fullName.includes(query) ||
           condition.includes(query) ||
           gender.includes(query) ||
-          clinician.includes(query)
-        );
+          clinician.includes(query);
+
+        const matchesGender = 
+          genderFilter === "All" || 
+          gender === genderFilter.toLowerCase();
+          
+        return matchesQuery && matchesGender;
       })
     : [];
 
@@ -210,6 +216,40 @@ function Fortune() {
               className="px-4 py-2 w-full md:w-80 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all shadow-sm"
             />
           </div>
+        </div>
+
+        {/* Gender Filter Buttons */}
+        <div className="flex gap-3 my-4">
+          <button
+            onClick={() => setGenderFilter("All")}
+            className={`px-5 py-2 rounded-lg text-sm font-bold transition-all shadow-sm ${
+              genderFilter === "All"
+                ? "bg-[#FF5162] text-white shadow-md scale-105"
+                : "bg-white text-gray-700 border border-gray-300 hover:border-[#FF5162]"
+            }`}
+          >
+            Show All
+          </button>
+          <button
+            onClick={() => setGenderFilter("Male")}
+            className={`px-5 py-2 rounded-lg text-sm font-bold transition-all shadow-sm ${
+              genderFilter === "Male"
+                ? "bg-blue-600 text-white shadow-md scale-105"
+                : "bg-white text-gray-700 border border-gray-300 hover:border-blue-600"
+            }`}
+          >
+            ♂ Male
+          </button>
+          <button
+            onClick={() => setGenderFilter("Female")}
+            className={`px-5 py-2 rounded-lg text-sm font-bold transition-all shadow-sm ${
+              genderFilter === "Female"
+                ? "bg-pink-600 text-white shadow-md scale-105"
+                : "bg-white text-gray-700 border border-gray-300 hover:border-pink-600"
+            }`}
+          >
+            ♀ Female
+          </button>
         </div>
         <div className="data-box grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-x-4 gap-y-8">
           {filteredPatients.map((data) => (
