@@ -71,6 +71,9 @@ function EshPatient() {
         ...formData,
         timestamp: serverTimestamp(),
         userId: auth?.currentUser?.uid,
+        userName: auth.currentUser?.displayName || 'Unknown',
+        userEmail: auth.currentUser?.email || 'N/A',
+        createdAt: new Date().toLocaleString(),
       };
       const data = await addDoc(collection(db, "eshpatients"), formDataCopy);
       console.log(data);

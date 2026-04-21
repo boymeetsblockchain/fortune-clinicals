@@ -6,7 +6,9 @@ import { db } from '../firebase.config';
 import ComponentLoader from './ComponentLoader';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import { getAuth } from 'firebase/auth';
 function Payment({ patientId,patientType}) {
+  const auth = getAuth();
   const [comment, setComment] = useState('');
   const [amount, setAmount] = useState('');
   const [payments, setPayments] = useState(null);
@@ -56,7 +58,10 @@ function Payment({ patientId,patientType}) {
       amount,
       patientId,
       datePayed,
-      patientType
+      patientType,
+      userName: auth.currentUser?.displayName || 'Unknown',
+      userEmail: auth.currentUser?.email || 'N/A',
+      createdAt: new Date().toLocaleString(),
     };
 
     
@@ -150,6 +155,10 @@ function Payment({ patientId,patientType}) {
                 <p className="text-gray-700 text-lg">Comment: {payment?.comment}</p>
                 <p className="text-green-600 text-sm font-semibold">Amount: 	&#8358;{payment?.amount}</p>
                 <p className="text-green-600 text-sm font-semibold">Date: {payment?.datePayed}</p>
+                <div className="mt-2 pt-2 border-t border-gray-100 text-[10px] text-gray-400">
+                  <p>Created by: {payment?.userName} ({payment?.userEmail})</p>
+                  <p>Date created: {payment?.createdAt}</p>
+                </div>
               </div>
               <div className="delete">
                 <ImBin size={24} color='red' className='cursor-pointer' onClick={()=>deletePayment(payment.id)}/>

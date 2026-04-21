@@ -14,10 +14,12 @@ import Loader from "../components/Loader";
 import { Link, useNavigate } from "react-router-dom";
 import { BsFillCartPlusFill } from "react-icons/bs";
 import Input from "../components/Input";
+import { getAuth } from "firebase/auth";
 import { ViewCommentModal } from "../components/products/viewCommentModal";
 import CommentModal from "../components/products/commentModal";
 
 function Products() {
+  const auth = getAuth();
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -53,6 +55,8 @@ function Products() {
       [id]: {
         ...prevState[id],
         [field]: value,
+        updatedBy: auth.currentUser?.displayName || 'Unknown',
+        updatedByEmail: auth.currentUser?.email || 'N/A',
         editedDate: new Date().toISOString(),
       },
     }));
@@ -63,6 +67,8 @@ function Products() {
       const oldProduct = products.find((product) => product.id === id);
       const updatedData = {
         ...editedData[id],
+        updatedBy: auth.currentUser?.displayName || 'Unknown',
+        updatedByEmail: auth.currentUser?.email || 'N/A',
         editedDate: new Date().toISOString(),
       };
 
@@ -139,6 +145,9 @@ function Products() {
         productId: productId,
         comment: commentData.comment,
         date: commentData.date,
+        userName: auth.currentUser?.displayName || 'Unknown',
+        userEmail: auth.currentUser?.email || 'N/A',
+        createdAt: new Date().toLocaleString(),
       });
 
       console.log("Comment saved successfully!");

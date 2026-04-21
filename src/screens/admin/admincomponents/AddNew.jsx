@@ -67,7 +67,10 @@ function AddNewPatient() {
         const formDataCopy ={
             ...formData,
             timestamp: serverTimestamp(),
-            userId:auth?.currentUser?.uid
+            userId:auth?.currentUser?.uid,
+            userName: auth.currentUser?.displayName || 'Unknown',
+            userEmail: auth.currentUser?.email || 'N/A',
+            createdAt: new Date().toLocaleString(),
          }
          const data = await addDoc(collection(db, 'patients'), formDataCopy)
          console.log(data)

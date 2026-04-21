@@ -7,9 +7,11 @@ import Input from '../components/Input';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { AiOutlineArrowRight } from 'react-icons/ai';
+import { getAuth } from 'firebase/auth';
 
 function Products() {
   const navigate = useNavigate();
+  const auth = getAuth();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [product, setProduct] = useState('');
@@ -25,6 +27,9 @@ function Products() {
       price,
       quantity,
       date,
+      userName: auth.currentUser?.displayName || 'Unknown',
+      userEmail: auth.currentUser?.email || 'N/A',
+      createdAt: new Date().toLocaleString(),
     };
     if(!product || !price || !quantity ||!date){
       toast.error("Please fill all Fields")
@@ -102,17 +107,23 @@ function Products() {
                 <th className="py-2 px-4 text-center">Price</th>
                 <th className="py-2 px-4 text-center">Amount</th>
                 <th className="py-2 px-4 text-center">Date</th>
+                <th className="py-2 px-4 text-center">Created By</th>
               </tr>
             </thead>
             <tbody>
               {filteredProducts.map((item) => (
-                <tr key={item.id} className="border-t border-gray-200">
+                <tr key={item.id} className="border-t border-gray-100">
                   <td className="py-2 px-4 text-center">{item.product}</td>
                   <td className="py-2 px-4 text-center">{item.quantity}</td>
                   <td className="py-2 px-4 text-center">&#8358; {item.price}</td> 
                   <td className="py-2 px-4 text-center">&#8358;{item.quantity * item.price}</td>
 
                   <td className="py-2 px-4 text-center">{item.date}</td>
+                  <td className="py-2 px-4 text-center text-[10px]">
+                    {item.userName}<br/>
+                    {item.userEmail}<br/>
+                    {item.createdAt}
+                  </td>
                 </tr>
               ))}
             </tbody>

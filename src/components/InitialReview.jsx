@@ -12,8 +12,10 @@ import {
 import { db } from "../firebase.config";
 import ComponentLoader from "./ComponentLoader";
 import toast from "react-hot-toast";
+import { getAuth } from "firebase/auth";
 
 function InitialReview({ patientId }) {
+  const auth = getAuth();
   const [comment, setComment] = useState("");
   const [reviews, setReview] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -60,6 +62,9 @@ function InitialReview({ patientId }) {
       comment,
       patientId,
       date,
+      userName: auth.currentUser?.displayName || 'Unknown',
+      userEmail: auth.currentUser?.email || 'N/A',
+      createdAt: new Date().toLocaleString(),
     };
 
     try {
@@ -139,6 +144,10 @@ function InitialReview({ patientId }) {
                   {" "}
                   Date: {session?.date}
                 </p>
+                <div className="mt-2 pt-2 border-t border-gray-100 text-[10px] text-gray-400">
+                  <p>Created by: {session?.userName} ({session?.userEmail})</p>
+                  <p>Date created: {session?.createdAt}</p>
+                </div>
               </div>
               <button
                 onClick={() => deleteReview(session.id)}
