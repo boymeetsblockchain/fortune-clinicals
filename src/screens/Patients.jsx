@@ -9,6 +9,7 @@ import {
   BsFillCalendarDateFill,
   BsSortAlphaDown,
   BsArrowDownUp,
+  BsGenderAmbiguous,
 } from "react-icons/bs";
 import { getDocs, collection } from "firebase/firestore";
 
@@ -79,6 +80,21 @@ function Patients() {
     return sortedData;
   };
 
+  const sortPatientsByGender = (data, order) => {
+    const sortedData = [...data];
+
+    sortedData.sort((a, b) => {
+      const genderA = (a.gender || "").toLowerCase();
+      const genderB = (b.gender || "").toLowerCase();
+
+      return order === "ascending"
+        ? genderA.localeCompare(genderB)
+        : genderB.localeCompare(genderA);
+    });
+
+    return sortedData;
+  };
+
   const getPatients = async () => {
     try {
       const data = await getDocs(collection(db, "patients"));
@@ -96,6 +112,8 @@ function Patients() {
       } else if (sortBy === "update") {
         // Corrected sortBy value to 'update'
         sortedData = sortPatientsByUpdatedDate(filteredData, sortOrder);
+      } else if (sortBy === "gender") {
+        sortedData = sortPatientsByGender(filteredData, sortOrder);
       }
 
       setPatients(sortedData);
@@ -175,6 +193,13 @@ function Patients() {
             >
               <BsArrowDownUp size={24} color={"purple"} />{" "}
               <span className="hidden md:block">Updated patient</span>{" "}
+            </button>
+            <button
+              className="flex text-xs gap-x-3 items-center"
+              onClick={() => toggleSortBy("gender")}
+            >
+              <BsGenderAmbiguous size={24} color={"#FF69B4"} />{" "}
+              <span className="hidden md:block">Gender</span>{" "}
             </button>
           </div>
           <div className="">
