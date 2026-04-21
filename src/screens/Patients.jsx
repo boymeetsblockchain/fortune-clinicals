@@ -126,7 +126,15 @@ function Patients() {
     ? patients.filter((patient) => {
         const fullName =
           `${patient.surname} ${patient.othername}`.toLowerCase();
-        return fullName.includes(searchQuery.toLowerCase());
+        const condition = (patient.condition || "").toLowerCase();
+        const gender = (patient.gender || "").toLowerCase();
+        const query = searchQuery.toLowerCase();
+        
+        return (
+          fullName.includes(query) ||
+          condition.includes(query) ||
+          gender.includes(query)
+        );
       })
     : [];
 

@@ -12,7 +12,7 @@ import { getAuth } from "firebase/auth";
 import { addDoc, serverTimestamp, collection } from "firebase/firestore";
 import { db } from "../firebase.config";
 import Navbar from "../components/Navbar";
-import { options, titleOptions, ageData } from "../data";
+import { options, titleOptions, ageData, genderOptions } from "../data";
 import { Link, useNavigate } from "react-router-dom";
 function AddNewPatient() {
   const navigate = useNavigate();
@@ -38,6 +38,7 @@ function AddNewPatient() {
   const [ageRange, setAgeRange] = useState("Year");
   const [regNum, setRegNum] = useState("");
   const [updatedDate, setUpdatedDate] = useState("");
+  const [gender, setGender] = useState("Male");
   const formData = {
     surname,
     othername,
@@ -59,6 +60,7 @@ function AddNewPatient() {
     ageRange,
     regNum,
     updatedDate,
+    gender,
   };
 
   const registerPatient = async (e) => {
@@ -142,6 +144,13 @@ function AddNewPatient() {
             onChange={(e) => setSelectedValue(e.target.value)}
             label="Select an option"
             options={options}
+          />
+          <Select
+            id="genderSelect"
+            value={gender}
+            onChange={(e) => setGender(e.target.value)}
+            label="Gender"
+            options={genderOptions}
           />
           <Input
             label={"Address"}

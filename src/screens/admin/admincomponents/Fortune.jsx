@@ -125,13 +125,22 @@ function Fortune() {
     ? patients.filter((patient) => {
         const fullName =
           `${patient.surname} ${patient.othername}`.toLowerCase();
-        const matchesName = fullName.includes(searchQuery.toLowerCase());
+        const condition = (patient.condition || "").toLowerCase();
+        const gender = (patient.gender || "").toLowerCase();
+        const query = searchQuery.toLowerCase();
+
+        const matchesName =
+          fullName.includes(query) ||
+          condition.includes(query) ||
+          gender.includes(query);
+
         const matchesClinician = clinicianQuery
           ? patient.clinician &&
             patient.clinician
               .toLowerCase()
               .includes(clinicianQuery.toLowerCase())
           : true;
+          
         return matchesName && matchesClinician;
       })
     : [];

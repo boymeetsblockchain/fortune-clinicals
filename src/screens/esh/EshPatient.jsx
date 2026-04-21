@@ -137,6 +137,7 @@ function PatientDetail() {
               </h1>
               <p> Age:&nbsp; {patient?.age}</p>
               <p> Phone Number: &nbsp; {patient?.phoneNumber}</p>
+              <p>Gender: {patient?.gender}</p>
               <p>Address:&nbsp;{patient?.address}</p>
               <p>Condition:&nbsp; {patient?.condition}</p>
               <p>Assessed by:&nbsp;{patient?.clinician}</p>

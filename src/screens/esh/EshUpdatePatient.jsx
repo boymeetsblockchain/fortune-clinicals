@@ -7,7 +7,7 @@ import { toast } from 'react-hot-toast'
 import { getDoc, doc, updateDoc } from 'firebase/firestore'
 import { db } from '../../firebase.config'
 import EshNav from '../../components/EshNav'
-import { ageData, titleOptions } from '../../data'
+import { ageData, titleOptions, genderOptions } from '../../data'
 import { Eshoptions } from '../../data'
 import { Link, useNavigate,useParams} from 'react-router-dom'
 function UpdatePatient() {
@@ -32,6 +32,7 @@ function UpdatePatient() {
     const[reffer,setReffer]= useState("")
     const[ageRange,setAgeRange]= useState("Year")
     const[regNum,setRegNum]= useState("")
+    const [gender, setGender] = useState("Male");
    
 
     useEffect(() => {
@@ -62,6 +63,7 @@ function UpdatePatient() {
           setReffer(data.reffer || "");
           setAgeRange(data.ageRange || "Year");
           setRegNum(data.regNum || "");
+          setGender(data.gender || "Male");
         }
       };
     
@@ -104,6 +106,7 @@ function UpdatePatient() {
           selectedTitle,
           ageRange,
           regNum,
+          gender,
         };
     
         // Update the document in Firestore
@@ -156,6 +159,13 @@ function UpdatePatient() {
   onChange={(e)=>setSelectedValue(e.target.value)}
   label="Select an option"
   options={Eshoptions}
+/>
+<Select
+  id="genderSelect"
+  value={gender}
+  onChange={(e)=>setGender(e.target.value)}
+  label="Gender"
+  options={genderOptions}
 />
           <Input label={"Address"} type={"text"} value={address} onChange={(e) => setAddress(e.target.value)} />
           <Input label={"Registration Number"} type={"text"} value={regNum} onChange={(e) => setRegNum(e.target.value)} />

@@ -12,7 +12,7 @@ import {
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { getAuth } from "firebase/auth";
-import { ageData, titleOptions } from "../../data";
+import { ageData, titleOptions, genderOptions } from "../../data";
 import { Eshoptions } from "../../data";
 import { Link, useNavigate } from "react-router-dom";
 function EshPatient() {
@@ -37,6 +37,7 @@ function EshPatient() {
   const [selectedValue, setSelectedValue] = useState("In-patient");
   const [selectedTitle, setSelectedTitle] = useState("Mr");
   const [reffer, setReffer] = useState("");
+  const [gender, setGender] = useState("Male");
 
   const formData = {
     surname,
@@ -55,6 +56,7 @@ function EshPatient() {
     regNumber,
     phoneNumber2,
     caregiver,
+    gender,
   };
   const registerPatient = async (e) => {
     e.preventDefault();
@@ -138,6 +140,13 @@ function EshPatient() {
             onChange={(e) => setSelectedValue(e.target.value)}
             label="Select an option"
             options={Eshoptions}
+          />
+          <Select
+            id="genderSelect"
+            value={gender}
+            onChange={(e) => setGender(e.target.value)}
+            label="Gender"
+            options={genderOptions}
           />
           <Input
             label={"Registration Number"}
