@@ -1,50 +1,52 @@
- export const titleOptions = [
-  { value: 'Mr', label: 'Mr' },
-  { value: 'Miss', label: 'Miss' },
-  { value: 'Mrs', label: 'Mrs' },
-  { value: 'Dr', label: 'Dr' },
-  { value: 'Prof', label: 'Prof' },
-  { value: 'Chief', label: 'Chief' },
-  { value: 'Alh', label: 'Alh' },
-  { value: 'Pastor', label: 'Pastor' },
-  { value: 'Bar', label: 'Bar' },
-  { value: 'Rev', label: 'Rev' },
-  { value: 'Bishop', label: 'Bishop' },
-  { value: 'Justice', label: 'Justice' },
-  { value: 'Evangelist', label: 'Evangelist' },
+export const titleOptions = [
+  { value: "Mr", label: "Mr" },
+  { value: "Miss", label: "Miss" },
+  { value: "Mrs", label: "Mrs" },
+  { value: "Dr", label: "Dr" },
+  { value: "Prof", label: "Prof" },
+  { value: "Chief", label: "Chief" },
+  { value: "Alh", label: "Alh" },
+  { value: "Pastor", label: "Pastor" },
+  { value: "Bar", label: "Bar" },
+  { value: "Rev", label: "Rev" },
+  { value: "Bishop", label: "Bishop" },
+  { value: "Justice", label: "Justice" },
+  { value: "Evangelist", label: "Evangelist" },
 ];
 
-
-export   const options = [
-  { value: ' Basic', label: 'Basic' },
-  { value: 'Vip', label: 'Vip' },
-  { value: 'ESH', label: 'ESH' },
-  { value: 'Home-Patient', label: 'Home-Patient' },
-  { value: 'Home-Patient-Admin', label: 'Home-Patient-Admin' },
-  {value:"Hospital-Calls", label:"Hospital-calls"}
+export const options = [
+  { value: " Basic", label: "Basic" },
+  { value: "Vip", label: "Vip" },
+  { value: "ESH", label: "ESH" },
+  { value: "Home-Patient", label: "Home-Patient" },
+  { value: "Home-Patient-Admin", label: "Home-Patient-Admin" },
+  { value: "Hospital-Calls", label: "Hospital-calls" },
 ];
 
-export   const Eshoptions = [
-  { value: 'In-patient', label: 'In-patient' },
-  { value: 'Out-patient', label: 'Out-patient' },
-  
+export const Eshoptions = [
+  { value: "In-patient", label: "In-patient" },
+  { value: "Out-patient", label: "Out-patient" },
 ];
 
-export const ageData=[
+export const ageData = [
   {
-    value:"Years",label:"Years",
+    value: "Years",
+    label: "Years",
   },
   {
-    value:"Months", label:"Months"
+    value: "Months",
+    label: "Months",
   },
   {
-    value:"Days", label:"Days"
-  }
-]
+    value: "Days",
+    label: "Days",
+  },
+];
 
 export const genderOptions = [
-  { value: 'Male', label: 'Male' },
-  { value: 'Female', label: 'Female' },
-  { value: 'Other', label: 'Other' },
+  { value: "Male", label: "Male" },
+  { value: "Female", label: "Female" },
+  { value: "Other", label: "Other" },
 ];
 
+export const test = "hello world";
