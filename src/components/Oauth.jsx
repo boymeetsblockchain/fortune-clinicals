@@ -36,13 +36,16 @@ function Oauth() {
       }
     }
   return (
-    <div className=' flex items-center mx-auto w-auto cursor-pointer'onClick={onGoogleClick}>
-        <p className="flex items-center space-x-4">
-           <span className='text-xl'>
-           Sign In with</span> <FcGoogle size={32}/>
-        </p>
-    </div>
-  )
+    <button 
+      type="button"
+      onClick={onGoogleClick}
+      className="flex items-center justify-center space-x-3 w-full py-3 px-4 border border-slate-200 rounded-xl hover:bg-slate-50 transition-all duration-300 active:scale-[0.98]"
+    >
+      <FcGoogle size={24} />
+      <span className="text-slate-700 font-medium">Continue with Google</span>
+    </button>
+  );
 }
+
 
 export default Oauth

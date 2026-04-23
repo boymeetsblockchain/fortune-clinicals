@@ -132,8 +132,8 @@ function PatientDetail() {
 
       // Update the patient data with the new updatedDate
       const docRef = doc(db, "patients", params.id);
-      const updatedPatientData = { 
-        ...patient, 
+      const updatedPatientData = {
+        ...patient,
         updatedDate,
         updatedBy: auth.currentUser?.displayName || 'Unknown',
         updatedByEmail: auth.currentUser?.email || 'N/A',
@@ -158,157 +158,149 @@ function PatientDetail() {
   }
 
   return (
-    <>
+    <div className="min-h-screen bg-slate-50 pb-12">
       <Navbar />
-      <div className="mx-auto max-w-screen-xl my-5 h-screen md:overflow-y-hidden w-full px-4 md:px-8 lg:px-12">
-        <div className="flex flex-col my-4 space-y-8">
-          <div className="flex top-details flex-col md:flex-row space-y-1 items-center justify-between">
-            {/* <div className="name-logo flex items-center jusify-between">
-              <div className="text-center text-8xl bg-[#ff5162] text-white rounded-full h-32 w-32 px-4 py-1 items-center justify-center flex font-bold">
-                {patient?.name[0].toUpperCase()}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex flex-col gap-8">
+          {/* Header Section */}
+          <div className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+            <div className="flex items-center gap-6">
+              <div className="w-20 h-20 rounded-[1.5rem] bg-[#FF5162]/5 flex items-center justify-center text-3xl font-bold text-[#FF5162] shadow-inner">
+                {patient?.surname?.[0].toUpperCase()}
               </div>
-            </div> */}
-            <div className="name-age-number flex space-y-3 mx-5 flex-col">
-              <h1 className="bg-slate-100 text-[#fff5162] text-center font-bold px-2 py-3 text-3xl rounded-md">
-                {patient?.selectedTitle} {""}
-                {patient?.surname} &nbsp; {patient?.othername}
-              </h1>
-              <p>
-                {" "}
-                Age:&nbsp; {patient?.age} {patient?.ageRange}
-              </p>
-              <p> Phone Number: &nbsp; {patient?.phoneNumber}</p>
-              <p>Gender: {patient?.gender}</p>
-              <p>Address: {patient?.address}</p>
-              <p> Phone Number 2: &nbsp; {patient?.phoneNumber2}</p>
-              <p> Care giver Details: &nbsp; {patient?.caregiver}</p>
-              <p>Condition:&nbsp; {patient?.condition}</p>
-              <p>Assessed by:&nbsp;{patient?.clinician}</p>
-              <div className="date-updated mt-4 flex   gap-3 items-center justify-between">
-                <Input
-                  label={"Update"}
-                  type={"date"}
-                  value={updatedDate}
-                  onChange={(e) => setUpdatedDate(e.target.value)}
-                />
-                <button
-                  className="bg-blue-700  text-white px-4 py-3 rounded-md"
-                  onClick={UpdatePatient}
-                >
-                  Update
-                </button>
-              </div>
-              <div className="mt-8 pt-4 border-t border-gray-200 text-xs text-gray-500">
-                {patient?.userName && (
-                  <p>Created by: {patient?.userName} ({patient?.userEmail}) on {patient?.createdAt}</p>
-                )}
-                {patient?.updatedBy && (
-                  <p>Last updated by: {patient?.updatedBy} ({patient?.updatedByEmail}) on {patient?.lastUpdatedAt}</p>
-                )}
+              <div className="space-y-1">
+                <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+                  {patient?.selectedTitle} {patient?.surname} {patient?.othername}
+                </h1>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-3 py-1 bg-emerald-50 text-emerald-600 text-xs font-bold rounded-full border border-emerald-100">
+                    ID: {patient?.regNum}
+                  </span>
+                  <span className="px-3 py-1 bg-blue-50 text-blue-600 text-xs font-bold rounded-full border border-blue-100">
+                    {patient?.selectedValue}
+                  </span>
+                  <span className="px-3 py-1 bg-slate-50 text-slate-600 text-xs font-bold rounded-full border border-slate-100">
+                    Reg: {patient?.dateRegistered}
+                  </span>
+                </div>
               </div>
             </div>
-            <div className="reg-number bg-green-500 text-2xl text-white px-2 py-1.5 ">
-              <h1>
-                {patient?.dateRegistered}/{patient?.regNum}/
-                {patient?.selectedValue}
-              </h1>
+
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => UpdatePatientDetails(params.id)}
+                className="flex items-center gap-2 px-6 py-3 bg-white border border-slate-200 rounded-2xl text-slate-700 font-bold text-sm hover:bg-slate-50 transition-all active:scale-95 shadow-sm"
+              >
+                <AiTwotoneEdit size={20} className="text-blue-500" />
+                Edit Profile
+              </button>
+              <button
+                onClick={onDelete}
+                className="flex items-center gap-2 px-6 py-3 bg-white border border-slate-200 rounded-2xl text-red-600 font-bold text-sm hover:bg-red-50 hover:border-red-100 transition-all active:scale-95 shadow-sm"
+              >
+                <ImBin size={18} />
+                Delete
+              </button>
             </div>
           </div>
-          <div className="session-payment md:grid md:gap-x-8 md:grid-cols-4 md:h-[420px] flex flex-col gap-4 justify-center">
-            <div className="bg-slate-200 rounded-md shadow-lg col-span-3 p-4 overflow-y-auto">
-              {isActive === "payment" && <Payment patientId={params.id} />}
-              {isActive === "session" && <Session patientId={params.id} />}
-              {isActive === "newsession" && (
-                <NewSession patientId={params.id} patientType={"fortune"} />
-              )}
-              {isActive === "newpayment" && (
-                <NewPayment patientId={params.id} patientType={"fortune"} />
-              )}
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Sidebar - Details */}
+            <div className="lg:col-span-1 space-y-8">
+              <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100 space-y-6">
+                <h2 className="text-xl font-bold text-slate-800 pb-4 border-b border-slate-50">Patient Information</h2>
+
+                <div className="grid grid-cols-1 gap-5">
+                  {[
+                    { label: "Age", value: `${patient?.age} ${patient?.ageRange}` },
+                    { label: "Gender", value: patient?.gender },
+                    { label: "Primary Phone", value: patient?.phoneNumber },
+                    { label: "Secondary Phone", value: patient?.phoneNumber2 || "N/A" },
+                    { label: "Condition", value: patient?.condition },
+                    { label: "Assessed By", value: patient?.clinician },
+                    { label: "Caregiver", value: patient?.caregiver || "None listed" },
+                    { label: "Address", value: patient?.address },
+                  ].map((info, i) => (
+                    <div key={i} className="space-y-1">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{info.label}</span>
+                      <p className="text-slate-700 font-semibold">{info.value}</p>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="pt-6 border-t border-slate-50 space-y-4">
+                  <div className="flex items-center gap-3">
+                    <div className="flex-1">
+                      <Input
+                        label="Update Date"
+                        type="date"
+                        value={updatedDate}
+                        onChange={(e) => setUpdatedDate(e.target.value)}
+                      />
+                    </div>
+                    <button
+                      onClick={UpdatePatient}
+                      className="h-full px-6 py-4 bg-[#FF5162] text-white rounded-2xl font-bold text-sm shadow-lg shadow-red-100 hover:bg-[#E64858] transition-all"
+                    >
+                      Log
+                    </button>
+                  </div>
+
+                  <div className="text-[10px] text-slate-400 leading-relaxed italic">
+                    {patient?.userName && <p>Created by {patient?.userName} on {patient?.createdAt}</p>}
+                    {patient?.updatedBy && <p>Last updated by {patient?.updatedBy} on {patient?.lastUpdatedAt}</p>}
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="bg-slate-200 rounded-md shadow-lg col-span-1 flex flex-col space-y-4 p-6 col-span-">
-              <div className="flex gap-3 cursor-pointer hover:opacity-50">
-                <FaCheck size={32} color="green" />
-                <h1 className="">DETAILS</h1>
-              </div>
-              <div className="flex gap-3 items-center justify-between cursor-pointer hover:opacity-50">
-                <div
-                  className="detials flex gap-2"
-                  onClick={() => setIsActive("session")}
-                >
-                  <FaCheck size={32} color="green" />
-                  <h1 className="">
-                    {" "}
-                    2023 SESSIONS{" "}
-                    <span className="ml-4 bg-green-500 px-3 py-1 rounded-md text-white">
-                      {session.length}
-                    </span>{" "}
-                  </h1>
+
+            {/* Main Content - Sessions & Payments */}
+            <div className="lg:col-span-2 space-y-8">
+              <div className="bg-white rounded-[2rem] p-4 shadow-sm border border-slate-100">
+                {/* Custom Tabs */}
+                <div className="flex p-1 bg-slate-50 rounded-[1.5rem] mb-6">
+                  {[
+                    { id: "newsession", label: "2024 Sessions", count: newsession?.length },
+                    { id: "newpayment", label: "2024 Payments", count: newpayment?.length },
+                    { id: "session", label: "2023 Sessions", count: session?.length },
+                    { id: "payment", label: "2023 Payments", count: payment?.length },
+                  ].map((tab) => (
+                    <button
+                      key={tab.id}
+                      onClick={() => setIsActive(tab.id)}
+                      className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs font-bold transition-all ${isActive === tab.id
+                        ? "bg-white text-[#FF5162] shadow-sm"
+                        : "text-slate-400 hover:text-slate-600"
+                        }`}
+                    >
+                      {tab.label}
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] ${isActive === tab.id ? "bg-[#FF5162] text-white" : "bg-slate-200 text-slate-500"
+                        }`}>
+                        {tab.count || 0}
+                      </span>
+                    </button>
+                  ))}
                 </div>
-              </div>
-              <div className="flex gap-3 items-center justify-between cursor-pointer hover:opacity-50">
-                <div
-                  className="detials flex gap-2"
-                  onClick={() => setIsActive("payment")}
-                >
-                  <FaCheck size={32} color="green" />
-                  <h1 className="">
-                    {" "}
-                    2023 PAYMENT{" "}
-                    <span className="ml-4 bg-green-500 px-3 py-1 rounded-md text-white">
-                      {payment.length}
-                    </span>
-                  </h1>
+
+                <div className="min-h-[500px]">
+                  {isActive === "payment" && <Payment patientId={params.id} />}
+                  {isActive === "session" && <Session patientId={params.id} />}
+                  {isActive === "newsession" && (
+                    <NewSession patientId={params.id} patientType={"fortune"} />
+                  )}
+                  {isActive === "newpayment" && (
+                    <NewPayment patientId={params.id} patientType={"fortune"} />
+                  )}
                 </div>
-              </div>
-              <div className="flex gap-3 items-center justify-between cursor-pointer hover:opacity-50">
-                <div
-                  className="detials flex gap-2"
-                  onClick={() => setIsActive("newsession")}
-                >
-                  <FaCheck size={32} color="green" />
-                  <h1 className="">
-                    2024 SESSIONS{" "}
-                    <span className="ml-4 bg-green-500 px-3 py-1 rounded-md text-white">
-                      {newsession?.length}
-                    </span>
-                  </h1>
-                </div>
-              </div>
-              <div className="flex gap-3 items-center justify-between cursor-pointer hover:opacity-50">
-                <div
-                  className="detials flex gap-2"
-                  onClick={() => setIsActive("newpayment")}
-                >
-                  <FaCheck size={32} color="green" />
-                  <h1 className="">
-                    {" "}
-                    2024 PAYMENTS{" "}
-                    <span className="ml-4 bg-green-500 px-3 py-1 rounded-md text-white">
-                      {newpayment?.length}
-                    </span>
-                  </h1>
-                </div>
-              </div>
-              <div
-                className="flex gap-3 cursor-pointer hover:opacity-50"
-                onClick={() => UpdatePatientDetails(params.id)}
-              >
-                <AiTwotoneEdit size={32} color="blue" />
-                UPDATE PATIENT
-              </div>
-              <div
-                className="flex gap-3 cursor-pointer hover:opacity-50"
-                onClick={onDelete}
-              >
-                <ImBin size={32} color="red" />
-                <h1 className="">DELETE</h1>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </>
+      </main>
+    </div>
   );
 }
+
+
 
 export default PatientDetail;

@@ -39,44 +39,30 @@ function Navbar() {
   const userRole = useUserRole(user);
 
   return (
-    <div className="mx-auto hidden md:block px-4 md:px-8 lg:px-12 sticky z-10 top-0 left-0 h-auto shadow-md bg-[#FF5162]">
-      <div className="flex items-center justify-center">
-      <div className="flex justify-between items-center gap-x-8">
-  {userRole === "isESH"
-    ? eshLinks.map((link) => (
-        <Link key={link.to} to={link.to} title={link.title}>
-          {React.createElement(link.icon, {
-            size: link.size,
-            color: 'white',
-            className: 'hover:scale-75',
-          })}
-        </Link>
-      ))
-    : userRole === "isAdmin" // Check if userRole is "isAdmin"
-    ? adminLinks.map((link) => ( // Replace adminLinks with your actual admin links
-        <Link key={link.to} to={link.to} title={link.title}>
-          {React.createElement(link.icon, {
-            size: link.size,
-            color: 'white',
-            className: 'hover:scale-75',
-          })}
-        </Link>
-      ))
-    : navLinks.map((link) => (
-        <Link key={link.to} to={link.to} title={link.title}>
-          {React.createElement(link.icon, {
-            size: link.size,
-            color: 'white',
-            className: 'hover:scale-75',
-          })}
-        </Link>
-      ))}
-</div>
-
+    <div className="mx-auto hidden md:block px-4 md:px-8 lg:px-12 sticky z-30 top-0 left-0 h-auto shadow-sm backdrop-blur-md bg-[#FF5162]/95 border-b border-white/10">
+      <div className="flex items-center justify-center py-2">
+        <div className="flex justify-between items-center gap-x-12">
+          {(userRole === "isESH" ? eshLinks : userRole === "isAdmin" ? adminLinks : navLinks).map((link) => (
+            <Link 
+              key={link.to} 
+              to={link.to} 
+              title={link.title}
+              className="relative group py-2"
+            >
+              {React.createElement(link.icon, {
+                size: link.size,
+                color: 'white',
+                className: 'transition-all duration-300 group-hover:scale-110 group-active:scale-90',
+              })}
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full opacity-50"></span>
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   );
 }
+
 
 export default Navbar;
 
