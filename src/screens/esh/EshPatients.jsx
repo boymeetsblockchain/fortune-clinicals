@@ -148,12 +148,12 @@ function Patients() {
           <div className="space-y-1">
             <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">ESH Patient Directory</h1>
             <p className="text-slate-500 font-medium">
-              Managing <span className="text-emerald-600 font-bold">{patients.length}</span> active records
+              Managing <span className="text-[#FF5162] font-bold">{patients.length}</span> active records
             </p>
           </div>
 
           <div className="relative w-full md:w-96 group">
-            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-emerald-500 transition-colors">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#FF5162] transition-colors">
               <AiOutlineSearch size={22} />
             </div>
             <input
@@ -161,7 +161,7 @@ function Patients() {
               placeholder="Search by name, condition or clinician..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 bg-white border border-slate-200 rounded-[1.5rem] text-sm font-medium focus:outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-500 transition-all shadow-sm group-hover:shadow-md"
+              className="w-full pl-12 pr-4 py-4 bg-white border border-slate-200 rounded-[1.5rem] text-sm font-medium focus:outline-none focus:ring-4 focus:ring-[#FF5162]/5 focus:border-[#FF5162] transition-all shadow-sm group-hover:shadow-md"
             />
           </div>
         </div>
@@ -197,7 +197,9 @@ function Patients() {
                 onClick={() => setGenderFilter(gender)}
                 className={`px-6 py-2.5 rounded-xl text-xs font-bold transition-all ${
                   genderFilter === gender
-                    ? "bg-emerald-500 text-white shadow-lg shadow-emerald-100"
+                    ? gender === "Male" ? "bg-blue-600 text-white shadow-lg shadow-blue-100" :
+                      gender === "Female" ? "bg-pink-600 text-white shadow-lg shadow-pink-100" :
+                      "bg-[#FF5162] text-white shadow-lg shadow-red-100"
                     : "text-slate-400 hover:text-slate-600 hover:bg-slate-50"
                 }`}
               >
@@ -213,20 +215,20 @@ function Patients() {
             filteredPatients.map((data) => (
               <div
                 key={data?.id}
-                className="group bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100 hover:shadow-2xl hover:shadow-emerald-200/20 transition-all duration-500 hover:-translate-y-2 flex flex-col h-full"
+                className="group bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100 hover:shadow-2xl hover:shadow-slate-200/20 transition-all duration-500 hover:-translate-y-2 flex flex-col h-full"
               >
                 <div className="flex items-center gap-5 mb-8">
                   <div className={`flex-shrink-0 w-16 h-16 rounded-[1.25rem] flex items-center justify-center text-2xl font-black shadow-inner border border-white ${
-                    data.selectedValue === "Out-patient" ? "bg-emerald-50 text-emerald-600" : "bg-blue-50 text-blue-600"
+                    data.selectedValue === "Out-patient" ? "bg-blue-50 text-blue-600" : "bg-[#FF5162]/5 text-[#FF5162]"
                   }`}>
                     {data?.surname?.[0]?.toUpperCase()}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <h3 className="text-lg font-bold text-slate-800 truncate group-hover:text-emerald-600 transition-colors">
+                    <h3 className="text-lg font-bold text-slate-800 truncate group-hover:text-[#FF5162] transition-colors">
                       {data?.surname} {data?.othername}
                     </h3>
                     <div className="flex items-center gap-1.5">
-                      <span className={`w-2 h-2 rounded-full ${data.selectedValue === "Out-patient" ? "bg-emerald-400" : "bg-blue-400"}`}></span>
+                      <span className={`w-2 h-2 rounded-full ${data.selectedValue === "Out-patient" ? "bg-blue-400" : "bg-[#FF5162]"}`}></span>
                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest truncate">
                         {data?.selectedValue}
                       </p>
@@ -253,7 +255,9 @@ function Patients() {
 
                 <button
                   onClick={() => onView(data?.id)}
-                  className="w-full py-4 bg-slate-900 text-white font-bold text-xs rounded-2xl shadow-xl shadow-slate-200 hover:bg-emerald-600 hover:shadow-emerald-100 transition-all active:scale-[0.98] uppercase tracking-widest"
+                  className={`w-full py-4 text-white font-bold text-xs rounded-2xl shadow-xl transition-all active:scale-[0.98] uppercase tracking-widest ${
+                    data.selectedValue === "Out-patient" ? "bg-blue-600 hover:bg-blue-700 shadow-blue-100" : "bg-[#FF5162] hover:bg-[#E64858] shadow-red-100"
+                  }`}
                 >
                   Manage Record
                 </button>
@@ -273,7 +277,7 @@ function Patients() {
         {/* Floating Action Button */}
         <Link
           to="/add-esh-patients"
-          className="fixed bottom-8 right-8 w-16 h-16 bg-emerald-500 text-white rounded-[1.5rem] shadow-2xl shadow-emerald-200 flex items-center justify-center hover:scale-110 hover:-rotate-6 active:scale-90 transition-all duration-300 z-50 group border-4 border-white"
+          className="fixed bottom-8 right-8 w-16 h-16 bg-[#FF5162] text-white rounded-[1.5rem] shadow-2xl shadow-red-200 flex items-center justify-center hover:scale-110 hover:-rotate-6 active:scale-90 transition-all duration-300 z-50 group border-4 border-white"
         >
           <AiOutlineUserAdd size={28} />
           <div className="absolute right-20 bg-slate-900 text-white text-[10px] font-bold py-2 px-4 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none uppercase tracking-widest whitespace-nowrap shadow-xl">

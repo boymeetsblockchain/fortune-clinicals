@@ -146,7 +146,7 @@ function Esh() {
           <div className="space-y-1">
             <h1 className="text-2xl font-bold text-slate-900">Admin - ESH Directory</h1>
             <p className="text-slate-500 font-medium">
-              Total ESH Records: <span className="text-[#FF5162]">{patients.length}</span>
+              Total ESH Records: <span className="text-slate-900 font-bold">{patients.length}</span>
             </p>
           </div>
 
@@ -232,7 +232,7 @@ function Esh() {
             >
               <div className="flex items-start gap-4 mb-4">
                 <div className={`flex-shrink-0 w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-bold shadow-inner ${
-                  data.selectedValue === "Out-patient" ? "bg-emerald-50 text-emerald-600" :
+                  data.selectedValue === "Out-patient" ? "bg-blue-50 text-blue-600" :
                   "bg-[#FF5162]/5 text-[#FF5162]"
                 }`}>
                   {data?.surname?.[0]?.toUpperCase()}
@@ -261,7 +261,7 @@ function Esh() {
               <button
                 onClick={() => onView(data?.id)}
                 className={`w-full py-3 rounded-xl text-white font-bold text-sm transition-all shadow-md active:scale-95 ${
-                  data.selectedValue === "Out-patient" ? "bg-emerald-500 hover:bg-emerald-600 shadow-emerald-100" :
+                  data.selectedValue === "Out-patient" ? "bg-blue-600 hover:bg-blue-700 shadow-blue-100" :
                   "bg-[#FF5162] hover:bg-[#E64858] shadow-red-100"
                 }`}
               >
