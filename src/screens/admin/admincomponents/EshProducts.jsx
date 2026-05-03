@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { db } from "../../../firebase.config";
 import {
   getDocs,
@@ -11,41 +11,41 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import Loader from "../../../components/Loader";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { BsFillCartPlusFill } from "react-icons/bs";
+import { HiOutlinePencilAlt, HiOutlineTrash, HiOutlineChatAlt2, HiOutlineEye } from "react-icons/hi";
 import Input from "../../../components/Input";
 import CommentModal from "../../../components/products/commentModal";
 import { ViewCommentModal } from "../../../components/products/viewCommentModal";
 
-function Products() {
+function EshProducts() {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [editingId, setEditingId] = useState(null);
-  const [editedComments, setEditedComments] = useState({});
   const [editedData, setEditedData] = useState({});
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
   const [isCommentViewModalOpen, setIsViewCommentModalOpen] = useState(false);
   const [commentProductId, setCommentProductId] = useState(null);
   const [comments, setComments] = useState([]);
-  const navigate = useNavigate();
+
+  const getProducts = useCallback(async () => {
+    try {
+      const data = await getDocs(collection(db, "eshgoods"));
+      const filteredData = data.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setProducts(filteredData);
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
 
   useEffect(() => {
-    const getProducts = async () => {
-      try {
-        const data = await getDocs(collection(db, "eshgoods"));
-        const filteredData = data.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setProducts(filteredData);
-        setLoading(false);
-      } catch (error) {
-        console.error(error);
-      }
-    };
     getProducts();
-  }, []);
+  }, [getProducts]);
 
   const handleEdit = (id, field, value) => {
     setEditingId(id);
@@ -54,67 +54,55 @@ function Products() {
       [id]: {
         ...prevState[id],
         [field]: value,
-        editedDate: new Date().toISOString(),
       },
-    }));
-  };
-
-  const handleEditComment = (id, value) => {
-    setEditedComments((prevState) => ({
-      ...prevState,
-      [id]: value,
     }));
   };
 
   const handleSave = async (id) => {
     try {
       const oldProduct = products.find((product) => product.id === id);
-      const updatedData = {
+      const updatedFields = {
         ...editedData[id],
         editedDate: new Date().toISOString(),
       };
 
-      const oldQuantity = parseFloat(oldProduct.quantity);
-      const added = parseFloat(updatedData.added);
-      const sold = parseFloat(updatedData.sold);
+      const oldQuantity = parseFloat(oldProduct.quantity) || 0;
+      const added = parseFloat(updatedFields.added) || 0;
+      const sold = parseFloat(updatedFields.sold) || 0;
 
-      // ✅ Calculate new quantity
-      if (!isNaN(added)) {
-        updatedData.quantity = oldQuantity + added;
-      } else if (!isNaN(sold)) {
-        updatedData.quantity = oldQuantity - sold;
-      } else {
-        updatedData.quantity = oldQuantity;
+      if (added !== 0) {
+        updatedFields.quantity = oldQuantity + added;
+      } else if (sold !== 0) {
+        updatedFields.quantity = oldQuantity - sold;
       }
 
-      // ✅ Reset added & sold to 0 after operation
-      updatedData.added = 0;
-      updatedData.sold = 0;
+      // Reset added/sold fields
+      updatedFields.added = 0;
+      updatedFields.sold = 0;
 
-      // ✅ Update Firestore
-      await updateDoc(doc(db, "eshgoods", id), updatedData);
+      await updateDoc(doc(db, "eshgoods", id), updatedFields);
 
-      // ✅ Update local state (reset added/sold locally too)
       setProducts((prev) =>
         prev.map((product) =>
-          product.id === id ? { ...product, ...updatedData } : product
+          product.id === id ? { ...product, ...updatedFields } : product
         )
       );
 
-      // ✅ Reset edit state
       setEditingId(null);
       setEditedData({});
     } catch (error) {
       console.error(error);
     }
   };
+
   const handleDelete = async (id) => {
-    try {
-      await deleteDoc(doc(db, "eshgoods", id));
-      const updatedProducts = products.filter((product) => product.id !== id);
-      setProducts(updatedProducts);
-    } catch (error) {
-      console.error(error);
+    if (window.confirm("Are you sure you want to delete this product?")) {
+      try {
+        await deleteDoc(doc(db, "eshgoods", id));
+        setProducts(products.filter((product) => product.id !== id));
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
@@ -153,8 +141,6 @@ function Products() {
         comment: commentData.comment,
         date: commentData.date,
       });
-
-      console.log("Comment saved successfully!");
     } catch (error) {
       console.error("Error saving comment: ", error);
     }
@@ -164,202 +150,172 @@ function Products() {
     product.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  if (loading) {
-    return <Loader />;
-  }
+  if (loading) return <Loader />;
 
   return (
-    <>
-      <div className="mx-auto  my-5 h-full md:overflow-y-hidden relative w-full  px-4 md:px-8 lg:px-12">
-        <div className="flex justify-end mb-4">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+        <div className="space-y-1">
+          <h2 className="text-xl font-bold text-slate-800">ESH Inventory</h2>
+          <p className="text-slate-500 text-sm">Manage stock levels for ESH-specific products</p>
+        </div>
+        <div className="w-full md:w-80">
           <Input
-            label="Search Products"
+            placeholder="Search ESH products..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
+      </div>
+
+      <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="min-w-full table-fixed">
+          <table className="w-full text-left border-collapse">
             <thead>
-              <tr>
-                <th className="px-4 py-2">No.</th>
-                <th className="px-4 py-2">Name</th>
-                <th className="px-4 py-2">Quantity</th>
-                <th className="px-4 py-2">Price</th>
-                <th className="px-4 py-2">Addedd</th>
-                <th className="px-4 py-2">Used/Sold</th>
-                {/* <th className="px-4 py-2">Comment</th> */}
-                <th className="px-4 py-2">Date</th>
-                <th className="px-4 py-2">Actions</th>
+              <tr className="bg-slate-50/50 border-b border-slate-100">
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">No.</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Product Name</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">Stock</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">Price</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">Update Stock</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-slate-50">
               {filteredProducts?.map((product, index) => (
-                <tr
-                  key={product.id}
-                  className="border-b border-gray-200 cursor-pointer"
-                >
-                  <td className="px-4 text-center py-2">{index + 1}</td>
-                  <td className="px-4 text-center py-2">
+                <tr key={product.id} className="hover:bg-slate-50/50 transition-colors">
+                  <td className="px-6 py-4 text-sm font-medium text-slate-400">{index + 1}</td>
+                  <td className="px-6 py-4">
                     {editingId === product.id ? (
-                      <Input
-                        value={editedData[product.id]?.name || product.name}
-                        onChange={(e) =>
-                          handleEdit(product.id, "name", e.target.value)
-                        }
+                      <input
+                        className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-[#FF5162]"
+                        value={editedData[product.id]?.name ?? product.name}
+                        onChange={(e) => handleEdit(product.id, "name", e.target.value)}
                       />
                     ) : (
-                      product.name
+                      <span className="font-bold text-slate-700">{product.name}</span>
                     )}
                   </td>
-                  <td className="px-4 text-center text-sm py-2">
+                  <td className="px-6 py-4 text-center">
+                    <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                      (product.quantity || 0) < 10 ? 'bg-red-50 text-red-600' : 'bg-emerald-50 text-emerald-600'
+                    }`}>
+                      {product.quantity || 0}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-center">
                     {editingId === product.id ? (
-                      <Input
-                        type={"number"}
-                        value={
-                          editedData[product.id]?.quantity || product.quantity
-                        }
-                        onChange={(e) =>
-                          handleEdit(product.id, "quantity", e.target.value)
-                        }
+                      <input
+                        type="number"
+                        className="w-24 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm text-center focus:outline-none focus:border-[#FF5162]"
+                        value={editedData[product.id]?.price ?? product.price}
+                        onChange={(e) => handleEdit(product.id, "price", e.target.value)}
                       />
                     ) : (
-                      product.quantity
+                      <span className="font-bold text-slate-600">₦{parseFloat(product.price || 0).toLocaleString()}</span>
                     )}
                   </td>
-                  <td className="px-4 text-center text-sm py-2">
-                    {editingId === product.id ? (
-                      <Input
-                        type={"number"}
-                        value={editedData[product.id]?.price || product.price}
-                        onChange={(e) =>
-                          handleEdit(product.id, "price", e.target.value)
-                        }
-                      />
-                    ) : (
-                      product.price
-                    )}
+                  <td className="px-6 py-4">
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="flex flex-col items-center gap-1">
+                        <span className="text-[9px] font-bold text-emerald-500 uppercase">Add</span>
+                        <input
+                          type="number"
+                          placeholder="+"
+                          className="w-16 px-2 py-1.5 bg-emerald-50/50 border border-emerald-100 rounded-lg text-xs text-center focus:outline-none focus:border-emerald-500"
+                          value={editedData[product.id]?.added ?? ""}
+                          onChange={(e) => handleEdit(product.id, "added", e.target.value)}
+                        />
+                      </div>
+                      <div className="flex flex-col items-center gap-1">
+                        <span className="text-[9px] font-bold text-rose-500 uppercase">Sold</span>
+                        <input
+                          type="number"
+                          placeholder="-"
+                          className="w-16 px-2 py-1.5 bg-rose-50/50 border border-rose-100 rounded-lg text-xs text-center focus:outline-none focus:border-rose-500"
+                          value={editedData[product.id]?.sold ?? ""}
+                          onChange={(e) => handleEdit(product.id, "sold", e.target.value)}
+                        />
+                      </div>
+                    </div>
                   </td>
-                  <td className="px-4 text-center text-sm py-2">
-                    {editingId === product.id ? (
-                      <Input
-                        type={"number"}
-                        value={editedData[product.id]?.added || product.added}
-                        onChange={(e) =>
-                          handleEdit(product.id, "added", e.target.value)
-                        }
-                      />
-                    ) : (
-                      product.added
-                    )}
-                  </td>
-                  <td className="px-4 text-center text-sm py-2">
-                    {editingId === product.id ? (
-                      <Input
-                        type={"number"}
-                        value={editedData[product.id]?.sold || product.sold}
-                        onChange={(e) =>
-                          handleEdit(product.id, "sold", e.target.value)
-                        }
-                      />
-                    ) : (
-                      product.sold
-                    )}
-                  </td>
-                  {/* <td className="px-4 text-center text-xs py-2">
-                    {editingId === product.id ? (
-                      <Input
-                        value={editedComments[product.id] || product.comment}
-                        onChange={(e) =>
-                          handleEditComment(product.id, e.target.value)
-                        }
-                      />
-                    ) : (
-                      product.comment
-                    )}
-                  </td> */}
-                  <td className="px-4 text-center text-xs py-2">
-                    {editingId === product.id ? (
-                      <Input
-                        type={"date"}
-                        value={editedData[product.id]?.date || product.date}
-                        onChange={(e) =>
-                          handleEdit(product.id, "date", e.target.value)
-                        }
-                      />
-                    ) : (
-                      product.date
-                    )}
-                  </td>
-
-                  <td className="px-4 text-center text-sm py-2">
-                    {editingId === product.id ? (
-                      <button
-                        className="bg-green-500 px-3 py-2 rounded-md text-white"
-                        onClick={() => handleSave(product.id)}
-                      >
-                        Save
-                      </button>
-                    ) : (
-                      <div>
-                        <div className="flex flex-row gap-x-4">
+                  <td className="px-6 py-4">
+                    <div className="flex items-center justify-center gap-2">
+                      {editingId === product.id || editedData[product.id] ? (
+                        <button
+                          className="bg-[#FF5162] text-white px-4 py-2 rounded-xl text-xs font-bold shadow-lg shadow-red-100 hover:bg-[#E64858] transition-all"
+                          onClick={() => handleSave(product.id)}
+                        >
+                          Save
+                        </button>
+                      ) : (
+                        <div className="flex items-center gap-1">
                           <button
-                            className="bg-blue-500 px-3 py-2 rounded-md text-white text-xs"
                             onClick={() => setEditingId(product.id)}
+                            className="p-2 text-blue-500 hover:bg-blue-50 rounded-xl transition-colors"
+                            title="Edit Name/Price"
                           >
-                            Edit
+                            <HiOutlinePencilAlt size={18} />
                           </button>
                           <button
-                            className="bg-pink-500 px-3 py-2 rounded-md text-white text-xs"
                             onClick={() => openCommentModal(product.id)}
+                            className="p-2 text-pink-500 hover:bg-pink-50 rounded-xl transition-colors"
+                            title="Add Comment"
                           >
-                            Comment
+                            <HiOutlineChatAlt2 size={18} />
                           </button>
                           <button
-                            className="bg-purple-500 px-3 py-2 rounded-md text-white text-xs"
                             onClick={() => openViewCommentModal(product.id)}
+                            className="p-2 text-purple-500 hover:bg-purple-50 rounded-xl transition-colors"
+                            title="View Comments"
                           >
-                            View Comment
+                            <HiOutlineEye size={18} />
                           </button>
                           <button
-                            className="bg-red-500 px-3 py-2 rounded-md text-white text-xs"
                             onClick={() => handleDelete(product.id)}
+                            className="p-2 text-rose-500 hover:bg-rose-50 rounded-xl transition-colors"
+                            title="Delete"
                           >
-                            Delete
+                            <HiOutlineTrash size={18} />
                           </button>
                         </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-
-        {isCommentModalOpen && (
-          <CommentModal
-            productId={commentProductId}
-            onSave={saveComment}
-            onClose={() => setIsCommentModalOpen(false)}
-          />
-        )}
-
-        {isCommentViewModalOpen && (
-          <ViewCommentModal
-            productId={commentProductId}
-            comments={comments}
-            onClose={() => setIsViewCommentModalOpen(false)}
-          />
-        )}
-        <div className="fixed bottom-4 right-4 h-40 w-40 cursor-pointer bg-white flex justify-center items-center rounded-full shadow-lg">
-          <Link to={"/esh/add-new-product"}>
-            <BsFillCartPlusFill size={64} color="red" />
-          </Link>
-        </div>
       </div>
-    </>
+
+      {isCommentModalOpen && (
+        <CommentModal
+          productId={commentProductId}
+          onSave={saveComment}
+          onClose={() => setIsCommentModalOpen(false)}
+        />
+      )}
+
+      {isCommentViewModalOpen && (
+        <ViewCommentModal
+          productId={commentProductId}
+          comments={comments}
+          onClose={() => setIsViewCommentModalOpen(false)}
+        />
+      )}
+
+      <Link
+        to="/esh/add-new-product"
+        className="fixed bottom-8 right-8 w-16 h-16 bg-[#FF5162] text-white rounded-2xl shadow-2xl shadow-red-200 flex items-center justify-center hover:scale-110 active:scale-90 transition-all duration-300 z-50 group"
+      >
+        <BsFillCartPlusFill size={32} />
+        <span className="absolute right-20 bg-slate-800 text-white text-xs py-2 px-4 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+          Add New ESH Product
+        </span>
+      </Link>
+    </div>
   );
 }
 
-export default Products;
+export default EshProducts;

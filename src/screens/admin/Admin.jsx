@@ -12,75 +12,127 @@ import {
 import { AiOutlineBorderlessTable } from "react-icons/ai";
 import { BiMessageSquareCheck } from "react-icons/bi";
 import { PiMoneyBold } from "react-icons/pi";
+import Navbar from "../../components/Navbar";
+
 const menuItems = [
   {
     to: "/admin/patients",
-    text: "Click to view and edit Patient Data",
+    text: "Patient Directory",
+    subtext: "View and edit clinical data",
     icon: AiOutlineUnorderedList,
+    color: "text-blue-500",
+    bg: "bg-blue-50",
   },
   {
     to: "/admin/products",
-    text: "Click to have access to available Products",
+    text: "Inventory Management",
+    subtext: "Track available products",
     icon: AiOutlineShoppingCart,
+    color: "text-emerald-500",
+    bg: "bg-emerald-50",
   },
   {
     to: "/admin/profile",
-    text: "Click to access your details",
+    text: "My Profile",
+    subtext: "Access your account details",
     icon: AiOutlineUser,
+    color: "text-purple-500",
+    bg: "bg-purple-50",
   },
   {
     to: "/admin/calender",
-    text: "Click to have access to monthly report",
+    text: "Monthly Reports",
+    subtext: "Clinical performance summary",
     icon: AiTwotoneCalendar,
+    color: "text-amber-500",
+    bg: "bg-amber-50",
   },
   {
     to: "/admin/messages",
-    text: "Click to have access to message ",
+    text: "Messages",
+    subtext: "Communication center",
     icon: AiOutlineMessage,
+    color: "text-indigo-500",
+    bg: "bg-indigo-50",
   },
   {
     to: "/admin/notes",
-    text: "Click to have  access to note ",
+    text: "Clinical Notes",
+    subtext: "Staff observations & logs",
     icon: BiMessageSquareCheck,
+    color: "text-rose-500",
+    bg: "bg-rose-50",
   },
   {
     to: "/admin/staff",
-    text: "Click to have  access to Staff Records",
+    text: "Staff Records",
+    subtext: "Personnel & payroll data",
     icon: PiMoneyBold,
+    color: "text-teal-500",
+    bg: "bg-teal-50",
   },
   {
     to: "/admin/user",
-    text: "Click to have  access to Users",
+    text: "User Management",
+    subtext: "System access controls",
     icon: AiOutlineUsergroupDelete,
+    color: "text-orange-500",
+    bg: "bg-orange-50",
   },
   {
     to: "/admin/eshdata",
-    text: "Click to have  access to EshData",
+    text: "ESH Database",
+    subtext: "Secure ESH patient records",
     icon: AiFillDatabase,
+    color: "text-sky-500",
+    bg: "bg-sky-50",
   },
   {
     to: "/admin/Initial",
-    text: "Click to have  access to Esh Initial Reviews",
+    text: "Initial Reviews",
+    subtext: "ESH preliminary assessments",
     icon: AiOutlineBorderlessTable,
+    color: "text-fuchsia-500",
+    bg: "bg-fuchsia-50",
   },
 ];
+
 function Admin() {
   return (
-    <div className="flex items-center flex-col   justify-center h-full py-4 px-4 md:px-8 lg:px-12">
-      <h1 className="text-center md:text-4xl text-2xl  mb-4 font-bold">
-        Welcome, Admin
-      </h1>
-      <div className="grid  grid-cols-1 md:grid-cols-2  md:gap-6 gap-2">
-        {menuItems.map((item, index) => (
-          <Link
-            key={index}
-            to={item.to}
-            className="bg-red-500 h-24 w-full px-2 py-3 text-white text-center flex flex-row-reverse items-center justify-center rounded-md"
-          >
-            <span className="mx-4">{item.text}</span> <item.icon size={32} />
-          </Link>
-        ))}
-      </div>
+    <div className="min-h-screen bg-slate-50">
+      <Navbar />
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="mb-12">
+          <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight mb-2">
+            Admin Dashboard
+          </h1>
+          <p className="text-slate-500 font-medium">
+            Welcome back. Manage your clinical operations and staff from one central hub.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {menuItems.map((item, index) => (
+            <Link
+              key={index}
+              to={item.to}
+              className="group bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300 hover:-translate-y-1 flex flex-col items-start gap-4"
+            >
+              <div className={`p-4 rounded-2xl ${item.bg} ${item.color} transition-colors group-hover:bg-[#FF5162]/10 group-hover:text-[#FF5162]`}>
+                <item.icon size={32} />
+              </div>
+              <div className="space-y-1 text-left">
+                <h3 className="font-bold text-slate-900 group-hover:text-[#FF5162] transition-colors">
+                  {item.text}
+                </h3>
+                <p className="text-xs text-slate-500 font-medium leading-relaxed">
+                  {item.subtext}
+                </p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </main>
     </div>
   );
 }
