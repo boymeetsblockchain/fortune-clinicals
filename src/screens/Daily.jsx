@@ -5,7 +5,8 @@ import { db } from '../firebase.config';
 import { getAuth } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { addDoc, serverTimestamp, collection, getDocs } from 'firebase/firestore';
-import { AiOutlineArrowRight } from 'react-icons/ai';
+import { AiOutlineArrowRight, AiOutlineSearch, AiOutlinePlus } from 'react-icons/ai';
+import { HiOutlineArrowLeft } from 'react-icons/hi';
 import { toast } from 'react-hot-toast';
 import Loader from '../components/Loader';
 
@@ -14,36 +15,36 @@ function Daily() {
   const [date, setDate] = useState('');
   const [price, setPrice] = useState('');
   const [loading, setLoading] = useState(true);
-  const [expensesData, setExpensesData] = useState([]); // State to store fetched data
-  const [searchQuery, setSearchQuery] = useState(''); // State for the search query
+  const [expensesData, setExpensesData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   const auth = getAuth();
 
   const saveDaily = async (e) => {
     e.preventDefault();
+    if (!daily || !price || !date) {
+      toast.error("Please fill in all Fields");
+      return;
+    }
+    
     const dailyCopy = {
       daily,
       date,
-      price, // You were missing this in your code
+      price,
       timestamp: serverTimestamp(),
       userId: auth.currentUser.uid,
     };
 
     try {
-        if(!daily || !price || !date){
-            toast.error("Please fill in all Fields")
-        }else{
-            const data = await addDoc(collection(db, 'dailys'), dailyCopy);
-            console.log(data);
-            toast.success('Expenses saved');
-            setDaily('');
-            setDate('');
-            setPrice('');
-            navigate(0); // Use the correct navigation path
-        }
-
+      await addDoc(collection(db, 'dailys'), dailyCopy);
+      toast.success('Expense recorded successfully');
+      setDaily('');
+      setDate('');
+      setPrice('');
+      getDaily(); // Refresh list instead of reloading page
     } catch (error) {
       console.log(error);
+      toast.error("Failed to save expense");
     }
   };
 
@@ -72,63 +73,114 @@ function Daily() {
     getDaily();
   }, []);
 
-  const filteredNotes = expensesData.filter((noteItem) => {
-    // Convert both the note and the search query to lowercase for a case-insensitive search
-    const noteText = noteItem.daily.toLowerCase();
+  const filteredExpenses = expensesData.filter((item) => {
+    const text = item.daily.toLowerCase();
     const query = searchQuery.toLowerCase();
-    
-    // Check if the note contains the search query
-    return noteText.includes(query);
+    return text.includes(query);
   });
+
   if (loading) return <Loader />;
 
   return (
-    <>
-      {/* <Navbar /> */}
-      <div className="h-auto w-full flex flex-col max-w-screen-xl mx-auto px-4 md:px-8 lg:px-12">
-      <div className="flex justify-end mt-4">
-      <input
-          type="text"
-          placeholder="Search notes..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="px-3 py-2 mb-4 rounded-md border border-gray-300 focus:outline-none mb"
-        />
-      </div>
-         <div className='flex items-start my-3'>
-         <button className='bg-[#ff5162]  text-white py-3 inline-block px-6 rounded-lg' onClick={()=>navigate(-1)}>
-          back
-        </button>
-         </div>
-        <form onSubmit={saveDaily} className="my-3 flex flex-col gap-y-3">
-            <h1 className='text-center font-bold text-3xl'>Add Daily Expenses</h1>
-          <Input label="Add  Daily Expense" type="text" value={daily} onChange={(e) => setDaily(e.target.value)} />
-          <Input label="Add the price" type="number" value={price} onChange={(e) => setPrice(e.target.value)} />
-          <Input label="Pick a date" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
-
-          <div className="flex justify-end">
-            <button className="bg-[#FF5162] py-3 flex items-center justify-center gap-x-2 text-white text-sm rounded-md w-1/4 mt-4 hover:bg-red-700 transition">
-              Add new Expense <AiOutlineArrowRight />
-            </button>
-          </div>
-        </form>
-
-        {/* Display the fetched expenses data */}
-        <div>
-          <h2 className='text-center font-bold text-3xl mb-2'>Expenses List</h2>
+    <div className="min-h-screen bg-slate-50">
+      <Navbar />
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        
+        <div className="flex items-center gap-6 mb-10">
+          <button 
+            onClick={() => navigate(-1)}
+            className="p-3 rounded-2xl bg-white text-slate-400 hover:text-[#FF5162] hover:bg-[#FF5162]/5 transition-all shadow-sm border border-slate-100 group"
+          >
+            <HiOutlineArrowLeft size={24} className="group-hover:-translate-x-1 transition-transform" />
+          </button>
           <div>
-  {filteredNotes.map((expense) => (
-    <div key={expense.id} className='bg-red-500 text-white p-4 rounded-lg mb-4'>
-      <p className='text-lg capitalize'>{expense.daily}</p>
-      <p className='text-xl'>amount : &#8358;{expense.price}</p>
-      <p className='text-sm'>date: {expense.date}</p>
-    </div>
-  ))}
-</div>
+            <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Daily Expenditures</h1>
+            <p className="text-slate-500 font-medium text-sm">Track and manage clinical expenses</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          
+          {/* Add Expense Form */}
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100 sticky top-24">
+              <h2 className="text-xl font-bold text-slate-900 mb-8">Add New Expense</h2>
+              <form onSubmit={saveDaily} className="space-y-6">
+                <Input label="Description" placeholder="e.g., Medical supplies" value={daily} onChange={(e) => setDaily(e.target.value)} />
+                <Input label="Amount (₦)" type="number" placeholder="0.00" value={price} onChange={(e) => setPrice(e.target.value)} />
+                <Input label="Date" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+
+                <button 
+                  type="submit"
+                  className="w-full bg-[#FF5162] py-4 flex items-center justify-center gap-2 text-white font-bold rounded-2xl shadow-xl shadow-red-50 hover:bg-[#E64858] transition-all active:scale-[0.98]"
+                >
+                  <AiOutlinePlus /> Save Expense
+                </button>
+              </form>
+            </div>
+          </div>
+
+          {/* Expenses List */}
+          <div className="lg:col-span-2 space-y-8">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-4">
+              <div className="flex items-center gap-2 px-2">
+                <div className="w-1.5 h-6 bg-slate-900 rounded-full"></div>
+                <h2 className="text-lg font-bold text-slate-800 uppercase tracking-wider">Expense History</h2>
+              </div>
+              <div className="relative w-full md:w-72">
+                <Input
+                  placeholder="Search expenses..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <div className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400">
+                  <AiOutlineSearch size={18} />
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {filteredExpenses.length > 0 ? (
+                filteredExpenses.map((expense) => (
+                  <div 
+                    key={expense.id} 
+                    className="group bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300 hover:-translate-y-1"
+                  >
+                    <div className="flex justify-between items-start mb-6">
+                      <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 shadow-inner">
+                        <HiOutlineArrowLeft className="rotate-[135deg]" size={20} />
+                      </div>
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 px-3 py-1 rounded-full border border-slate-100">
+                        {expense.date}
+                      </span>
+                    </div>
+                    
+                    <div className="space-y-1 mb-6">
+                      <h3 className="font-bold text-slate-900 text-lg group-hover:text-[#FF5162] transition-colors capitalize">
+                        {expense.daily}
+                      </h3>
+                      <p className="text-2xl font-black text-slate-800 tracking-tight">
+                        ₦{parseFloat(expense.price || 0).toLocaleString()}
+                      </p>
+                    </div>
+
+                    <div className="pt-4 border-t border-slate-50 flex items-center justify-between">
+                      <span className="text-[9px] text-slate-300 font-medium uppercase tracking-tighter">Verified Expenditure</span>
+                      <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="col-span-full bg-white rounded-[2.5rem] p-20 text-center border-2 border-dashed border-slate-100">
+                  <p className="text-slate-400 font-medium">No expenses found matching your search.</p>
+                </div>
+              )}
+            </div>
+          </div>
 
         </div>
-      </div>
-    </>
+      </main>
+    </div>
   );
 }
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchFeeTable, updateFee } from "../../../hooks/feeTables";
-import Input from "../../../components/Input";
+import { HiOutlinePencilAlt, HiOutlineCheck } from "react-icons/hi";
 
 function FeeTable({ tableName, label }) {
   const [fees, setFees] = useState([]);
@@ -17,57 +17,61 @@ function FeeTable({ tableName, label }) {
   };
 
   const handleSave = async (id) => {
-    await updateFee(tableName, id, editedFee);
-    setEditingId(null);
-    setEditedFee("");
-    fetchFeeTable(tableName).then(setFees);
+    try {
+      await updateFee(tableName, id, editedFee);
+      setEditingId(null);
+      setEditedFee("");
+      const updatedFees = await fetchFeeTable(tableName);
+      setFees(updatedFees);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
-    <div className="mb-10 bg-white shadow-lg rounded-2xl p-6 border border-gray-100">
-      <h3 className="font-semibold text-lg text-gray-800 mb-4">{label}</h3>
-      <div className="overflow-x-auto">
-        <table className="min-w-full border-collapse rounded-lg overflow-hidden">
-          <thead>
-            <tr className=" text-gray-700 text-sm uppercase">
-              <th className="px-6 py-3 text-left font-medium">Fee</th>
-              <th className="px-6 py-3 text-center font-medium">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {fees.map((feeItem, idx) => (
-              <tr
-                key={feeItem.id}
-                className={`${idx % 2 === 0 ? "bg-white" : "bg-gray-50"} `}
-              >
-                <td className="px-6 py-3">
+    <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden transition-all hover:shadow-md">
+      <div className="bg-slate-50/50 px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+        <h3 className="font-bold text-slate-800 text-sm tracking-tight">{label}</h3>
+        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-white px-2 py-1 rounded-lg border border-slate-100">
+          Fees
+        </span>
+      </div>
+      <div className="p-4">
+        <table className="w-full text-left">
+          <tbody className="divide-y divide-slate-50">
+            {fees.map((feeItem) => (
+              <tr key={feeItem.id} className="group transition-colors hover:bg-slate-50/30">
+                <td className="py-4 pl-2">
                   {editingId === feeItem.id ? (
-                    <Input
-                      type="number"
-                      value={editedFee}
-                      onChange={(e) => setEditedFee(e.target.value)}
-                      className="w-28 rounded-lg  focus:ring-2 focus:ring-blue-400"
-                    />
+                    <div className="flex items-center gap-2">
+                      <span className="text-slate-400 font-bold">₦</span>
+                      <input
+                        type="number"
+                        value={editedFee}
+                        onChange={(e) => setEditedFee(e.target.value)}
+                        className="w-24 px-3 py-2 bg-white border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-[#FF5162] focus:ring-4 focus:ring-[#FF5162]/5 transition-all"
+                      />
+                    </div>
                   ) : (
-                    <span className="text-gray-700 font-medium">
-                      ₦{feeItem.fee}
+                    <span className="text-lg font-extrabold text-slate-700 tracking-tight">
+                      ₦{parseFloat(feeItem.fee || 0).toLocaleString()}
                     </span>
                   )}
                 </td>
-                <td className="px-6 py-3 text-center">
+                <td className="py-4 text-right pr-2">
                   {editingId === feeItem.id ? (
                     <button
-                      className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg text-white font-medium shadow-sm transition"
+                      className="bg-emerald-500 hover:bg-emerald-600 p-2.5 rounded-xl text-white transition-all shadow-lg shadow-emerald-100 active:scale-95"
                       onClick={() => handleSave(feeItem.id)}
                     >
-                      Save
+                      <HiOutlineCheck size={18} />
                     </button>
                   ) : (
                     <button
-                      className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg text-white font-medium shadow-sm transition"
+                      className="opacity-0 group-hover:opacity-100 p-2.5 text-[#FF5162] hover:bg-[#FF5162]/10 rounded-xl transition-all"
                       onClick={() => handleEdit(feeItem.id, feeItem.fee)}
                     >
-                      Edit
+                      <HiOutlinePencilAlt size={18} />
                     </button>
                   )}
                 </td>
