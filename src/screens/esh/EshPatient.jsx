@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
 import EshNav from "../../components/EshNav";
-
-import { FaCheck } from "react-icons/fa";
-import { ImBin } from "react-icons/im";
-import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { db } from "../../firebase.config";
 import {
@@ -15,16 +11,18 @@ import {
   getDocs,
   where,
   updateDoc,
-} from "firebase/firestore"; // Import deleteDoc
+} from "firebase/firestore";
 import { useParams } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 import Loader from "../../components/Loader";
-// import NewSession from '../../components/NewSession'
 import EshSession from "../../components/EshSession";
 import Session from "../../components/Session";
 import InitialReview from "../../components/InitialReview";
 import Input from "../../components/Input";
-import { AiTwotoneEdit } from "react-icons/ai";
+import { AiTwotoneEdit, AiOutlineUser, AiOutlineArrowLeft } from "react-icons/ai";
+import { ImBin } from "react-icons/im";
+import { toast } from "react-hot-toast";
+
 function PatientDetail() {
   const params = useParams();
   const navigate = useNavigate();
@@ -32,9 +30,9 @@ function PatientDetail() {
   const [loading, setLoading] = useState(true);
   const [patient, setPatient] = useState(null);
   const [updatedDate, setUpdatedDate] = useState("");
-  const [session, setSession] = useState("");
-  const [newsession, setNewSession] = useState("");
-  const [isActive, setIsActive] = useState("newsession"); // Initialize with 'payment'
+  const [session, setSession] = useState([]);
+  const [newsession, setNewSession] = useState([]);
+  const [isActive, setIsActive] = useState("newsession");
 
   useEffect(() => {
     const getPatient = async () => {
@@ -46,217 +44,204 @@ function PatientDetail() {
       }
     };
 
-    const getSession = async () => {
-      const paymentsQuery = query(
-        collection(db, "patientssessions"),
-        where("patientId", "==", params.id)
-      );
-      const querySnapshot = await getDocs(paymentsQuery);
+    const getSessionData = async () => {
+      const q2023 = query(collection(db, "patientssessions"), where("patientId", "==", params.id));
+      const q2024 = query(collection(db, "eshsessions"), where("patientId", "==", params.id));
+      
+      const snap2023 = await getDocs(q2023);
+      const snap2024 = await getDocs(q2024);
 
-      // Use map to directly transform querySnapshot to an array of paymentDetails
-      const sessionDetails = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setSession(sessionDetails);
+      setSession(snap2023.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      setNewSession(snap2024.docs.map(doc => ({ id: doc.id, ...doc.data() })));
     };
 
-    const getNewSession = async () => {
-      const paymentsQuery = query(
-        collection(db, "eshsessions"),
-        where("patientId", "==", params.id)
-      );
-      const querySnapshot = await getDocs(paymentsQuery);
-      // Use map to directly transform querySnapshot to an array of paymentDetails
-      const sessionDetails = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setNewSession(sessionDetails);
-    };
-
-    getSession();
-    getNewSession();
     getPatient();
-  }, []);
+    getSessionData();
+  }, [params.id]);
 
   const onDelete = async () => {
-    if (
-      window.confirm("Are you sure you want to delete this patient record?")
-    ) {
+    if (window.confirm("Delete this patient record from ESH database?")) {
       try {
-        const docRef = doc(db, "eshpatients", params.id);
-        await deleteDoc(docRef);
+        await deleteDoc(doc(db, "eshpatients", params.id));
+        toast.success("Deleted successfully");
         navigate("/esh/patients");
-        toast.success("Deleted");
-        // Redirect or perform any other action after deletion
       } catch (error) {
-        console.error("Error deleting patient record:", error);
-        navigate("/esh/patients");
-        toast.error("Error deleting patient record");
+        console.error(error);
+        toast.error("Error deleting record");
       }
     }
   };
 
   const UpdatePatient = async () => {
+    if (!updatedDate) {
+      toast.error("Select a log date");
+      return;
+    }
     try {
-      // Ensure updatedDate is not empty before proceeding
-      if (!updatedDate) {
-        toast.error("Please select or enter an updated date.");
-        return;
-      }
-
-      // Update the patient data with the new updatedDate
       const docRef = doc(db, "eshpatients", params.id);
-      const updatedPatientData = { 
+      await updateDoc(docRef, { 
         ...patient, 
         updatedDate,
         updatedBy: auth.currentUser?.displayName || 'Unknown',
-        updatedByEmail: auth.currentUser?.email || 'N/A',
         lastUpdatedAt: new Date().toLocaleString()
-      };
-      await updateDoc(docRef, updatedPatientData);
-
-      // Show success message and navigate
-      toast.success("Patient record updated successfully.");
+      });
+      toast.success("Activity logged");
       navigate(0);
     } catch (error) {
-      console.error("Error updating patient record:", error);
-      toast.error("Error updating patient record");
+      console.error(error);
+      toast.error("Log failed");
     }
   };
-  const UpdatePatientDetails = (params) => {
-    navigate(`/update/esh/${params}`);
-  };
-  if (loading) {
-    return <Loader />;
-  }
+
+  if (loading) return <Loader />;
 
   return (
-    <>
+    <div className="min-h-screen bg-slate-50 pb-12">
       <EshNav />
-      <div className="mx-auto max-w-screen-xl my-5 h-screen md:overflow-y-hidden w-full px-4 md:px-8 lg:px-12">
-        <div className="flex flex-col my-4 space-y-8">
-          <div className="flex top-details flex-col md:flex-row space-y-4 items-center justify-between">
-            <div className="name-age-number flex space-y-4 mx-5 flex-col">
-              <h1 className="bg-slate-100 text-[#fff5162]  text-center font-bold px-2 py-3 text-3xl rounded-md">
-                {patient?.selectedTitle} {""}
-                {patient?.surname} &nbsp; {patient?.othername}
-              </h1>
-              <p> Age:&nbsp; {patient?.age}</p>
-              <p> Phone Number: &nbsp; {patient?.phoneNumber}</p>
-              <p>Gender: {patient?.gender}</p>
-              <p>Address:&nbsp;{patient?.address}</p>
-              <p>Condition:&nbsp; {patient?.condition}</p>
-              <p>Assessed by:&nbsp;{patient?.clinician}</p>
-              <p>Reffered by:&nbsp;{patient?.reffer}</p>
-              <div className="date-updated mt-4 flex   gap-3 items-center justify-between">
-                <Input
-                  label={"Update"}
-                  type={"date"}
-                  value={updatedDate}
-                  onChange={(e) => setUpdatedDate(e.target.value)}
-                />
-                <button
-                  className="bg-blue-700  text-white px-4 py-3 rounded-md"
-                  onClick={UpdatePatient}
-                >
-                  Update
-                </button>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex flex-col gap-8">
+          
+          {/* Hero Section */}
+          <div className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+            <div className="flex items-center gap-6">
+              <div className={`w-20 h-20 rounded-[1.5rem] flex items-center justify-center text-3xl font-bold shadow-inner ${
+                patient?.selectedValue === 'In-patient' ? 'bg-emerald-50 text-emerald-600' : 'bg-blue-50 text-blue-600'
+              }`}>
+                {patient?.surname?.[0]?.toUpperCase()}
               </div>
-              <div className="mt-8 pt-4 border-t border-gray-200 text-xs text-gray-500">
-                {patient?.userName && (
-                  <p>Created by: {patient?.userName} ({patient?.userEmail}) on {patient?.createdAt}</p>
-                )}
-                {patient?.updatedBy && (
-                  <p>Last updated by: {patient?.updatedBy} ({patient?.updatedByEmail}) on {patient?.lastUpdatedAt}</p>
-                )}
+              <div className="space-y-1">
+                <div className="flex items-center gap-3">
+                  <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+                    {patient?.selectedTitle} {patient?.surname} {patient?.othername}
+                  </h1>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className={`px-3 py-1 text-[10px] font-bold rounded-full border border-emerald-100 bg-emerald-50 text-emerald-600 uppercase tracking-widest`}>
+                    ESH {patient?.selectedValue}
+                  </span>
+                  <span className="px-3 py-1 bg-slate-50 text-slate-600 text-[10px] font-bold rounded-full border border-slate-100 uppercase tracking-widest">
+                    Reg: {patient?.dateRegistered}
+                  </span>
+                </div>
               </div>
             </div>
-            <div className="reg-number bg-green-500 text-2xl text-white px-2 py-1.5 ">
-              <h1>
-                {patient.selectedValue}
-                {patient.regNumber}
-              </h1>
+
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => navigate(`/esh-update-patient/${params.id}`)}
+                className="flex items-center gap-2 px-6 py-3 bg-white border border-slate-200 rounded-2xl text-slate-700 font-bold text-sm hover:bg-slate-50 transition-all active:scale-95 shadow-sm"
+              >
+                <AiTwotoneEdit size={20} className="text-emerald-500" />
+                Edit Profile
+              </button>
+              <button
+                onClick={onDelete}
+                className="flex items-center gap-2 px-6 py-3 bg-white border border-slate-200 rounded-2xl text-red-600 font-bold text-sm hover:bg-red-50 hover:border-red-100 transition-all active:scale-95 shadow-sm"
+              >
+                <ImBin size={18} />
+                Delete
+              </button>
             </div>
           </div>
-          <div className="session-payment md:grid md:gap-x-8 md:grid-cols-4 md:h-[420px] flex flex-col gap-4 justify-center">
-            <div className="bg-slate-200 rounded-md shadow-lg col-span-3 p-4 overflow-y-auto">
-              {isActive === "newsession" && (
-                <EshSession
-                  patientId={params.id}
-                  patientType={patient.selectedValue}
-                />
-              )}
-              {isActive === "session" && (
-                <Session patientId={params.id} patientType={"esh"} />
-              )}
-              {isActive === "review" && <InitialReview patientId={params.id} />}
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Sidebar */}
+            <div className="lg:col-span-1 space-y-8">
+              <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100 space-y-6">
+                <div className="flex items-center justify-between pb-4 border-b border-slate-50">
+                  <h2 className="text-xl font-bold text-slate-800">Identity Details</h2>
+                  <AiOutlineUser className="text-slate-200" size={24} />
+                </div>
+                
+                <div className="grid grid-cols-1 gap-5">
+                  {[
+                    { label: "Age", value: patient?.age + " " + (patient?.ageRange || "Year") },
+                    { label: "Gender", value: patient?.gender },
+                    { label: "Phone", value: patient?.phoneNumber },
+                    { label: "Emergency", value: patient?.phoneNumber2 },
+                    { label: "Condition", value: patient?.condition },
+                    { label: "Clinician", value: patient?.clinician },
+                    { label: "Referrer", value: patient?.reffer },
+                    { label: "Address", value: patient?.address },
+                  ].map((info, i) => (
+                    <div key={i} className="space-y-1">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{info.label}</span>
+                      <p className="text-slate-700 font-semibold">{info.value || "N/A"}</p>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="pt-6 border-t border-slate-50 space-y-4">
+                  <div className="flex items-center gap-3">
+                    <div className="flex-1">
+                      <Input
+                        label="Log Date"
+                        type="date"
+                        value={updatedDate}
+                        onChange={(e) => setUpdatedDate(e.target.value)}
+                      />
+                    </div>
+                    <button
+                      onClick={UpdatePatient}
+                      className="mt-6 px-6 py-3.5 bg-emerald-500 text-white rounded-2xl font-bold text-sm shadow-lg shadow-emerald-100 hover:bg-emerald-600 transition-all active:scale-95"
+                    >
+                      Update
+                    </button>
+                  </div>
+                  
+                  <div className="text-[10px] text-slate-400 leading-relaxed italic border-t border-slate-50 pt-4">
+                    <p>Created by {patient?.userName} on {patient?.createdAt}</p>
+                    {patient?.updatedBy && <p>Last updated by {patient?.updatedBy} on {patient?.lastUpdatedAt}</p>}
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="bg-slate-200 rounded-md shadow-lg col-span-1 flex flex-col justify-center space-y-4 p-6 col-span-">
-              <div
-                className="flex gap-3 cursor-pointer hover:opacity-50"
-                onClick={() => setIsActive("payment")}
-              >
-                <FaCheck size={32} color="green" />
-                <h1 className="">DETAILS</h1>
-              </div>
-              <div
-                className="flex gap-3 cursor-pointer hover:opacity-50"
-                onClick={() => setIsActive("review")}
-              >
-                <FaCheck size={32} color="green" />
-                <h1 className="">INTIAL REVIEW</h1>
-              </div>
-              <div className="flex gap-3 items-center justify-between cursor-pointer hover:opacity-50">
-                <div
-                  className="detials flex gap-2"
-                  onClick={() => setIsActive("session")}
-                >
-                  <FaCheck size={32} color="green" />
-                  <h1 className="">
-                    {" "}
-                    2023 SESSIONS{" "}
-                    <span className="ml-4 bg-green-500 px-3 py-1 rounded-md text-white">
-                      {session.length}
-                    </span>{" "}
-                  </h1>
+
+            {/* Main Content */}
+            <div className="lg:col-span-2 space-y-8">
+              <div className="bg-white rounded-[2.5rem] p-4 shadow-sm border border-slate-100 min-h-[600px]">
+                <div className="flex p-1.5 bg-slate-50 rounded-[1.75rem] mb-6">
+                  {[
+                    { id: "newsession", label: "2024 Sessions", count: newsession?.length },
+                    { id: "session", label: "2023 Sessions", count: session?.length },
+                    { id: "review", label: "Initial Review" },
+                  ].map((tab) => (
+                    <button
+                      key={tab.id}
+                      onClick={() => setIsActive(tab.id)}
+                      className={`flex-1 flex items-center justify-center gap-2 py-4 px-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${
+                        isActive === tab.id
+                          ? "bg-white text-emerald-600 shadow-sm"
+                          : "text-slate-400 hover:text-slate-600"
+                      }`}
+                    >
+                      {tab.label}
+                      {tab.count !== undefined && (
+                        <span className={`px-2 py-0.5 rounded-full text-[10px] ${
+                          isActive === tab.id ? "bg-emerald-500 text-white" : "bg-slate-200 text-slate-500"
+                        }`}>
+                          {tab.count}
+                        </span>
+                      )}
+                    </button>
+                  ))}
                 </div>
-                <div>{patient?.session}</div>
-              </div>
-              <div className="flex gap-3 items-center justify-between cursor-pointer hover:opacity-50">
-                <div
-                  className="detials flex gap-2"
-                  onClick={() => setIsActive("newsession")}
-                >
-                  <FaCheck size={32} color="green" />
-                  <h1 className="">
-                    2024 SESSIONS{" "}
-                    <span className="ml-4 bg-green-500 px-3 py-1 rounded-md text-white">
-                      {newsession?.length}
-                    </span>
-                  </h1>
+
+                <div className="px-4 py-2">
+                  {isActive === "newsession" && (
+                    <EshSession patientId={params.id} patientType={"esh"} />
+                  )}
+                  {isActive === "session" && (
+                    <Session patientId={params.id} patientType={"esh"} />
+                  )}
+                  {isActive === "review" && <InitialReview patientId={params.id} />}
                 </div>
-              </div>
-              <div
-                className="flex gap-3 cursor-pointer hover:opacity-50"
-                onClick={() => UpdatePatientDetails(params.id)}
-              >
-                <AiTwotoneEdit size={32} color="blue" />
-                UPDATE PATIENT
-              </div>
-              <div
-                className="flex gap-3 cursor-pointer hover:opacity-50"
-                onClick={onDelete}
-              >
-                <ImBin size={32} color="red" />
-                <h1 className="">DELETE</h1>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </>
+      </main>
+    </div>
   );
 }
 

@@ -9,13 +9,16 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import Navbar from "../../components/Navbar";
+import EshNav from "../../components/EshNav";
 import Loader from "../../components/Loader";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { BsFillCartPlusFill } from "react-icons/bs";
+import { AiOutlineSearch, AiOutlineEdit, AiOutlineMessage, AiOutlineEye } from "react-icons/ai";
+import { HiOutlineCheck } from "react-icons/hi";
 import Input from "../../components/Input";
 import { ViewCommentModal } from "../../components/products/viewCommentModal";
 import CommentModal from "../../components/products/commentModal";
+import { toast } from "react-hot-toast";
 
 function Products() {
   const [loading, setLoading] = useState(true);
@@ -27,7 +30,6 @@ function Products() {
   const [isCommentViewModalOpen, setIsViewCommentModalOpen] = useState(false);
   const [commentProductId, setCommentProductId] = useState(null);
   const [comments, setComments] = useState([]);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const getProducts = async () => {
@@ -53,7 +55,6 @@ function Products() {
       [id]: {
         ...prevState[id],
         [field]: value,
-        editedDate: new Date().toISOString(),
       },
     }));
   };
@@ -66,38 +67,33 @@ function Products() {
         editedDate: new Date().toISOString(),
       };
 
-      const oldQuantity = parseFloat(oldProduct.quantity);
-      const added = parseFloat(updatedData.added);
-      const sold = parseFloat(updatedData.sold);
+      const oldQuantity = parseFloat(oldProduct.quantity || 0);
+      const added = parseFloat(updatedData.added || 0);
+      const sold = parseFloat(updatedData.sold || 0);
 
-      // ✅ Calculate new quantity
-      if (!isNaN(added)) {
+      if (!isNaN(added) && added !== 0) {
         updatedData.quantity = oldQuantity + added;
-      } else if (!isNaN(sold)) {
+      } else if (!isNaN(sold) && sold !== 0) {
         updatedData.quantity = oldQuantity - sold;
-      } else {
-        updatedData.quantity = oldQuantity;
       }
 
-      // ✅ Reset added & sold to 0 after operation
       updatedData.added = 0;
       updatedData.sold = 0;
 
-      // ✅ Update Firestore
       await updateDoc(doc(db, "eshgoods", id), updatedData);
-
-      // ✅ Update local state (reset added/sold locally too)
+      
       setProducts((prev) =>
         prev.map((product) =>
           product.id === id ? { ...product, ...updatedData } : product
         )
       );
 
-      // ✅ Reset edit state
       setEditingId(null);
       setEditedData({});
+      toast.success("Inventory updated");
     } catch (error) {
       console.error(error);
+      toast.error("Update failed");
     }
   };
 
@@ -140,164 +136,168 @@ function Products() {
         comment: commentData.comment,
         date: commentData.date,
       });
-
-      console.log("Comment saved successfully!");
+      toast.success("Comment added");
     } catch (error) {
       console.error("Error saving comment: ", error);
     }
   };
 
-  if (loading) {
-    return <Loader />;
-  }
+  if (loading) return <Loader />;
 
   return (
-    <>
-      <Navbar />
-      <div className="mx-auto  my-5 h-full relative w-full px-4 md:px-8 lg:px-12">
-        <div className="flex justify-end mb-3">
-          <Input
-            value={searchQuery}
-            label={"Search Products"}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-        <div className="overflow-x-auto">
-          <table className="min-w-full table-fixed text-sm">
-            <thead>
-              <tr>
-                <th className="px-4 py-2">No.</th>
-                <th className="px-4 py-2">Name</th>
-                <th className="px-4 py-2">Quantity</th>
-                <th className="px-4 py-2">Price</th>
-                <th className="px-4 py-2">Added</th>
-                <th className="px-4 py-2">Used/Sold</th>
-                <th className="px-4 py-2">Date</th>
-                <th className="px-4 py-2">Actions</th>
-              </tr>
-            </thead>
+    <div className="min-h-screen bg-slate-50">
+      <EshNav />
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-10">
+          <div className="space-y-1">
+            <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">ESH Inventory</h1>
+            <p className="text-slate-500 font-medium">Manage and track available products</p>
+          </div>
 
-            <tbody>
-              {filteredProducts?.map((product, index) => (
-                <tr
-                  key={product.id}
-                  className="border-b border-gray-200 cursor-pointer"
-                >
-                  <td className="px-4 text-center py-2">{index + 1}</td>
-                  <td className="px-4 text-center py-2">
-                    {editingId === product.id ? (
-                      <Input
-                        value={editedData[product.id]?.name || product.name}
-                        onChange={(e) =>
-                          handleEdit(product.id, "name", e.target.value)
-                        }
-                      />
-                    ) : (
-                      product.name
-                    )}
-                  </td>
-                  <td className="px-4 text-center text-sm py-2">
-                    {editingId === product.id ? (
-                      <Input
-                        type={"number"}
-                        value={
-                          editedData[product.id]?.quantity || product.quantity
-                        }
-                        onChange={(e) =>
-                          handleEdit(product.id, "quantity", e.target.value)
-                        }
-                      />
-                    ) : (
-                      product.quantity
-                    )}
-                  </td>
-                  <td className="px-4 text-center text-sm py-2">
-                    {editingId === product.id ? (
-                      <Input
-                        type={"number"}
-                        value={editedData[product.id]?.price || product.price}
-                        onChange={(e) =>
-                          handleEdit(product.id, "price", e.target.value)
-                        }
-                      />
-                    ) : (
-                      product.price
-                    )}
-                  </td>
-                  <td className="px-4 text-center text-sm py-2">
-                    {editingId === product.id ? (
-                      <Input
-                        type={"number"}
-                        value={editedData[product.id]?.added || product.added}
-                        onChange={(e) =>
-                          handleEdit(product.id, "added", e.target.value)
-                        }
-                      />
-                    ) : (
-                      product.added
-                    )}
-                  </td>
-                  <td className="px-4 text-center text-sm py-2">
-                    {editingId === product.id ? (
-                      <Input
-                        type={"number"}
-                        value={editedData[product.id]?.sold || product.sold}
-                        onChange={(e) =>
-                          handleEdit(product.id, "sold", e.target.value)
-                        }
-                      />
-                    ) : (
-                      product.sold
-                    )}
-                  </td>
-                  <td className="px-4 text-center text-xs py-2">
-                    {editingId === product.id ? (
-                      <Input
-                        type={"date"}
-                        value={editedData[product.id]?.date || product.date}
-                        onChange={(e) =>
-                          handleEdit(product.id, "date", e.target.value)
-                        }
-                      />
-                    ) : (
-                      product.date
-                    )}
-                  </td>
-                  <td className="px-4 text-center text-sm py-2">
-                    {editingId === product.id ? (
-                      <button
-                        className="bg-green-500 px-3 py-2 rounded-md text-white"
-                        onClick={() => handleSave(product.id)}
-                      >
-                        Save
-                      </button>
-                    ) : (
-                      <div className="flex flex-row gap-x-4">
-                        <button
-                          className="bg-blue-500 px-3 py-2 rounded-md text-white text-xs"
-                          onClick={() => setEditingId(product.id)}
-                        >
-                          Edit
-                        </button>
-                        <button
-                          className="bg-pink-500 px-3 py-2 rounded-md text-white text-xs"
-                          onClick={() => openCommentModal(product.id)}
-                        >
-                          Comment
-                        </button>
-                        <button
-                          className="bg-purple-500 px-3 py-2 rounded-md text-white text-xs"
-                          onClick={() => openViewCommentModal(product.id)}
-                        >
-                          View Comment
-                        </button>
-                      </div>
-                    )}
-                  </td>
+          <div className="relative w-full md:w-80 group">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-emerald-500 transition-colors">
+              <AiOutlineSearch size={20} />
+            </div>
+            <input
+              type="text"
+              placeholder="Search inventory..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm font-medium focus:outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-500 transition-all shadow-sm"
+            />
+          </div>
+        </div>
+
+        <div className="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-slate-50/50 border-b border-slate-100">
+                  <th className="px-6 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Product Info</th>
+                  <th className="px-6 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Stock Level</th>
+                  <th className="px-6 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Unit Price</th>
+                  <th className="px-6 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Manage Stock</th>
+                  <th className="px-6 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-slate-50">
+                {filteredProducts?.map((product) => (
+                  <tr key={product.id} className="group hover:bg-slate-50/30 transition-colors">
+                    <td className="px-6 py-6">
+                      {editingId === product.id ? (
+                        <input
+                          value={editedData[product.id]?.name || product.name}
+                          onChange={(e) => handleEdit(product.id, "name", e.target.value)}
+                          className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-sm font-bold focus:border-emerald-500 transition-all"
+                        />
+                      ) : (
+                        <div className="flex items-center gap-4">
+                          <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 font-bold">
+                            {product.name?.[0]?.toUpperCase()}
+                          </div>
+                          <div>
+                            <p className="font-bold text-slate-900">{product.name}</p>
+                            <p className="text-[10px] text-slate-400 font-medium">Ref: {product.id.slice(0, 8)}</p>
+                          </div>
+                        </div>
+                      )}
+                    </td>
+                    <td className="px-6 py-6">
+                      <div className="flex items-center gap-2">
+                        {editingId === product.id ? (
+                          <input
+                            type="number"
+                            value={editedData[product.id]?.quantity || product.quantity}
+                            onChange={(e) => handleEdit(product.id, "quantity", e.target.value)}
+                            className="w-20 px-3 py-2 bg-white border border-slate-200 rounded-xl text-sm font-bold"
+                          />
+                        ) : (
+                          <span className={`px-3 py-1 rounded-lg font-bold text-sm ${
+                            parseFloat(product.quantity) < 5 ? 'bg-red-50 text-red-600' : 'bg-emerald-50 text-emerald-600'
+                          }`}>
+                            {product.quantity} units
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-6 py-6">
+                      {editingId === product.id ? (
+                        <input
+                          type="number"
+                          value={editedData[product.id]?.price || product.price}
+                          onChange={(e) => handleEdit(product.id, "price", e.target.value)}
+                          className="w-24 px-3 py-2 bg-white border border-slate-200 rounded-xl text-sm font-bold"
+                        />
+                      ) : (
+                        <span className="font-extrabold text-slate-700 tracking-tight">₦{parseFloat(product.price || 0).toLocaleString()}</span>
+                      )}
+                    </td>
+                    <td className="px-6 py-6">
+                      <div className="flex items-center gap-3">
+                        <div className="space-y-1">
+                          <span className="text-[9px] font-bold text-slate-300 uppercase">Add</span>
+                          <input
+                            type="number"
+                            placeholder="0"
+                            className="w-16 px-2 py-1.5 bg-slate-50 border border-slate-100 rounded-lg text-xs font-bold focus:bg-white focus:border-emerald-500 transition-all"
+                            value={editedData[product.id]?.added || ""}
+                            onChange={(e) => handleEdit(product.id, "added", e.target.value)}
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <span className="text-[9px] font-bold text-slate-300 uppercase">Sold</span>
+                          <input
+                            type="number"
+                            placeholder="0"
+                            className="w-16 px-2 py-1.5 bg-slate-50 border border-slate-100 rounded-lg text-xs font-bold focus:bg-white focus:border-red-400 transition-all"
+                            value={editedData[product.id]?.sold || ""}
+                            onChange={(e) => handleEdit(product.id, "sold", e.target.value)}
+                          />
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-6">
+                      <div className="flex items-center gap-2">
+                        {editingId === product.id ? (
+                          <button
+                            onClick={() => handleSave(product.id)}
+                            className="p-2.5 bg-emerald-500 text-white rounded-xl shadow-lg shadow-emerald-100 hover:bg-emerald-600 transition-all"
+                          >
+                            <HiOutlineCheck size={20} />
+                          </button>
+                        ) : (
+                          <>
+                            <button
+                              onClick={() => setEditingId(product.id)}
+                              className="p-2.5 text-slate-400 hover:text-blue-500 hover:bg-blue-50 rounded-xl transition-all"
+                              title="Edit Info"
+                            >
+                              <AiOutlineEdit size={18} />
+                            </button>
+                            <button
+                              onClick={() => openCommentModal(product.id)}
+                              className="p-2.5 text-slate-400 hover:text-amber-500 hover:bg-amber-50 rounded-xl transition-all"
+                              title="Add Comment"
+                            >
+                              <AiOutlineMessage size={18} />
+                            </button>
+                            <button
+                              onClick={() => openViewCommentModal(product.id)}
+                              className="p-2.5 text-slate-400 hover:text-purple-500 hover:bg-purple-50 rounded-xl transition-all"
+                              title="View Comments"
+                            >
+                              <AiOutlineEye size={18} />
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         {isCommentModalOpen && (
@@ -316,13 +316,14 @@ function Products() {
           />
         )}
 
-        <div className="fixed bottom-4 right-4 h-40 w-40 cursor-pointer bg-white flex justify-center items-center text-sm rounded-full shadow-lg">
-          <Link to={"/esh/add-new-product"}>
-            <BsFillCartPlusFill size={64} color="red" />
-          </Link>
-        </div>
-      </div>
-    </>
+        <Link
+          to="/esh/add-new-product"
+          className="fixed bottom-8 right-8 w-16 h-16 bg-emerald-500 text-white rounded-[1.5rem] shadow-2xl shadow-emerald-200 flex items-center justify-center hover:scale-110 active:scale-90 transition-all duration-300 z-50 border-4 border-white"
+        >
+          <BsFillCartPlusFill size={28} />
+        </Link>
+      </main>
+    </div>
   );
 }
 

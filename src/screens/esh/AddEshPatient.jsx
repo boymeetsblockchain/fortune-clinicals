@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import EshNav from "../../components/EshNav";
 import Input from "../../components/Input";
 import Select from "../../components/Select";
@@ -9,18 +9,18 @@ import {
   AiOutlineArrowLeft,
   AiOutlineArrowRight,
 } from "react-icons/ai";
-import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { getAuth } from "firebase/auth";
-import { ageData, titleOptions, genderOptions } from "../../data";
-import { Eshoptions } from "../../data";
+import { ageData, titleOptions, Eshoptions } from "../../data";
 import { Link, useNavigate } from "react-router-dom";
+
 function EshPatient() {
   const navigate = useNavigate();
   const auth = getAuth();
+  
   const [surname, setSurname] = useState("");
   const [othername, setOthername] = useState("");
-  const [ageRange, setAgeRange] = useState("");
+  const [ageRange, setAgeRange] = useState("Year");
   const [age, setAge] = useState("");
   const [address, setAddress] = useState("");
   const [regNumber, setRegnumber] = useState("");
@@ -32,234 +32,168 @@ function EshPatient() {
   const [dateRegistered, setDateRegistered] = useState("");
   const [numOfSessions, setNumOfSessions] = useState("");
   const [paidSessions, setPaidSessions] = useState("");
-  const [comment, setComment] = useState([]);
+  const [comment, setComment] = useState("");
   const [amountPerSession, setAmountPerSession] = useState("");
   const [selectedValue, setSelectedValue] = useState("In-patient");
   const [selectedTitle, setSelectedTitle] = useState("Mr");
   const [reffer, setReffer] = useState("");
   const [gender, setGender] = useState("Male");
 
-  const formData = {
-    surname,
-    othername,
-    age,
-    address,
-    phoneNumber,
-    clinician,
-    dateRegistered,
-    reffer,
-    selectedValue,
-    numOfSessions,
-    paidSessions,
-    comment,
-    condition,
-    regNumber,
-    phoneNumber2,
-    caregiver,
-    gender,
-  };
   const registerPatient = async (e) => {
     e.preventDefault();
 
-    if (!formData.surname || !formData.othername || !formData.clinician) {
-      toast.error("Please Fill in surname, othername and clinicians");
+    if (!surname || !othername || !clinician) {
+      toast.error("Please fill in basic patient identity fields");
       return;
     }
 
     try {
-      const formDataCopy = {
-        ...formData,
+      const formData = {
+        surname, othername, age, address, phoneNumber, clinician,
+        dateRegistered, reffer, selectedValue, numOfSessions,
+        paidSessions, comment, condition, regNumber,
+        phoneNumber2, caregiver, gender, ageRange,
         timestamp: serverTimestamp(),
         userId: auth?.currentUser?.uid,
         userName: auth.currentUser?.displayName || 'Unknown',
         userEmail: auth.currentUser?.email || 'N/A',
         createdAt: new Date().toLocaleString(),
       };
-      const data = await addDoc(collection(db, "eshpatients"), formDataCopy);
-      console.log(data);
-      toast.success("Patient saved");
+      
+      const data = await addDoc(collection(db, "eshpatients"), formData);
+      toast.success("ESH Record Created Successfully");
       navigate(`/esh-patient/${data.id}`);
     } catch (error) {
       console.error(error);
+      toast.error("Failed to save patient record");
     }
   };
 
   return (
-    <>
+    <div className="min-h-screen bg-slate-50">
       <EshNav />
-      <div className="mx-auto max-w-screen-xl py-4 h-full w-full px-4 md:px-8 lg:px-12">
-        <Link to={"/dashboard/patients"}>
-          <AiOutlineArrowLeft
-            size={32}
-            className="my-2  text-[#FF5162]  cursor-pointer"
-          />
-        </Link>
-
-        <h1 className="text-center my-6 font-bold  text-3xl  capitalize">
-          Add new ESH Patient
-        </h1>
-        <form
-          className="flex flex-col space-y-4 justify-center w-full mx-auto"
-          onSubmit={registerPatient}
-        >
-          <div className="flex  justify-center">
-            <AiOutlineUser className="rounded-full  text-gray-400 " size={64} />
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-sm border border-slate-100">
+          <div className="flex items-center justify-between mb-10">
+            <Link to={'/esh/patients'} className="p-3 rounded-2xl bg-slate-50 text-slate-400 hover:text-emerald-500 hover:bg-emerald-50 transition-all group">
+              <AiOutlineArrowLeft size={24} className="group-hover:-translate-x-1 transition-transform" />
+            </Link>
+            <div className="text-center flex-1">
+              <h1 className='text-3xl font-extrabold text-slate-900 tracking-tight capitalize'>Add ESH Patient</h1>
+              <p className="text-slate-500 font-medium text-sm">Clinical registration for ESH portal</p>
+            </div>
+            <div className="w-12"></div>
           </div>
-          <Input
-            label={"Surname"}
-            type={"text"}
-            value={surname}
-            onChange={(e) => setSurname(e.target.value)}
-          />
-          <Input
-            label={"Other Name"}
-            type={"text"}
-            value={othername}
-            onChange={(e) => setOthername(e.target.value)}
-          />
-          <Select
-            id="selectInput"
-            value={selectedTitle}
-            onChange={(e) => setSelectedTitle(e.target.value)}
-            label="Select an option"
-            options={titleOptions}
-          />
-          <Input
-            label={"Age"}
-            type={"number"}
-            value={age}
-            onChange={(e) => setAge(e.target.value)}
-          />
-          <Select
-            id="selectInput"
-            value={ageRange}
-            onChange={(e) => setAgeRange(e.target.value)}
-            label="in"
-            options={ageData}
-          />
-          <Select
-            id="selectInput"
-            value={selectedValue}
-            onChange={(e) => setSelectedValue(e.target.value)}
-            label="Select an option"
-            options={Eshoptions}
-          />
-          <div className="flex flex-col space-y-2">
-            <label className="text-gray-700 font-semibold">Gender</label>
-            <div className="flex gap-4">
-              <button
-                type="button"
-                onClick={() => setGender("Male")}
-                className={`flex-1 py-3 rounded-md border transition-all ${
-                  gender === "Male"
-                    ? "bg-[#FF5162] text-white border-[#FF5162] shadow-md"
-                    : "bg-white text-gray-700 border-gray-300 hover:border-[#FF5162]"
-                }`}
+
+          <form className='space-y-8' onSubmit={registerPatient}>
+            <div className='flex justify-center mb-8'>
+              <div className="relative group">
+                <div className="absolute -inset-1 bg-gradient-to-tr from-emerald-400 to-teal-500 rounded-full blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+                <div className="relative w-24 h-24 bg-white rounded-full flex items-center justify-center border border-slate-100">
+                  <AiOutlineUser className='text-slate-300' size={48} />
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Input label={"Surname"} type={"text"} value={surname} onChange={(e) => setSurname(e.target.value)} />
+              <Input label={"Other Name"} type={"text"} value={othername} onChange={(e) => setOthername(e.target.value)} />
+              
+              <div className="flex gap-4">
+                <div className="w-1/3">
+                  <Select
+                    value={selectedTitle}
+                    onChange={(e) => setSelectedTitle(e.target.value)}
+                    label="Title"
+                    options={titleOptions}
+                  />
+                </div>
+                <div className="flex-1">
+                  <div className="flex gap-2">
+                    <div className="flex-1">
+                      <Input label={"Age"} type={"number"} value={age} onChange={(e) => setAge(e.target.value)} />
+                    </div>
+                    <div className="w-24">
+                      <Select
+                        value={ageRange}
+                        onChange={(e) => setAgeRange(e.target.value)}
+                        label="Unit"
+                        options={ageData}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <Select
+                value={selectedValue}
+                onChange={(e) => setSelectedValue(e.target.value)}
+                label="ESH Status"
+                options={Eshoptions}
+              />
+
+              <div className="space-y-3">
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">Gender</label>
+                <div className="flex p-1 bg-slate-50 rounded-2xl border border-slate-100">
+                  <button
+                    type="button"
+                    onClick={() => setGender("Male")}
+                    className={`flex-1 py-3 rounded-xl text-xs font-bold transition-all ${
+                      gender === "Male"
+                        ? "bg-white text-blue-500 shadow-sm border border-blue-50"
+                        : "text-slate-400 hover:text-slate-600"
+                    }`}
+                  >
+                    Male
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setGender("Female")}
+                    className={`flex-1 py-3 rounded-xl text-xs font-bold transition-all ${
+                      gender === "Female"
+                        ? "bg-white text-pink-500 shadow-sm border border-pink-50"
+                        : "text-slate-400 hover:text-slate-600"
+                    }`}
+                  >
+                    Female
+                  </button>
+                </div>
+              </div>
+
+              <Input label={"Registration Number"} type={"text"} value={regNumber} onChange={(e) => setRegnumber(e.target.value)} />
+              <Input label={"Address"} type={"text"} value={address} onChange={(e) => setAddress(e.target.value)} />
+              <Input label={"Phone Number"} type={"number"} value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
+              <Input label={"Emergency Phone"} type={"number"} value={phoneNumber2} onChange={(e) => setPhoneNumber2(e.target.value)} />
+              <Input label={"Caregiver Details"} type={"text"} value={caregiver} onChange={(e) => setCareGiver(e.target.value)} />
+              <Input label={"Condition"} type={"text"} value={condition} onChange={(e) => setCondition(e.target.value)} />
+              <Input label={"Clinician"} type={"text"} value={clinician} onChange={(e) => setClinician(e.target.value)} />
+              <Input label={"Referring Source"} type={"text"} value={reffer} onChange={(e) => setReffer(e.target.value)} />
+              <Input label={"Date Registered"} type={"date"} value={dateRegistered} onChange={(e) => setDateRegistered(e.target.value)} />
+            </div>
+
+            <div className="pt-8 border-t border-slate-50">
+              <h3 className="text-sm font-bold text-slate-800 mb-6 uppercase tracking-wider">Clinical Sessions</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <Input label={"Total Sessions"} type={"number"} value={numOfSessions} onChange={(e) => setNumOfSessions(e.target.value)} />
+                <Input label={"Paid Sessions"} type={"number"} value={paidSessions} onChange={(e) => setPaidSessions(e.target.value)} />
+                <Input label={"Rate Per Session"} type={"number"} value={amountPerSession} onChange={(e) => setAmountPerSession(e.target.value)} />
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <Input label={"Initial Comments"} type={"text"} value={comment} onChange={(e) => setComment(e.target.value)} />
+              
+              <button 
+                type="submit"
+                className="w-full bg-emerald-500 py-5 flex items-center justify-center gap-3 text-white font-bold rounded-[1.5rem] shadow-xl shadow-emerald-100 hover:bg-emerald-600 transition-all active:scale-[0.98]"
               >
-                Male
-              </button>
-              <button
-                type="button"
-                onClick={() => setGender("Female")}
-                className={`flex-1 py-3 rounded-md border transition-all ${
-                  gender === "Female"
-                    ? "bg-[#FF5162] text-white border-[#FF5162] shadow-md"
-                    : "bg-white text-gray-700 border-gray-300 hover:border-[#FF5162]"
-                }`}
-              >
-                Female
+                Create Clinical Record <AiOutlineArrowRight />
               </button>
             </div>
-          </div>
-          <Input
-            label={"Registration Number"}
-            type={"text"}
-            value={regNumber}
-            onChange={(e) => setRegnumber(e.target.value)}
-          />
-          <Input
-            label={"Address"}
-            type={"text"}
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-          />
-          <Input
-            label={"Phone Number"}
-            type={"number"}
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-          />
-          <Input
-            label={"Phone Number 2"}
-            type={"number"}
-            value={phoneNumber2}
-            onChange={(e) => setPhoneNumber2(e.target.value)}
-          />
-          <Input
-            label={"Add Care giver details"}
-            type={"text"}
-            value={caregiver}
-            onChange={(e) => setCareGiver(e.target.value)}
-          />
-          <Input
-            label={"Condition"}
-            type={"text"}
-            value={condition}
-            onChange={(e) => setCondition(e.target.value)}
-          />
-          <Input
-            label={"Clinician attending to"}
-            type={"text"}
-            value={clinician}
-            onChange={(e) => setClinician(e.target.value)}
-          />
-          <Input
-            label={"Reffering Person"}
-            type={"text"}
-            value={reffer}
-            onChange={(e) => setReffer(e.target.value)}
-          />
-          <Input
-            label={"Date Registered"}
-            type={"date"}
-            value={dateRegistered}
-            onChange={(e) => setDateRegistered(e.target.value)}
-          />
-
-          <div className="flex items-center flex-col md:flex-row gap-4  justify-between ">
-            <Input
-              label={"Number of Session"}
-              type={"text"}
-              value={numOfSessions}
-              onChange={(e) => setNumOfSessions(e.target.value)}
-            />
-            <Input
-              label={"Paid Session"}
-              type={"text"}
-              value={paidSessions}
-              onChange={(e) => setPaidSessions(e.target.value)}
-            />
-            <Input
-              label={"Amount per Session"}
-              type={"text"}
-              value={amountPerSession}
-              onChange={(e) => setAmountPerSession(e.target.value)}
-            />
-          </div>
-          <Input
-            label={"Comment"}
-            type={"text"}
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-          />
-          <div className="flex justify-end">
-            <button className="bg-[#FF5162] py-3 flex  items-center justify-center gap-x-2 text-white text-sm rounded-md w-1/4 mt-4 hover:bg-red-700 transition">
-              Register <AiOutlineArrowRight />
-            </button>
-          </div>
-        </form>
-      </div>
-    </>
+          </form>
+        </div>
+      </main>
+    </div>
   );
 }
 

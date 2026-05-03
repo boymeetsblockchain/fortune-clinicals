@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import EshNav from "../../components/EshNav";
 import { useNavigate } from "react-router-dom";
-import { AiOutlineUserAdd } from "react-icons/ai";
+import { AiOutlineUserAdd, AiOutlineSearch } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { db } from "../../firebase.config";
 import Loader from "../../components/Loader";
@@ -141,35 +141,34 @@ function Patients() {
   return (
     <div className="min-h-screen bg-slate-50">
       <EshNav />
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        
+        {/* Header & Search */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-12">
           <div className="space-y-1">
-            <h1 className="text-2xl font-bold text-slate-900">ESH Patients Directory</h1>
+            <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">ESH Patient Directory</h1>
             <p className="text-slate-500 font-medium">
-              Total Patients: <span className="text-[#FF5162]">{patients.length}</span>
+              Managing <span className="text-emerald-600 font-bold">{patients.length}</span> active records
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center gap-4">
-            <div className="relative w-full sm:w-80">
-              <input
-                type="text"
-                placeholder="Search patients..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm focus:outline-none focus:ring-4 focus:ring-[#FF5162]/10 focus:border-[#FF5162] transition-all shadow-sm"
-              />
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </div>
+          <div className="relative w-full md:w-96 group">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-emerald-500 transition-colors">
+              <AiOutlineSearch size={22} />
             </div>
+            <input
+              type="text"
+              placeholder="Search by name, condition or clinician..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-12 pr-4 py-4 bg-white border border-slate-200 rounded-[1.5rem] text-sm font-medium focus:outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-500 transition-all shadow-sm group-hover:shadow-md"
+            />
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-6 mb-8">
-          <div className="flex items-center gap-2 p-1 bg-white border border-slate-200 rounded-2xl shadow-sm">
+        {/* Filters & Sorting */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-10">
+          <div className="flex items-center gap-2 p-1.5 bg-white border border-slate-100 rounded-2xl shadow-sm overflow-x-auto no-scrollbar">
             {[
               { id: "name", label: "A-Z", icon: BsSortAlphaDown, color: "text-blue-500" },
               { id: "date", label: "Date", icon: BsFillCalendarDateFill, color: "text-emerald-500" },
@@ -179,29 +178,27 @@ function Patients() {
               <button
                 key={sort.id}
                 onClick={() => toggleSortBy(sort.id)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
                   sortBy === sort.id
                     ? "bg-slate-50 text-slate-900 shadow-inner"
-                    : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
+                    : "text-slate-400 hover:text-slate-600 hover:bg-slate-50/50"
                 }`}
               >
-                <sort.icon className={sort.color} size={18} />
-                <span className="hidden sm:inline">{sort.label}</span>
+                <sort.icon className={sortBy === sort.id ? sort.color : "text-slate-300"} size={16} />
+                {sort.label}
               </button>
             ))}
           </div>
 
-          <div className="flex items-center gap-2 p-1 bg-white border border-slate-200 rounded-2xl shadow-sm">
+          <div className="flex items-center gap-2 p-1.5 bg-white border border-slate-100 rounded-2xl shadow-sm">
             {["All", "Male", "Female"].map((gender) => (
               <button
                 key={gender}
                 onClick={() => setGenderFilter(gender)}
-                className={`px-5 py-2 rounded-xl text-sm font-semibold transition-all ${
+                className={`px-6 py-2.5 rounded-xl text-xs font-bold transition-all ${
                   genderFilter === gender
-                    ? gender === "Male" ? "bg-blue-500 text-white shadow-lg shadow-blue-100" :
-                      gender === "Female" ? "bg-pink-500 text-white shadow-lg shadow-pink-100" :
-                      "bg-[#FF5162] text-white shadow-lg shadow-red-100"
-                    : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
+                    ? "bg-emerald-500 text-white shadow-lg shadow-emerald-100"
+                    : "text-slate-400 hover:text-slate-600 hover:bg-slate-50"
                 }`}
               >
                 {gender}
@@ -210,61 +207,78 @@ function Patients() {
           </div>
         </div>
 
+        {/* Patients Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredPatients.map((data) => (
-            <div
-              key={data?.id}
-              className="group bg-white rounded-[2rem] p-6 shadow-sm border border-slate-100 hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300 hover:-translate-y-1"
-            >
-              <div className="flex items-start gap-4 mb-4">
-                <div className={`flex-shrink-0 w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-bold shadow-inner ${
-                  data.selectedValue === "Out-patient" ? "bg-emerald-50 text-emerald-600" :
-                  "bg-[#FF5162]/5 text-[#FF5162]"
-                }`}>
-                  {data?.surname?.[0]?.toUpperCase()}
-                </div>
-                <div className="min-w-0 flex-1">
-                  <h3 className="text-lg font-bold text-slate-800 truncate group-hover:text-[#FF5162] transition-colors">
-                    {data?.surname} {data?.othername}
-                  </h3>
-                  <p className="text-slate-500 text-sm font-medium truncate">
-                    {data?.condition || "No condition specified"}
-                  </p>
-                </div>
-              </div>
-
-              <div className="space-y-3 mb-6">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-slate-400 font-medium uppercase tracking-wider">Clinician</span>
-                  <span className="text-slate-700 font-semibold">{data?.clinician}</span>
-                </div>
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-slate-400 font-medium uppercase tracking-wider">Registered</span>
-                  <span className="text-slate-700 font-semibold">{data?.dateRegistered}</span>
-                </div>
-              </div>
-
-              <button
-                onClick={() => onView(data?.id)}
-                className={`w-full py-3 rounded-xl text-white font-bold text-sm transition-all shadow-md active:scale-95 ${
-                  data.selectedValue === "Out-patient" ? "bg-emerald-500 hover:bg-emerald-600 shadow-emerald-100" :
-                  "bg-[#FF5162] hover:bg-[#E64858] shadow-red-100"
-                }`}
+          {filteredPatients.length > 0 ? (
+            filteredPatients.map((data) => (
+              <div
+                key={data?.id}
+                className="group bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100 hover:shadow-2xl hover:shadow-emerald-200/20 transition-all duration-500 hover:-translate-y-2 flex flex-col h-full"
               >
-                View Details
-              </button>
+                <div className="flex items-center gap-5 mb-8">
+                  <div className={`flex-shrink-0 w-16 h-16 rounded-[1.25rem] flex items-center justify-center text-2xl font-black shadow-inner border border-white ${
+                    data.selectedValue === "Out-patient" ? "bg-emerald-50 text-emerald-600" : "bg-blue-50 text-blue-600"
+                  }`}>
+                    {data?.surname?.[0]?.toUpperCase()}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-lg font-bold text-slate-800 truncate group-hover:text-emerald-600 transition-colors">
+                      {data?.surname} {data?.othername}
+                    </h3>
+                    <div className="flex items-center gap-1.5">
+                      <span className={`w-2 h-2 rounded-full ${data.selectedValue === "Out-patient" ? "bg-emerald-400" : "bg-blue-400"}`}></span>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest truncate">
+                        {data?.selectedValue}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4 mb-8 flex-1">
+                  <div className="p-4 bg-slate-50/50 rounded-2xl space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Condition</span>
+                      <span className="text-xs text-slate-700 font-bold truncate max-w-[120px] text-right">
+                        {data?.condition || "N/A"}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Clinician</span>
+                      <span className="text-xs text-slate-700 font-bold truncate max-w-[120px] text-right">
+                        {data?.clinician || "N/A"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => onView(data?.id)}
+                  className="w-full py-4 bg-slate-900 text-white font-bold text-xs rounded-2xl shadow-xl shadow-slate-200 hover:bg-emerald-600 hover:shadow-emerald-100 transition-all active:scale-[0.98] uppercase tracking-widest"
+                >
+                  Manage Record
+                </button>
+              </div>
+            ))
+          ) : (
+            <div className="col-span-full py-32 bg-white rounded-[3rem] border-2 border-dashed border-slate-100 flex flex-col items-center justify-center text-center px-6">
+              <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center text-slate-200 mb-6">
+                <AiOutlineSearch size={40} />
+              </div>
+              <h3 className="text-xl font-bold text-slate-800 mb-2">No patients found</h3>
+              <p className="text-slate-400 max-w-xs font-medium">Try adjusting your search filters to find the clinical records you're looking for.</p>
             </div>
-          ))}
+          )}
         </div>
 
+        {/* Floating Action Button */}
         <Link
           to="/add-esh-patients"
-          className="fixed bottom-8 right-8 w-16 h-16 bg-[#FF5162] text-white rounded-2xl shadow-2xl shadow-red-200 flex items-center justify-center hover:scale-110 active:scale-90 transition-all duration-300 z-50 group"
+          className="fixed bottom-8 right-8 w-16 h-16 bg-emerald-500 text-white rounded-[1.5rem] shadow-2xl shadow-emerald-200 flex items-center justify-center hover:scale-110 hover:-rotate-6 active:scale-90 transition-all duration-300 z-50 group border-4 border-white"
         >
-          <AiOutlineUserAdd size={32} />
-          <span className="absolute right-20 bg-slate-800 text-white text-xs py-2 px-4 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+          <AiOutlineUserAdd size={28} />
+          <div className="absolute right-20 bg-slate-900 text-white text-[10px] font-bold py-2 px-4 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none uppercase tracking-widest whitespace-nowrap shadow-xl">
             Add ESH Patient
-          </span>
+          </div>
         </Link>
       </main>
     </div>
