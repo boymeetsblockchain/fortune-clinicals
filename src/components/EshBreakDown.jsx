@@ -4,6 +4,14 @@ import { useParams, useNavigate } from "react-router-dom";
 import AdminNav from "./AdminNav";
 import Loader from "./Loader";
 import { fetchFeeTable } from "../hooks/feeTables";
+import { 
+  AiOutlineArrowLeft, 
+  AiOutlineCalendar, 
+  AiOutlineLineChart,
+  AiOutlineUser,
+  AiOutlineArrowRight
+} from "react-icons/ai";
+import { BsCashStack, BsPersonCheck, BsPersonBadge } from "react-icons/bs";
 
 function EshBreakDown() {
   const { yearsData, loading: dataLoading } = useEshData();
@@ -35,7 +43,6 @@ function EshBreakDown() {
   const inpatientMultiplier = inpatientFee?.[0]?.fee || 2000;
   const outpatientMultiplier = outpatientFee?.[0]?.fee || 2000;
 
-  // ✅ Hooks always run, even if data is missing
   const selectedYear = useMemo(
     () => yearsData.find((yearData) => yearData.year === year),
     [yearsData, year]
@@ -48,7 +55,6 @@ function EshBreakDown() {
     [selectedYear, monthName]
   );
 
-  // ❌ Conditional return happens AFTER hooks
   if (loading || dataLoading || !inpatientFee || !outpatientFee || !selectedMonth) {
     return <Loader />;
   }
@@ -76,117 +82,212 @@ function EshBreakDown() {
     0
   );
 
+  const inRevenue = totalInPatients * inpatientMultiplier;
+  const outRevenue = totalOutPatients * outpatientMultiplier;
+  const totalRevenue = inRevenue + outRevenue;
+
   const handlePatientClick = (patientId) => {
     navigate(`/admin/patient/esh/${patientId}`);
   };
 
   return (
-    <>
+    <div className="min-h-screen bg-slate-50 pb-20">
       <AdminNav />
-      <div className="px-4 md:px-8 lg:px-8 h-full mx-auto my-5">
-        <h1 className="text-2xl font-semibold mb-4 text-center">
-          {selectedMonth?.name} Daily Sessions ({year})
-        </h1>
-        <h1 className="text-2xl font-bold mb-4 text-center">
-          Total Sessions for {selectedMonth?.name}: {selectedMonth.ses}
-        </h1>
-        <div className="flex justify-center gap-x-4 mb-2">
-          <h2 className="text-xl font-bold text-center">
-            Total In-patients: {totalInPatients}
-          </h2>
-          <h2 className="text-xl font-bold text-center">
-            Total Out-patients: {totalOutPatients}
-          </h2>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        {/* Navigation & Header */}
+        <div className="flex items-center gap-4 mb-8">
+          <button 
+            onClick={() => navigate(-1)}
+            className="p-3 bg-white rounded-2xl border border-slate-100 text-slate-400 hover:text-slate-900 transition-colors shadow-sm"
+          >
+            <AiOutlineArrowLeft size={20} />
+          </button>
+          <div>
+            <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
+              <AiOutlineCalendar className="text-emerald-500" />
+              {selectedMonth?.name} Daily Sessions
+              <span className="text-slate-300 font-light ml-1">({year})</span>
+            </h1>
+          </div>
         </div>
 
-        <div className="flex flex-col justify-center mb-2">
-          <h2 className="text-xl font-bold text-center">
-            Total In-patients Revenue Generated:
-            {(totalInPatients * inpatientMultiplier).toLocaleString("en-NG", {
-              style: "currency",
-              currency: "NGN",
-            })}
-          </h2>
-          <h2 className="text-xl font-bold text-center">
-            Total Out-patients Revenue Generated:
-            {(totalOutPatients * outpatientMultiplier).toLocaleString("en-NG", {
-              style: "currency",
-              currency: "NGN",
-            })}
-          </h2>
-          <h2 className="text-2xl font-bold mt-4 text-center">
-            General Total Revenue:
-            <span className="ml-2">
-              {(
-                totalInPatients * inpatientMultiplier +
-                totalOutPatients * outpatientMultiplier
-              ).toLocaleString("en-NG", {
-                style: "currency",
-                currency: "NGN",
-              })}
-            </span>
-          </h2>
-        </div>
-
-        {dailySessionsWithFilteredPatients
-          .filter((dayData) => dayData.sessions.length > 0)
-          .map((dayData) => (
-          <div key={dayData.day} className="mb-4 p-4 rounded-lg">
-            <h2 className="text-xl font-semibold mb-2">{`Day ${dayData.day}`}</h2>
-
-            <div>
-              <h3 className="text-lg font-semibold">
-                In-patients ({dayData.inPatients.length})
-              </h3>
-              {dayData.inPatients.length > 0 ? (
-                <ul className="flex flex-col space-y-4 mb-4">
-                  {dayData.inPatients.map((patient, index) => (
-                    <li
-                      key={index}
-                      className="flex items-center py-3 justify-between mb-2 cursor-pointer bg-[#ff5162] text-white"
-                      onClick={() => handlePatientClick(patient.patientId)}
-                    >
-                      <div className="flex justify-between">
-                        <h1 className="ml-4 text-2xl">
-                          &#8358; {patient?.comment}
-                        </h1>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>No in-patients for this day.</p>
-              )}
+        {/* Analytics Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          <div className="bg-white rounded-[2.5rem] p-6 shadow-sm border border-slate-100 flex flex-col justify-between group hover:shadow-xl hover:shadow-slate-200/50 transition-all">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 bg-blue-50 text-blue-600 rounded-2xl group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                <AiOutlineUser size={24} />
+              </div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total Sessions</span>
             </div>
-
             <div>
-              <h3 className="text-lg font-semibold">
-                Out-patients ({dayData.outPatients.length})
-              </h3>
-              {dayData.outPatients.length > 0 ? (
-                <ul className="flex flex-col space-y-4">
-                  {dayData.outPatients.map((patient, index) => (
-                    <li
-                      key={index}
-                      className="flex items-center py-3 justify-between mb-2 cursor-pointer bg-green-500 text-white"
-                      onClick={() => handlePatientClick(patient.patientId)}
-                    >
-                      <div className="flex justify-between">
-                        <h1 className="ml-4 text-2xl">
-                          &#8358; {patient?.comment}
-                        </h1>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>No out-patients for this day.</p>
-              )}
+              <p className="text-3xl font-black text-slate-900">{selectedMonth.ses}</p>
+              <p className="text-xs font-bold text-slate-400 mt-1 italic">Confirmed Sessions</p>
             </div>
           </div>
-        ))}
-      </div>
-    </>
+
+          <div className="bg-white rounded-[2.5rem] p-6 shadow-sm border border-slate-100 flex flex-col justify-between group hover:shadow-xl hover:shadow-slate-200/50 transition-all">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 bg-emerald-50 text-emerald-600 rounded-2xl group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                <BsPersonBadge size={24} />
+              </div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">In-Patients</span>
+            </div>
+            <div>
+              <p className="text-3xl font-black text-slate-900">{totalInPatients}</p>
+              <p className="text-xs font-bold text-emerald-500 mt-1 uppercase tracking-tighter">
+                {inRevenue.toLocaleString("en-NG", { style: "currency", currency: "NGN" })}
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-[2.5rem] p-6 shadow-sm border border-slate-100 flex flex-col justify-between group hover:shadow-xl hover:shadow-slate-200/50 transition-all">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 bg-indigo-50 text-indigo-600 rounded-2xl group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                <BsPersonCheck size={24} />
+              </div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Out-Patients</span>
+            </div>
+            <div>
+              <p className="text-3xl font-black text-slate-900">{totalOutPatients}</p>
+              <p className="text-xs font-bold text-indigo-500 mt-1 uppercase tracking-tighter">
+                {outRevenue.toLocaleString("en-NG", { style: "currency", currency: "NGN" })}
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-slate-900 rounded-[2.5rem] p-6 shadow-2xl shadow-slate-200 flex flex-col justify-between relative overflow-hidden group">
+            <div className="absolute -right-4 -top-4 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl group-hover:bg-emerald-500/20 transition-all"></div>
+            <div className="flex items-center justify-between mb-4 relative z-10">
+              <div className="p-3 bg-emerald-500 text-white rounded-2xl">
+                <BsCashStack size={24} />
+              </div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total Revenue</span>
+            </div>
+            <div className="relative z-10">
+              <p className="text-2xl font-black text-white tracking-tight">
+                {totalRevenue.toLocaleString("en-NG", { style: "currency", currency: "NGN" })}
+              </p>
+              <div className="flex items-center gap-2 text-[10px] font-bold text-emerald-400 mt-2">
+                <AiOutlineLineChart />
+                <span>MONTHLY PERFORMANCE</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Daily Reports Section */}
+        <div className="space-y-12">
+          {dailySessionsWithFilteredPatients.map((dayData) => (
+            <div key={dayData.day} className="relative">
+              <div className="flex items-center gap-6 mb-6">
+                <div className="w-16 h-16 bg-slate-900 rounded-3xl flex items-center justify-center text-white font-black text-xl shadow-lg relative z-10 border-4 border-slate-50">
+                  {dayData.day}
+                </div>
+                <div className="h-[2px] flex-1 bg-slate-200 rounded-full"></div>
+                <h2 className="text-lg font-black text-slate-400 uppercase tracking-[0.2em]">Day Break-down</h2>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pl-8 md:pl-20 border-l-2 border-slate-100 ml-8 md:ml-10">
+                {/* In-Patients Column */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between mb-4 bg-emerald-50/50 p-4 rounded-2xl border border-emerald-100/50">
+                    <h3 className="text-sm font-bold text-emerald-700 flex items-center gap-2">
+                      <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                      In-patients Records
+                    </h3>
+                    <span className="px-3 py-1 bg-white text-emerald-600 text-[10px] font-black rounded-full border border-emerald-100 shadow-sm">
+                      {dayData.inPatients.length}
+                    </span>
+                  </div>
+                  
+                  {dayData.inPatients.length > 0 ? (
+                    <div className="grid grid-cols-1 gap-3">
+                      {dayData.inPatients.map((patient, index) => (
+                        <div
+                          key={index}
+                          onClick={() => handlePatientClick(patient.patientId)}
+                          className="group bg-white p-5 rounded-[1.75rem] shadow-sm border border-slate-100 hover:shadow-md hover:border-emerald-200 transition-all cursor-pointer flex items-center justify-between"
+                        >
+                          <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm font-bold group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-inner">
+                              Rx
+                            </div>
+                            <div>
+                              <p className="text-sm font-bold text-slate-800">{patient?.comment || "Consultation Record"}</p>
+                              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">#{patient.patientId.slice(-6)}</p>
+                            </div>
+                          </div>
+                          <AiOutlineArrowRight className="text-slate-200 group-hover:text-emerald-500 group-hover:translate-x-1 transition-all" />
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="py-8 text-center bg-slate-50/50 rounded-[2rem] border border-dashed border-slate-200">
+                      <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">No active in-patient logs</p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Out-Patients Column */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between mb-4 bg-blue-50/50 p-4 rounded-2xl border border-blue-100/50">
+                    <h3 className="text-sm font-bold text-blue-700 flex items-center gap-2">
+                      <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
+                      Out-patients Records
+                    </h3>
+                    <span className="px-3 py-1 bg-white text-blue-600 text-[10px] font-black rounded-full border border-blue-100 shadow-sm">
+                      {dayData.outPatients.length}
+                    </span>
+                  </div>
+
+                  {dayData.outPatients.length > 0 ? (
+                    <div className="grid grid-cols-1 gap-3">
+                      {dayData.outPatients.map((patient, index) => (
+                        <div
+                          key={index}
+                          onClick={() => handlePatientClick(patient.patientId)}
+                          className="group bg-white p-5 rounded-[1.75rem] shadow-sm border border-slate-100 hover:shadow-md hover:border-blue-200 transition-all cursor-pointer flex items-center justify-between"
+                        >
+                          <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-sm font-bold group-hover:bg-blue-600 group-hover:text-white transition-all shadow-inner">
+                              Rx
+                            </div>
+                            <div>
+                              <p className="text-sm font-bold text-slate-800">{patient?.comment || "Consultation Record"}</p>
+                              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">#{patient.patientId.slice(-6)}</p>
+                            </div>
+                          </div>
+                          <AiOutlineArrowRight className="text-slate-200 group-hover:text-blue-500 group-hover:translate-x-1 transition-all" />
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="py-8 text-center bg-slate-50/50 rounded-[2rem] border border-dashed border-slate-200">
+                      <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">No active out-patient logs</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {dailySessionsWithFilteredPatients.length === 0 && (
+          <div className="py-32 bg-white rounded-[3rem] border-2 border-dashed border-slate-100 flex flex-col items-center justify-center text-center px-6">
+            <div className="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center text-slate-200 mb-8 animate-pulse">
+              <AiOutlineCalendar size={48} />
+            </div>
+            <h3 className="text-2xl font-black text-slate-800 mb-4 tracking-tight">No Sessions Found</h3>
+            <p className="text-slate-400 max-w-sm font-medium leading-relaxed">
+              There are no session records available for {selectedMonth?.name} {year}. 
+              New clinical sessions will appear here as they are recorded.
+            </p>
+          </div>
+        )}
+      </main>
+    </div>
   );
 }
 
