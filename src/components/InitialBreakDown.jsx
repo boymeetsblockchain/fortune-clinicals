@@ -9,7 +9,9 @@ import {
   AiOutlineCalendar, 
   AiOutlineStar,
   AiOutlineArrowRight,
-  AiOutlineLineChart
+  AiOutlineLineChart,
+  AiOutlineArrowUp,
+  AiOutlineArrowDown
 } from "react-icons/ai";
 import { BsCashStack, BsCardChecklist } from "react-icons/bs";
 
@@ -65,9 +67,31 @@ function InitialBreakDown() {
 
   const totalRevenue = selectedMonth.rev * inpatientMultiplier;
 
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+  const scrollToBottom = () => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+
   return (
-    <div className="min-h-screen bg-slate-50 pb-20">
+    <div className="min-h-screen bg-slate-50 pb-20 relative">
       <AdminNav />
+
+      {/* Floating Snap Buttons */}
+      <div className="fixed bottom-8 right-8 flex flex-col gap-3 z-50">
+        <button 
+          onClick={scrollToTop}
+          className="w-14 h-14 bg-white text-slate-400 rounded-2xl shadow-2xl flex items-center justify-center hover:bg-slate-900 hover:text-white transition-all active:scale-90 border border-slate-100 group"
+          title="Scroll to Top"
+        >
+          <AiOutlineArrowUp size={24} className="group-hover:-translate-y-1 transition-transform" />
+        </button>
+        <button 
+          onClick={scrollToBottom}
+          className="w-14 h-14 bg-white text-slate-400 rounded-2xl shadow-2xl flex items-center justify-center hover:bg-slate-900 hover:text-white transition-all active:scale-90 border border-slate-100 group"
+          title="Scroll to Bottom"
+        >
+          <AiOutlineArrowDown size={24} className="group-hover:translate-y-1 transition-transform" />
+        </button>
+      </div>
+
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
         {/* Header */}
