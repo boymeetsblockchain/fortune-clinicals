@@ -229,7 +229,7 @@ function PatientDetail() {
 
                 <div className="px-4 py-2">
                   {isActive === "newsession" && (
-                    <EshSession patientId={params.id} patientType={"esh"} />
+                    <EshSession patientId={params.id} patientType={patient?.selectedValue} />
                   )}
                   {isActive === "session" && (
                     <Session patientId={params.id} patientType={"esh"} />

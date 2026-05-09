@@ -6,7 +6,7 @@ import Loader from "./Loader";
 import { fetchFeeTable } from "../hooks/feeTables";
 
 function EshBreakDown() {
-  const { yearsData } = useEshData();
+  const { yearsData, loading: dataLoading } = useEshData();
   const params = useParams();
   const navigate = useNavigate();
 
@@ -49,12 +49,13 @@ function EshBreakDown() {
   );
 
   // ❌ Conditional return happens AFTER hooks
-  if (loading || !inpatientFee || !outpatientFee || !selectedMonth) {
+  if (loading || dataLoading || !inpatientFee || !outpatientFee || !selectedMonth) {
     return <Loader />;
   }
 
-  const dailySessionsWithFilteredPatients = selectedMonth.dailySessions.map(
-    (dayData) => {
+  const dailySessionsWithFilteredPatients = selectedMonth.dailySessions
+    .filter((dayData) => dayData.sessions.length > 0)
+    .map((dayData) => {
       const inPatients = dayData.sessions.filter(
         (patient) => patient.patientType === "In-patient"
       );
@@ -127,7 +128,9 @@ function EshBreakDown() {
           </h2>
         </div>
 
-        {dailySessionsWithFilteredPatients.map((dayData) => (
+        {dailySessionsWithFilteredPatients
+          .filter((dayData) => dayData.sessions.length > 0)
+          .map((dayData) => (
           <div key={dayData.day} className="mb-4 p-4 rounded-lg">
             <h2 className="text-xl font-semibold mb-2">{`Day ${dayData.day}`}</h2>
 

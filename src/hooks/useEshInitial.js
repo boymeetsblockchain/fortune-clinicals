@@ -56,8 +56,8 @@ const useInitialReview = () => {
       acc[year] = months.map((month) => ({
         name: month.name,
         rev: 0,
-        dailyReviews: Array.from({ length: 31 }, () => ({
-          day: null,
+        dailyReviews: Array.from({ length: 31 }, (_, i) => ({
+          day: i + 1,
           reviews: [],
         })),
       }));

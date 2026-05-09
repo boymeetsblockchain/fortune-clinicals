@@ -4,19 +4,42 @@ import { db } from "../firebase.config";
 
 const useEshData = () => {
   const [sessions, setSessions] = useState([]);
+  const [patientMap, setPatientMap] = useState({});
+  const [loading, setLoading] = useState(true);
 
-  const getSession = async () => {
-    const sessionsQuery = query(collection(db, "eshsessions"));
-    const querySnapshot = await getDocs(sessionsQuery);
-    const sessionDetails = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-    setSessions(sessionDetails);
+  const fetchData = async () => {
+    try {
+      // Fetch both sessions and patients to resolve "esh" type sessions
+      const sessionsQuery = query(collection(db, "eshsessions"));
+      const patientsQuery = query(collection(db, "eshpatients"));
+      
+      const [sessionsSnap, patientsSnap] = await Promise.all([
+        getDocs(sessionsQuery),
+        getDocs(patientsQuery)
+      ]);
+
+      // Create a map of patientId -> patientType
+      const pMap = {};
+      patientsSnap.docs.forEach(doc => {
+        const data = doc.data();
+        pMap[doc.id] = data.selectedValue; // "In-patient" or "Out-patient"
+      });
+      setPatientMap(pMap);
+
+      const sessionDetails = sessionsSnap.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setSessions(sessionDetails);
+    } catch (error) {
+      console.error("Error fetching ESH data:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    getSession();
+    fetchData();
   }, []);
 
   const months = [
@@ -42,11 +65,11 @@ const useEshData = () => {
     const day = sessionDate.getDate();
 
     if (!acc[year]) {
-      acc[year] = months.map((month, index) => ({
+      acc[year] = months.map((month) => ({
         name: month.name,
         ses: 0,
-        dailySessions: Array.from({ length: 31 }, () => ({
-          day: null,
+        dailySessions: Array.from({ length: 31 }, (_, i) => ({
+          day: i + 1,
           sessions: [],
           inPatients: [],
           outPatients: [],
@@ -55,18 +78,27 @@ const useEshData = () => {
     }
 
     const monthData = acc[year][monthIndex];
-    monthData.ses += 1;
+    if (monthData) {
+      monthData.ses += 1;
+      const daySessions = monthData.dailySessions[day - 1];
+      if (daySessions) {
+        // Resolve patient type: use session data if specific, else fallback to patient document
+        const resolvedType = (session.patientType === "In-patient" || session.patientType === "Out-patient")
+          ? session.patientType
+          : patientMap[session.patientId];
 
-    const daySessions = monthData.dailySessions[day - 1];
-    daySessions.day = day;
-    daySessions.sessions.push(session);
-
-    if (session.patientType === "In-patient") {
-      daySessions.inPatients.push(session);
-    } else if (session.patientType === "Out-patient") {
-      daySessions.outPatients.push(session);
+        // Enrich session with resolved type for the view
+        const enrichedSession = { ...session, patientType: resolvedType };
+        
+        daySessions.sessions.push(enrichedSession);
+        
+        if (resolvedType === "In-patient") {
+          daySessions.inPatients.push(enrichedSession);
+        } else if (resolvedType === "Out-patient") {
+          daySessions.outPatients.push(enrichedSession);
+        }
+      }
     }
-
     return acc;
   }, {});
 
@@ -80,6 +112,7 @@ const useEshData = () => {
 
   return {
     yearsData: structuredYearsData,
+    loading
   };
 };
 

@@ -63,7 +63,9 @@ function InitialBreakDown() {
             currency: "NGN",
           })}
         </h2>
-        {selectedMonth.dailyReviews.map((dayData) => (
+        {selectedMonth.dailyReviews
+          .filter((dayData) => dayData.reviews.length > 0)
+          .map((dayData) => (
           <div
             key={dayData.day}
             className="mb-4 p-4 rounded-lg bg-gray-100 shadow"
