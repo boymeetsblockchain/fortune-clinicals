@@ -246,6 +246,10 @@ function Patients() {
                     <span className="text-slate-400 font-medium uppercase tracking-wider">Registered</span>
                     <span className="text-slate-700 font-semibold">{data?.dateRegistered}</span>
                   </div>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-slate-400 font-medium uppercase tracking-wider">Last Session</span>
+                    <span className="text-slate-700 font-semibold">{data?.updatedDate || "N/A"}</span>
+                  </div>
                 </div>
 
                 <button

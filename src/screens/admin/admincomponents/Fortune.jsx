@@ -234,16 +234,20 @@ function Fortune() {
                 </div>
               </div>
 
-              <div className="space-y-3 mb-6">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-slate-400 font-medium uppercase tracking-wider">Clinician</span>
-                  <span className="text-slate-700 font-semibold">{data?.clinician}</span>
+                <div className="space-y-3 mb-6">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-slate-400 font-medium uppercase tracking-wider">Clinician</span>
+                    <span className="text-slate-700 font-semibold">{data?.clinician}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-slate-400 font-medium uppercase tracking-wider">Registered</span>
+                    <span className="text-slate-700 font-semibold">{data?.dateRegistered}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-slate-400 font-medium uppercase tracking-wider">Last Session</span>
+                    <span className="text-slate-700 font-semibold">{data?.updatedDate || "N/A"}</span>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-slate-400 font-medium uppercase tracking-wider">Registered</span>
-                  <span className="text-slate-700 font-semibold">{data?.dateRegistered}</span>
-                </div>
-              </div>
 
               <button
                 onClick={() => onView(data?.id)}
