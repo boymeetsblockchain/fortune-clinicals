@@ -110,10 +110,21 @@ function PatientDetail() {
       window.confirm("Are you sure you want to delete this patient record?")
     ) {
       try {
+        // Delete all attached initial reviews first
+        const reviewsQuery = query(
+          collection(db, "reviews"),
+          where("patientId", "==", params.id)
+        );
+        const reviewsSnapshot = await getDocs(reviewsQuery);
+        const deleteReviewPromises = reviewsSnapshot.docs.map((reviewDoc) => 
+          deleteDoc(doc(db, "reviews", reviewDoc.id))
+        );
+        await Promise.all(deleteReviewPromises);
+
         const docRef = doc(db, "patients", params.id);
         await deleteDoc(docRef);
         toast.success("Deleted");
-        navigate("/dashboard/patients");
+        navigate(-1);
         // Redirect or perform any other action after deletion
       } catch (error) {
         console.error("Error deleting patient record:", error);

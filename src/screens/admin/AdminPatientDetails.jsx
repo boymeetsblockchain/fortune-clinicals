@@ -16,6 +16,7 @@ import Session from "../../components/Session";
 import NewSession from "../../components/NewSession";
 import NewPayment from "../../components/NewPayment";
 import Input from "../../components/Input";
+import InitialReview from "../../components/InitialReview";
 
 function AdminPatientDetail() {
   const params = useParams();
@@ -110,6 +111,18 @@ function AdminPatientDetail() {
       window.confirm("Are you sure you want to delete this patient record?")
     ) {
       try {
+        // Delete all attached initial reviews first
+        const reviewsQuery = query(
+          collection(db, "reviews"),
+          where("patientId", "==", params.id)
+        );
+        const reviewsSnapshot = await getDocs(reviewsQuery);
+        const deleteReviewPromises = reviewsSnapshot.docs.map((reviewDoc) => 
+          deleteDoc(doc(db, "reviews", reviewDoc.id))
+        );
+        await Promise.all(deleteReviewPromises);
+
+        // Delete the patient record
         const docRef = doc(db, "patients", params.id);
         await deleteDoc(docRef);
         toast.success("Deleted");
@@ -230,6 +243,9 @@ function AdminPatientDetail() {
                   patientType={patient?.selectedValue || "fortune"}
                 />
               )}
+              {isActive === "review" && (
+                <InitialReview patientId={params.id} />
+              )}
             </div>
             <div className="bg-slate-200 rounded-md shadow-lg col-span-1 flex flex-col space-y-4 p-6 col-span-">
               <div className="flex gap-3 cursor-pointer hover:opacity-50">
@@ -301,6 +317,17 @@ function AdminPatientDetail() {
               >
                 <AiTwotoneEdit size={32} color="blue" />
                 UPDATE PATIENT
+              </div>
+              <div className="flex gap-3 items-center justify-between cursor-pointer hover:opacity-50">
+                <div
+                  className="detials flex gap-2"
+                  onClick={() => setIsActive("review")}
+                >
+                  <FaCheck size={32} color="green" />
+                  <h1 className="">
+                    INITIAL REVIEW
+                  </h1>
+                </div>
               </div>
               <div
                 className="flex gap-3 cursor-pointer hover:opacity-50"

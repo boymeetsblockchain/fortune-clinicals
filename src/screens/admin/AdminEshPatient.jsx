@@ -53,6 +53,17 @@ function AdminPatientDetail() {
   const onDelete = async () => {
     if (window.confirm("Are you sure you want to delete this patient record?")) {
       try {
+        // Delete all attached initial reviews first
+        const reviewsQuery = query(
+          collection(db, "reviews"),
+          where("patientId", "==", params.id)
+        );
+        const reviewsSnapshot = await getDocs(reviewsQuery);
+        const deleteReviewPromises = reviewsSnapshot.docs.map((reviewDoc) => 
+          deleteDoc(doc(db, "reviews", reviewDoc.id))
+        );
+        await Promise.all(deleteReviewPromises);
+
         await deleteDoc(doc(db, "eshpatients", params.id));
         navigate(-1);
         toast.success("Deleted successfully");
