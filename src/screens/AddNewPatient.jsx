@@ -30,7 +30,7 @@ function AddNewPatient() {
   const [dateRegistered, setDateRegistered] = useState("");
   const [numOfSessions, setNumOfSessions] = useState("");
   const [paidSessions, setPaidSessions] = useState("");
-  const [comment, setComment] = useState([]);
+  const [comment, setComment] = useState("");
   const [amountPerSession, setAmountPerSession] = useState("");
   const [selectedValue, setSelectedValue] = useState("Basic");
   const [selectedTitle, setSelectedTitle] = useState("Mr");
@@ -79,7 +79,19 @@ function AddNewPatient() {
         createdAt: new Date().toLocaleString(),
       };
       const data = await addDoc(collection(db, "patients"), formDataCopy);
-      console.log(data);
+      
+      if (comment) {
+        const reviewData = {
+          comment,
+          patientId: data.id,
+          date: dateRegistered || new Date().toISOString().split('T')[0],
+          userName: auth.currentUser?.displayName || 'Unknown',
+          userEmail: auth.currentUser?.email || 'N/A',
+          createdAt: new Date().toLocaleString(),
+        };
+        await addDoc(collection(db, "reviews"), reviewData);
+      }
+
       toast.success("patient saved");
       navigate(`/dashboard/patient/${data.id}`);
     } catch (error) {

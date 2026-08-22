@@ -61,6 +61,19 @@ function EshPatient() {
       };
       
       const data = await addDoc(collection(db, "eshpatients"), formData);
+      
+      if (comment) {
+        const reviewData = {
+          comment,
+          patientId: data.id,
+          date: dateRegistered || new Date().toISOString().split('T')[0],
+          userName: auth.currentUser?.displayName || 'Unknown',
+          userEmail: auth.currentUser?.email || 'N/A',
+          createdAt: new Date().toLocaleString(),
+        };
+        await addDoc(collection(db, "reviews"), reviewData);
+      }
+
       toast.success("ESH Record Created Successfully");
       navigate(`/esh-patient/${data.id}`);
     } catch (error) {
