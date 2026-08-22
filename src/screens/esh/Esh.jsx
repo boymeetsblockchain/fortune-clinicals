@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { AiOutlineShoppingCart, AiOutlineUser, AiOutlineUnorderedList } from 'react-icons/ai';
+import { AiOutlineShoppingCart, AiOutlineUser, AiOutlineUnorderedList, AiOutlineBorderlessTable } from 'react-icons/ai';
 import { BiMessageDetail } from 'react-icons/bi';
 import EshNav from '../../components/EshNav';
 
@@ -36,6 +36,14 @@ const eshMenuItems = [
     icon: BiMessageDetail,
     color: 'text-amber-500',
     bg: 'bg-amber-50',
+  },
+  {
+    to: '/esh/initial',
+    text: 'Initial Reviews',
+    subtext: 'ESH preliminary assessments',
+    icon: AiOutlineBorderlessTable,
+    color: 'text-fuchsia-500',
+    bg: 'bg-fuchsia-50',
   },
 ];
 

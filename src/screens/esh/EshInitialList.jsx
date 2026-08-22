@@ -1,9 +1,9 @@
-import AdminNav from "../../components/AdminNav";
+import EshNav from "../../components/EshNav";
 import Loader from "../../components/Loader";
 import useInitialReview from "../../hooks/useEshInitial";
 import { useNavigate } from "react-router-dom";
 
-const EshInitial = () => {
+const EshInitialList = () => {
   const navigate = useNavigate();
   const { yearsData } = useInitialReview();
 
@@ -21,7 +21,7 @@ const EshInitial = () => {
 
   return (
     <>
-      <AdminNav />
+      <EshNav />
       <div className="px-4 md:px-8 lg:px-12 h-full mx-auto my-5">
         <div className="flex flex-col items-center h-full">
           {sortedYearsData.map((yearData, yearIndex) => (
@@ -38,7 +38,7 @@ const EshInitial = () => {
                     key={monthIndex}
                     className="cursor-pointer transform transition hover:scale-105"
                     onClick={() =>
-                      navigate(`/admin/initial-breakdown/${yearData.year}/${month.name}`)
+                      navigate(`/esh/initial/${yearData.year}/${month.name}`)
                     }
                   >
                     <div className=" h-36 w-72 flex items-center justify-center text-center p-6 rounded-xl flex-col shadow-lg">
@@ -62,4 +62,4 @@ const EshInitial = () => {
   );
 };
 
-export default EshInitial;
+export default EshInitialList;

@@ -52,6 +52,8 @@ import EshInitial from "./screens/admin/EshInitial";
 import InitialBreakDown from "./components/InitialBreakDown";
 import NewAdminStaff from "./screens/admin/NewAdminStafff";
 import NewAdminStaffDetail from "./screens/admin/NewAdminStaffDetail";
+import EshInitialList from "./screens/esh/EshInitialList";
+import InitialBreakDownEsh from "./components/InitialBreakDownEsh";
 
 const App = () => {
   return (
@@ -83,6 +85,8 @@ const App = () => {
         <Route path="/esh/products" element={<EshProduct />} />
         <Route path="/esh/message" element={<EshMessage />} />
         <Route path="/esh" element={<ESH />} />
+        <Route path="/esh/initial" element={<EshInitialList />} />
+        <Route path="/esh/initial/:year/:monthName" element={<InitialBreakDownEsh />} />
         <Route path="/esh/add-new-product" element={<AddNewEshProduct />} />
         <Route
           path="add-new-product-esh-money"
@@ -126,7 +130,7 @@ const App = () => {
         />
         <Route path="/esh/:year/:monthName" element={<EshBreakDown />} />
         <Route
-          path="/esh/initial/:year/:monthName"
+          path="/admin/initial-breakdown/:year/:monthName"
           element={<InitialBreakDown />}
         />
 
