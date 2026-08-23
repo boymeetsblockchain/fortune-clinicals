@@ -256,6 +256,12 @@ function Patients() {
                         {data?.updatedDate || "N/A"}
                       </span>
                     </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Registered</span>
+                      <span className="text-xs text-slate-700 font-bold truncate max-w-[120px] text-right">
+                        {data?.dateRegistered || "N/A"}
+                      </span>
+                    </div>
                   </div>
                 </div>
 
