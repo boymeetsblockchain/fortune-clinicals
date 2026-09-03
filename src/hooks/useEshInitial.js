@@ -40,7 +40,7 @@ const useInitialReview = () => {
 
   // Safeguard against empty `reviews`
   if (!reviews || reviews.length === 0) {
-    return { yearsData: [] };
+    return { yearsData: [], refetch: getReviews };
   }
 
   // Group reviews by year and month
@@ -87,6 +87,7 @@ const useInitialReview = () => {
 
   return {
     yearsData: structuredYearsData,
+    refetch: getReviews,
   };
 };
 
