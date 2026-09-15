@@ -8,11 +8,57 @@ const useInitialReview = () => {
   const getReviews = async () => {
     try {
       const reviewQuery = query(collection(db, "reviews"));
-      const reviewSnapShot = await getDocs(reviewQuery);
-      const reviewDetails = reviewSnapShot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      const eshPatientsQuery = query(collection(db, "eshpatients"));
+      const fortunePatientsQuery = query(collection(db, "patients"));
+
+      const [reviewSnapShot, eshPatientsSnap, fortunePatientsSnap] =
+        await Promise.all([
+          getDocs(reviewQuery),
+          getDocs(eshPatientsQuery),
+          getDocs(fortunePatientsQuery),
+        ]);
+
+      const eshPatientIds = new Set(eshPatientsSnap.docs.map((doc) => doc.id));
+      const fortunePatientIds = new Set(
+        fortunePatientsSnap.docs.map((doc) => doc.id)
+      );
+
+      const reviewDetails = reviewSnapShot.docs
+        .map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+        .filter((review) => {
+          const userName = (review.userName || "").toLowerCase();
+          const userEmail = (review.userEmail || "").toLowerCase();
+
+          // Exclude any reviews created by frontdesk user/account
+          if (
+            userName.includes("frontdesk") ||
+            userName.includes("front desk") ||
+            userEmail.includes("frontdesk")
+          ) {
+            return false;
+          }
+
+          // Exclude if patientId belongs to Fortune general patients collection
+          if (review.patientId && fortunePatientIds.has(review.patientId)) {
+            return false;
+          }
+
+          // Include if patientId belongs to ESH patients collection
+          if (review.patientId && eshPatientIds.has(review.patientId)) {
+            return true;
+          }
+
+          // Include if explicitly marked as ESH
+          if (review.clinic === "esh" || review.isESH === true) {
+            return true;
+          }
+
+          return false;
+        });
+
       setReviews(reviewDetails);
     } catch (error) {
       console.error("Error fetching reviews: ", error);

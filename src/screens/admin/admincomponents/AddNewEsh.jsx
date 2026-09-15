@@ -54,6 +54,21 @@ function EshPatient() {
         createdAt: new Date().toLocaleString(),
       }
       const data = await addDoc(collection(db, 'eshpatients'), formDataCopy)
+      
+      if (comment) {
+        const reviewData = {
+          comment,
+          patientId: data.id,
+          date: dateRegistered || new Date().toISOString().split('T')[0],
+          userName: auth.currentUser?.displayName || 'Unknown',
+          userEmail: auth.currentUser?.email || 'N/A',
+          createdAt: new Date().toLocaleString(),
+          clinic: 'esh',
+          isESH: true,
+        };
+        await addDoc(collection(db, "reviews"), reviewData);
+      }
+
       toast.success("ESH Patient record created")
       navigate(`/admin/patient/esh/${data.id}`)
     } catch (error) {

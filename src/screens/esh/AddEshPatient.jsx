@@ -70,6 +70,8 @@ function EshPatient() {
           userName: auth.currentUser?.displayName || 'Unknown',
           userEmail: auth.currentUser?.email || 'N/A',
           createdAt: new Date().toLocaleString(),
+          clinic: 'esh',
+          isESH: true,
         };
         await addDoc(collection(db, "reviews"), reviewData);
       }
